@@ -1,0 +1,20 @@
+<p-card>
+    <ng-template pTemplate="header">
+        <div class="flex justify-content-between">
+            <h5 style="padding:21px 0 0 21px; margin-bottom: 0;">Import Member Data</h5>
+        </div>
+    </ng-template>
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12">
+            <label htmlFor="firstname2">File</label>
+            <p-fileUpload name="demo[]" url="./upload.php" (onUpload)="onUpload($event)" [multiple]="true"
+                accept="image/*" [maxFileSize]="1000000">
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+        </div>
+    </div>
+</p-card>

@@ -1,9 +1,9 @@
-namespace MIS.Domain.Entities
+using MediatR;
+
+namespace MIS.Application.Members.Commands.CreateGuest
 {
-    public class MemberDto
+    public class CreateGuestCommand : IRequest<long>
     {
-        public long Id { get; set; }
-        public string MemberNumber { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -13,6 +13,7 @@ namespace MIS.Domain.Entities
         public string CivilStatus { get; set; }
         public DateTime? Birthdate { get; set; }
         public int? Age { get; set; }
+
         public int? NetworkId { get; set; }
     }
 }

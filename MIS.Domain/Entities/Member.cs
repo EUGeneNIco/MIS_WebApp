@@ -1,8 +1,9 @@
+using MIS.Domain.Entities.Base;
+
 namespace MIS.Domain.Entities
 {
-    public class Member
+    public class Member : EntityBase
     {
-        public int Id { get; set; }
         public string MemberNumber { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -14,8 +15,7 @@ namespace MIS.Domain.Entities
         public DateTime? Birthdate { get; set; }
         public int? Age { get; set; }
 
-        public int? NetworkId { get; set; }
-        public Network Network { get; set; }
-
+        public long NetworkId { get; set; }
+        public virtual Network Network { get; set; }
     }
 }

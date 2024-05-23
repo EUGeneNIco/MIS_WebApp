@@ -17,7 +17,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(settings.DefaultConnectionStrings));
+    options.UseSqlServer(settings.DefaultConnectionStrings)
+                    .UseLazyLoadingProxies());
 
 builder.Services.AddScoped(typeof(IAppDbContext), typeof(AppDbContext));
 

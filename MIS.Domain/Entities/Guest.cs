@@ -1,8 +1,8 @@
-using MediatR;
+using MIS.Domain.Entities.Base;
 
-namespace MIS.Application.Members.Commands.CreateMember
+namespace MIS.Domain.Entities
 {
-    public class CreateMemberCommand : IRequest<int>
+    public class Guest : EntityBase
     {
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -14,6 +14,7 @@ namespace MIS.Application.Members.Commands.CreateMember
         public DateTime? Birthdate { get; set; }
         public int? Age { get; set; }
 
-        public int? NetworkId { get; set; }
+        public long NetworkId { get; set; }
+        public virtual Network Network { get; set; }
     }
 }

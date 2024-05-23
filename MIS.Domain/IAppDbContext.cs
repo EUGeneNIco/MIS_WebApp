@@ -1,18 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MIS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MIS.Domain
 {
     public interface IAppDbContext
     {
+        DbSet<Guest> Guests { get; set; }
         DbSet<Member> Members { get; set; }
         DbSet<Network> Networks { get; set; }
+        DbSet<User> Users { get; set; }
 
         /******************************************************************************/
 

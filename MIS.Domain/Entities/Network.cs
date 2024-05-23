@@ -1,8 +1,9 @@
-﻿namespace MIS.Domain.Entities
+using MIS.Domain.Entities.Base;
+
+namespace MIS.Domain.Entities
 {
-    public class Network
+    public class Network : EntityBase
     {
-        public int Id { get; set; }
         public string Name { get; set; }
     }
 }

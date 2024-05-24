@@ -4,6 +4,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
+using MIS.Application._Helpers;
 using MIS.Application.Members.Queries.GetGuest;
 using MIS.Domain;
 using MIS.Domain.Entities;
@@ -38,13 +39,20 @@ namespace MIS.Application.Members.Queries.GetGuestGrid
 
             data.FilteredDataCount = query.Count();
 
+            //Filter
+            var name = QueryHelper.GetFilterValue(request.Filters, "name");
+            if (!String.IsNullOrEmpty(name))
+            {
+                name = name.Trim();
+                query = query.Where(x => x.FirstName.Contains(name) || x.MiddleName.Contains(name) || x.LastName.Contains(name));
+            }
 
             //Sort
-            //if (request.SortKey == "percentageOfContribution")
-            //{
-            //    query = request.SortDirection == SortDirection.Ascending ? query.OrderBy(x => x.PercentageOfContribution)
-            //        : query.OrderByDescending(x => x.PercentageOfContribution);
-            //}
+            if (request.SortKey == "network")
+            {
+                query = request.SortDirection == SortDirection.Ascending ? query.OrderBy(x => x.NetworkId)
+                    : query.OrderByDescending(x => x.NetworkId);
+            }
 
             //Page
             query = request.Limit > 0

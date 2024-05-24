@@ -1,7 +1,6 @@
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MIS.Application._Helpers;
+using MIS.Application._Mappings.AutoMapper;
 using MIS.Domain;
 using MIS.Persistence;
 using MIS.WebAPI;
@@ -22,14 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped(typeof(IAppDbContext), typeof(AppDbContext));
 
-// Auto Mapper Configurations
-var mapperConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new MappingProfile());
-});
-
-IMapper mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 // Register all MediatR dependencies
 var assembly = AppDomain.CurrentDomain.Load("MIS.Application"); // Use this approach because the handlers are in a separate assembly

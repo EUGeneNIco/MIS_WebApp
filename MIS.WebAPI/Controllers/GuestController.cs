@@ -8,8 +8,6 @@ using MIS.Application.Members.Queries.GetGuestGrid;
 
 namespace MIS.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
     public class GuestController : ApiControllerBase
     {
         private readonly ILogger<GuestController> _logger;
@@ -45,7 +43,7 @@ namespace MIS.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] CreateGuestCommand command)
+        public async Task<IActionResult> Create(CreateGuestCommand command)
         {
             try
             {
@@ -81,15 +79,15 @@ namespace MIS.WebAPI.Controllers
             }
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(DeleteGuestCommand command)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                await Mediator.Send(command);
+                await Mediator.Send(new DeleteGuestCommand { Id = id });
 
                 return Ok(NoContent());
             }

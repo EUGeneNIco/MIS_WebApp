@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
 import { ImportMemberDataComponent } from './pages/management/import-member-data/import-member-data.component';
+import { GuestComponent } from './pages/management/guest/guest.component';
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import { ImportMemberDataComponent } from './pages/management/import-member-data
                     { path: 'documentation', loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
                     { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
-                    { path: 'management/import-member-data', component: ImportMemberDataComponent }
+                    { path: 'management/import-member-data', component: ImportMemberDataComponent },
+                    { path: 'management/guest', component: GuestComponent },
                 ]
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

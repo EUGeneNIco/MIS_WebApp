@@ -10,6 +10,7 @@ namespace MIS.Application.Members.Queries.GetGuestGrid
 {
     public class GuestGridItem : IHaveCustomMapping
     {
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string ContactNumber { get; set; }

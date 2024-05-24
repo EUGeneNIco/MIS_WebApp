@@ -22,7 +22,7 @@ import { BadgeModule } from 'primeng/badge';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { BlockUIModule } from 'primeng/blockui';
 import { CalendarModule } from 'primeng/calendar';
@@ -99,12 +99,17 @@ import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeTableModule } from 'primeng/treetable';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { BrowserModule } from '@angular/platform-browser';
+import { GuestComponent } from './pages/management/guest/guest.component';
+import { FieldErrorDisplayComponent } from './_components/field-error-display/field-error-display.component';
+import { Validation } from './_helpers/validation';
 
 @NgModule({
     declarations: [
         AppComponent,
         NotfoundComponent,
-        ImportMemberDataComponent
+        ImportMemberDataComponent,
+        GuestComponent,
+        FieldErrorDisplayComponent
     ],
     imports: [
         // AppRoutingModule,
@@ -215,7 +220,7 @@ import { BrowserModule } from '@angular/platform-browser';
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MessageService
+        PhotoService, ProductService, MessageService, ConfirmationService, Validation
     ],
     bootstrap: [AppComponent],
 })

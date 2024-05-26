@@ -29,7 +29,7 @@
             <tr>
                 <th *ngFor="let col of columns" [ngStyle]="col.cellStyle" [ngClass]="col.priority">
 
-                    <input *ngIf="col.filter" pInputText
+                    <input *ngIf="col.filter" pInputText placeholder="Enter guest name here"
                         class="p-inputtext p-component p-element ng-star-inserted p-filled"
                         (keyup.enter)="columnFilter(col.field, $event.target.value)" type="text"
                         [style]="{'width': '100%'}" />
@@ -73,7 +73,7 @@
 
 <!-- Modal -->
 <p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '65vw'}" [(visible)]="displayModal"
-    (onHide)="onExit()" [header]="!editMode ? createFormTitle : updateFormTitle">
+    (onHide)="onExit()" [header]="addMode ? createFormTitle : updateFormTitle">
 
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid">

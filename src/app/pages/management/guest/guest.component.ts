@@ -36,7 +36,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     { label: 'Female', value: 'Female' },
   ];
   readonly createFormTitle: string = 'Guest Registration Form';
-  readonly updateFormTitle: string = 'Guest Registration Form';
+  readonly updateFormTitle: string = 'Guest Details';
 
   // Modal
   displayModal: boolean;
@@ -53,6 +53,10 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   get birthDate() { return this.formModel.get('birthDate'); }
   get age() { return this.formModel.get('age'); }
   get network() { return this.formModel.get('network'); }
+
+  get addMode() {
+    return this.formMode === 'Add';
+  }
 
   @ViewChild('dt') dt: Table;
   constructor(

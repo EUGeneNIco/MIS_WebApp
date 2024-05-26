@@ -24,6 +24,9 @@ namespace MIS.Application.Members.Commands.UpdateGuest
             if (guest is null)
                 throw new NotFoundException(ErrorMessages.EntityNotFound("Guest"));
 
+            if (dbContext.Guests.Any(x => x.ContactNumber == request.ContactNumber && !x.IsDeleted && x.Id != request.Id))
+                throw new DuplicateException(ErrorMessages.DuplicateRecordError("contact number"));
+
             guest.ModifiedOn = DateTime.Now;
 
             guest.FirstName = request.FirstName.Trim();

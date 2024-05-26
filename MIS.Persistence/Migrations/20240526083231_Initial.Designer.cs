@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIS.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240523130154_Initial")]
+    [Migration("20240526083231_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,10 +40,10 @@ namespace MIS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Age")
+                    b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("Birthdate")
+                    b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CivilStatus")

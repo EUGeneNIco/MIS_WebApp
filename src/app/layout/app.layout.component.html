@@ -1,3 +1,5 @@
+<p-toast position="bottom-right" key="tst"></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div class="layout-wrapper" [ngClass]="containerClass">
     <app-topbar></app-topbar>
     <div class="layout-sidebar">
@@ -5,7 +7,14 @@
     </div>
     <div class="layout-main-container">
         <div class="layout-main">
-            <router-outlet></router-outlet>
+            <p-breadcrumb [model]="breadcrumbItems"></p-breadcrumb>
+            <br />
+            <p-blockUI [blocked]="block" [target]="mainPanel">
+                <p-progressSpinner animationDuration="0.75s" class="progress-spinner"></p-progressSpinner>
+            </p-blockUI>
+            <p-panel #mainPanel class="main-panel">
+                <router-outlet (activate)="onActivate($event)"></router-outlet>
+            </p-panel>
         </div>
         <app-footer></app-footer>
     </div>

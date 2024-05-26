@@ -1,5 +1,3 @@
-using AFPMBAI.CLAIMS.Application.Exceptions;
-using AFPMBAI.CLAIMS.Application.KIABenefits.Queries.GetKIABenefitsGrid;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +50,11 @@ namespace MIS.Application.Members.Queries.GetGuestGrid
             {
                 query = request.SortDirection == SortDirection.Ascending ? query.OrderBy(x => x.NetworkId)
                     : query.OrderByDescending(x => x.NetworkId);
+            }
+            else if (request.SortKey == "name")
+            {
+                query = request.SortDirection == SortDirection.Ascending ? query.OrderBy(x => x.LastName)
+                    : query.OrderByDescending(x => x.LastName);
             }
 
             //Page

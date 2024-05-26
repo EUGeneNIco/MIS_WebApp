@@ -21,7 +21,12 @@ namespace MIS.Application.Members.Commands.CreateGuest
 
         public void CreateMappings(Profile configuration)
         {
-            configuration.CreateMap<CreateGuestCommand, Guest>();
+            configuration.CreateMap<CreateGuestCommand, Guest>()
+                .ForMember(x => x.FirstName, s => s.MapFrom(x => x.FirstName))
+                .ForMember(x => x.MiddleName, s => s.MapFrom(x => x.MiddleName))
+                .ForMember(x => x.LastName, s => s.MapFrom(x => x.LastName))
+                .ForMember(x => x.Address, s => s.MapFrom(x => x.Address))
+                .ForMember(x => x.BirthDate, s => s.MapFrom(x => x.BirthDate.Date));
         }
     }
 }

@@ -1,0 +1,35 @@
+/* Remove Header of the Wrapping Panel */
+:host ::ng-deep .main-panel > .p-panel > .p-panel-header {
+    display: none !important;
+}
+
+/* Remove Background, Border and Padding of the Wrapping Panel */
+:host
+    ::ng-deep
+    .main-panel
+    > .p-panel
+    > .p-toggleable-content
+    > .p-panel-content {
+    background-color: transparent;
+    border: 0;
+    padding: 0px;
+}
+
+/* Center the Progress Spinner */
+:host ::ng-deep .progress-spinner {
+    bottom: 0;
+    height: 30px;
+    left: 0;
+    margin: auto;
+    overflow: show;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    z-index: 999;
+}
+
+:host ::ng-deep .ui-progress-spinner {
+    height: 30px;
+    width: 30px;
+}

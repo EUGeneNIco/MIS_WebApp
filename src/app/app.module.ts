@@ -102,6 +102,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { GuestComponent } from './pages/management/guest/guest.component';
 import { FieldErrorDisplayComponent } from './_components/field-error-display/field-error-display.component';
 import { Validation } from './_helpers/validation';
+import { NotificationService } from './services/notification.service';
 
 @NgModule({
     declarations: [
@@ -109,25 +110,9 @@ import { Validation } from './_helpers/validation';
         NotfoundComponent,
         ImportMemberDataComponent,
         GuestComponent,
-        FieldErrorDisplayComponent
+        FieldErrorDisplayComponent,
     ],
     imports: [
-        // AppRoutingModule,
-        // AppLayoutModule,
-        // InputTextModule,
-        // HttpClientModule,
-        // BrowserAnimationsModule,
-        // AccordionModule,
-        // AutoCompleteModule,
-        // AvatarModule,
-        // AvatarGroupModule,
-        // BadgeModule,
-        // BreadcrumbModule,
-        // ButtonModule,
-        // InputTextareaModule,
-        // FormsModule,
-        // FileUploadModule
-
         BrowserModule,
         FormsModule,
         AppRoutingModule,
@@ -216,11 +201,13 @@ import { Validation } from './_helpers/validation';
         VirtualScrollerModule,
         StyleClassModule,
         SplitButtonModule,
+
+        AppLayoutModule,
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MessageService, ConfirmationService, Validation
+        PhotoService, ProductService, MessageService, ConfirmationService, Validation, NotificationService
     ],
     bootstrap: [AppComponent],
 })

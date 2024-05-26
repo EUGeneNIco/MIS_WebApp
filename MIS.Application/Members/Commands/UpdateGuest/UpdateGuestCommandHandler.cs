@@ -1,10 +1,9 @@
-using AFPMBAI.CLAIMS.Application.Exceptions;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
+using MIS.Application._Exceptions;
 using MIS.Domain;
-using MIS.Domain.Entities;
 
 namespace MIS.Application.Members.Commands.UpdateGuest
 {
@@ -27,15 +26,14 @@ namespace MIS.Application.Members.Commands.UpdateGuest
 
             guest.ModifiedOn = DateTime.Now;
 
-            guest.FirstName = request.FirstName;
-            guest.LastName = request.LastName;
-            guest.MiddleName = request.MiddleName;
-            guest.Birthdate = request.Birthdate;
+            guest.FirstName = request.FirstName.Trim();
+            guest.LastName = request.LastName.Trim();
+            guest.MiddleName = request.MiddleName.Trim();
+            guest.BirthDate = request.BirthDate.Date;
             guest.Address = request.Address;
             guest.Gender = request.Gender;
             guest.ContactNumber = request.ContactNumber;
             guest.CivilStatus = request.CivilStatus;
-            guest.Birthdate = request.Birthdate;
             guest.Age = request.Age;
 
             await dbContext.SaveChangesAsync(cancellationToken);

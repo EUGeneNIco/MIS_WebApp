@@ -1,4 +1,4 @@
-﻿namespace AFPMBAI.CLAIMS.Application.Exceptions
+namespace MIS.Application._Exceptions
 {
     public class GenericException : Exception
     {

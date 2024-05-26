@@ -4,7 +4,7 @@
         </ng-template>
         <ng-template pTemplate="right">
             <button pButton pRipple label="Register new guest" icon="pi pi-plus"
-                class="p-button-raised p-button-success mr-2" (click)="onViewAddNewModal()"></button>
+                class="p-button-raised p-button-info mr-2" (click)="openGuestModal()"></button>
         </ng-template>
     </p-toolbar>
 
@@ -15,7 +15,7 @@
         [totalRecords]="totalRecords" [value]="rows">
         <ng-template pTemplate="caption">
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                <h5 class="m-0">Manage Guest</h5>
+                <h5 class="m-0">Guests</h5>
             </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -43,16 +43,20 @@
                     <span class="p-column-title">{{col.header}}</span>
 
                     <span *ngIf="col.type=='text'">
-                        {{rowData[col.field]}}
+                        {{col.field === 'address'
+                        ? rowData[col.field].length > 60
+                        ? rowData[col.field].slice(0, 55) + '...'
+                        : rowData[col.field]
+                        : rowData[col.field]}}
                     </span>
 
                     <div *ngIf="col.type == 'actions' " class="flex">
                         <button pButton pRipple icon="pi pi-pencil"
                             class="p-button-rounded p-button-raised p-button-success mr-2"
-                            (click)="onViewEditModal(rowData)" title="Edit"></button>
+                            (click)="openEditModal(rowData)" pTooltip="Edit"></button>
                         <button pButton pRipple icon="pi pi-trash"
-                            class="p-button-rounded p-button-raised p-button-danger" (click)="deleteRecord(rowData)"
-                            title="Delete"></button>
+                            class="p-button-rounded p-button-raised p-button-warning" (click)="deleteRecord(rowData)"
+                            pTooltip="Delete"></button>
                     </div>
                 </td>
             </tr>
@@ -68,57 +72,61 @@
 
 
 <!-- Modal -->
-<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '75vw'}" [(visible)]="displayModal"
+<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '65vw'}" [(visible)]="displayModal"
     (onHide)="onExit()" [header]="!editMode ? createFormTitle : updateFormTitle">
 
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid">
             <div class="field col-12 md:col-4">
                 <label htmlfor="firstName">First Name</label>
-                <input pInputText formControlName="firstName" type="text" placeholder="First Name">
+                <input pInputText formControlName="firstName" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.firstName, 'required')"
                     errorMsg="First Name is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="middleName">Middle Name</label>
-                <input pInputText formControlName="middleName" type="text" placeholder="Middle Name">
+                <input pInputText formControlName="middleName" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.middleName, 'required')"
                     errorMsg="Amount is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="lastName">Last Name</label>
-                <input pInputText formControlName="lastName" type="text" placeholder="Last Name">
+                <input pInputText formControlName="lastName" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.lastName, 'required')"
                     errorMsg="Last Name is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="birthDate">Birth Date</label>
                 <p-calendar dataType="string" formControlName="birthDate" dateFormat="mm/dd/yy" [readonlyInput]="false"
-                    placeholder="mm/dd/yyyy" type="date"></p-calendar>
+                    type="date"></p-calendar>
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.birthDate, 'required')"
                     errorMsg="Birth Date is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="age">Age</label>
-                <input pInputText formControlName="age" type="number" placeholder="Age">
+                <input pInputText formControlName="age" type="number">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.age, 'required')"
                     errorMsg="Age is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
-                <label htmlfor="contactNumber">Contact Number</label>
-                <input pInputText formControlName="contactNumber" type="text" placeholder="Contact No.">
+                <label htmlfor="contactNumber">Contact No.</label>
+                <input pInputText formControlName="contactNumber" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.contactNumber, 'required')"
                     errorMsg="Contact No. is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="civilStatus">Civil Status</label>
-                <p-dropdown [filter]="true" formControlName="civilStatus" optionLabel="label" [options]="civilStatuses"
-                    placeholder="Select"></p-dropdown>
+                <p-dropdown [filter]="false" formControlName="civilStatus" optionLabel="label" placeholder="Select"
+                    [options]="civilStatuses"></p-dropdown>
+                <app-field-error-display [displayError]="validation.isFieldInvalid(this.civilStatus, 'required')"
+                    errorMsg="Civil Status is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="gender">Gender</label>
-                <p-dropdown [filter]="true" formControlName="gender" optionLabel="label" [options]="genders"
-                    placeholder="Select"></p-dropdown>
+                <p-dropdown [filter]="false" formControlName="gender" optionLabel="label" placeholder="Select"
+                    [options]="genders"></p-dropdown>
+                <app-field-error-display [displayError]="validation.isFieldInvalid(this.gender, 'required')"
+                    errorMsg="Gender is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="network">Network</label>
@@ -129,23 +137,20 @@
             </div>
             <div class="field col-12 md:col-12">
                 <label htmlfor="address">Address</label>
-                <input pInputText formControlName="address" type="text" placeholder="Address">
+                <input pInputText formControlName="address" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.address, 'required')"
                     errorMsg="Address is required"></app-field-error-display>
             </div>
         </div>
     </form>
 
-    <div class="field col-12 md:col-12 mb-0">
+    <div class="field col-12 p-0 mb-0">
         <button *ngIf="editMode" pButton pRipple icon="pi pi-check" class="p-button-raised p-button-success"
             label="Save" style="float:right;width:auto" type="button" (click)="onSubmit()"></button>
-        <button *ngIf="editMode" pButton pRipple icon="pi pi-times" class="p-button-raised" label="Cancel"
-            style="width:auto" type="button" (click)="onExit()"></button>
+        <button *ngIf="editMode" pButton pRipple icon="pi pi-times" class="p-button-raised p-button-secondary"
+            label="Cancel" style="width:auto" type="button" (click)="closeModal()"></button>
 
         <button *ngIf="!editMode" pButton pRipple icon="pi pi-check" class="p-button-raised p-button-success"
             label="Edit" style="float:right;width:auto" type="button" (click)="onEditMode()"></button>
-        <button *ngIf="!editMode" pButton pRipple icon="pi pi-times" class="p-button-raised" label="Close"
-            style="width:auto" type="button" (click)="onExit()"></button>
     </div>
-
 </p-dialog>

@@ -1,5 +1,5 @@
-using AFPMBAI.CLAIMS.Application.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using MIS.Application._Exceptions;
 using MIS.Application.Members.Commands.CreateGuest;
 using MIS.Application.Members.Commands.DeleteGuest;
 using MIS.Application.Members.Commands.UpdateGuest;
@@ -51,6 +51,10 @@ namespace MIS.WebAPI.Controllers
 
                 return Ok(result);
             }
+            catch (DuplicateException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
@@ -68,6 +72,10 @@ namespace MIS.WebAPI.Controllers
                 var result = await Mediator.Send(command);
 
                 return Ok(result);
+            }
+            catch (DuplicateException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (NotFoundException ex)
             {

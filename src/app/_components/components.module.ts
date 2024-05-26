@@ -23,19 +23,13 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
-
-import { FieldErrorDisplayComponent } from './field-error-display/field-error-display.component';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 
 @NgModule({
     declarations: [
-        FieldErrorDisplayComponent,
-        // MemberSelectDialogComponent,
     ],
     exports: [
-        FieldErrorDisplayComponent,
-        // MemberSelectDialogComponent,
     ],
     imports: [
         ButtonModule,

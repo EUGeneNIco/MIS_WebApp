@@ -15,10 +15,10 @@ namespace MIS.Application.Members.Commands.UpdateGuest
         public string Gender { get; set; }
         public string ContactNumber { get; set; }
         public string CivilStatus { get; set; }
-        public DateTime? Birthdate { get; set; }
-        public int? Age { get; set; }
+        public DateTime BirthDate { get; set; }
+        public int Age { get; set; }
 
-        public int? NetworkId { get; set; }
+        public int NetworkId { get; set; }
 
         public void CreateMappings(Profile configuration)
         {

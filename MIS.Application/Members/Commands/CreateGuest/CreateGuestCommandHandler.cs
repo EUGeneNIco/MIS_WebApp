@@ -1,7 +1,7 @@
-using AFPMBAI.CLAIMS.Application.Exceptions;
 using AutoMapper;
 using MediatR;
 using MIS.Application._Enums;
+using MIS.Application._Exceptions;
 using MIS.Domain;
 using MIS.Domain.Entities;
 

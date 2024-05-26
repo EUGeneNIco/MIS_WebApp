@@ -1,9 +1,7 @@
-import { formatDate } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { first } from 'rxjs';
 import { MasterBaseComponent } from 'src/app/_components/base/master-base.component';
 import { ConfirmationMessages } from 'src/app/_enums/confirmation-messages';
 import { NotificationMessages } from 'src/app/_enums/notification-messages';
@@ -20,6 +18,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 export class GuestComponent extends MasterBaseComponent implements AfterViewInit, OnInit {
   formModel: FormGroup;
   recordId: any = 0;
+  initialGridParams: any;
   civilStatuses: SelectItem[] = [
     { label: 'Single', value: 'Single' },
     { label: 'Married', value: 'Married' },
@@ -41,7 +40,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
 
   // Modal
   displayModal: boolean;
-  formMode: any;
+  formMode: string;
   editMode: boolean;
 
   get firstName() { return this.formModel.get('firstName'); }
@@ -62,7 +61,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     private uiService: UiService,
     public confirmationService: ConfirmationService,
     public validation: Validation,
-    public override notifService: NotificationService) {
+    notifService: NotificationService) {
     super(notifService);
   }
 
@@ -71,14 +70,15 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     this._setBreadcrumbs();
 
     this.cols = [
-      { field: 'name', filter: false, header: 'Name', sortable: false, type: 'text' },
+      { field: 'name', filter: true, header: 'Name', sortable: true, type: 'text' },
       { field: 'address', filter: false, header: 'Address', sortable: false, type: 'text' },
+      { field: 'network', filter: false, header: 'Network', sortable: true, type: 'text' },
       { field: 'contactNumber', filter: false, header: 'Contact No.', sortable: false, type: 'text' },
-      { field: 'network', filter: false, header: 'Network', sortable: false, type: 'text' },
       { field: 'id', filter: false, header: 'Action', sortable: false, type: 'actions' }
     ];
 
     this.loading = true;
+    this.initialGridParams = Object.assign({}, this.dataParameter);
   }
 
 
@@ -89,7 +89,6 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   _callLoadService(): void {
     this.guestService.getGrid(this.dataParameter).subscribe({
       next: (data: any) => {
-        console.log("Params: ", data);
         this.reloadData(data);
       },
       error: (e) => {
@@ -122,6 +121,11 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     ]);
   }
 
+  reInitGrid() {
+    this.dataParameter = this.initialGridParams;
+    this._callLoadService();
+  }
+
   getCivilStatuses() {
     // this.causeOfDeathDisabilityService.getGetDescriptionsOfClaim().subscribe({
     //   next: (data: any) => {
@@ -143,29 +147,30 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
 
   // ******************************************Modal(Add, Edit and View)************************************************
 
-  onViewAddNewModal() {
-    this.displayModal = true;
+  openGuestModal() {
     this.formMode = 'Add';
+    this.displayModal = true;
     this.editMode = true;
     this.formModel.enable();
   }
 
   onRowSelect(event: any) {
-    const selectedRowId = event.data['id'];
+    this.formMode = 'View';
     this.editMode = false;
     this.displayModal = true;
-    this.formMode = 'View';
-    this.formModel.disable();;
+    this.formModel.disable();
+
+    const selectedRowId = event.data['id'];
     this.getDetails(selectedRowId);
   }
 
   onEditMode() {
-    this.formModel.enable();
     this.formMode = 'Edit';
+    this.formModel.enable();
     this.editMode = true;
   }
 
-  onViewEditModal(record: any) {
+  openEditModal(record: any) {
     const recordId = record.id;
     this.displayModal = true;
     this.onEditMode();
@@ -176,17 +181,13 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     this.recordId = id;
     this.guestService.get(id).subscribe({
       next: (data: any) => {
-        console.log("get data: ", data);
+        // console.log("get data: ", data);
 
-        this.firstName.setValue(data.firstName);
-        this.middleName.setValue(data.middleName);
-        this.lastName.setValue(data.firstName);
-        this.address.setValue(data.address);
-        this.civilStatus.setValue(data.civilStatus);
-        this.gender.setValue(data.gender);
-        this.contactNumber.setValue(data.contactNumber);
-        this.age.setValue(data.age);
-        this.network.setValue(data.network);
+        this.formModel.patchValue(data);
+
+        this.civilStatus.setValue(this.civilStatuses.find(x => x.value === data.civilStatus));
+        this.gender.setValue(this.genders.find(x => x.value === data.gender));
+        this.network.setValue(this.networks.find(x => x.value === data.networkId));
 
         const formattedDate = new Date(data.birthDate)
         this.birthDate.setValue(formattedDate);
@@ -198,43 +199,45 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   }
 
   deleteRecord(record: any) {
-    const recordId = record.id;
-    console.log('id to delete: ', recordId);
-    if (recordId > 0) {
-      this.guestService.delete(recordId).subscribe({
-        next: (data: any) => {
-          console.log('deleted: ', data);
+    this.confirmationService.confirm({
+      message: ConfirmationMessages.ConfirmDelete.Message,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.uiService.block();
+        const recordId = record.id;
+        if (recordId > 0) {
+          this.guestService.delete(recordId).subscribe({
+            next: (data: any) => {
+              console.log('deleted: ', data);
 
-          this.notifService.showSuccessToast(
-            NotificationMessages.DeleteSuccessful.Title,
-            NotificationMessages.DeleteSuccessful.Message);
+              this.notifService.showSuccessToast(
+                NotificationMessages.DeleteSuccessful.Title,
+                NotificationMessages.DeleteSuccessful.Message);
 
-          this._callLoadService();
-          setTimeout(() => this.displayModal = false, 500);
-          this.uiService.unBlock()
-        },
-        error: (e) => {
-          this.handleErrorMessage(e, NotificationMessages.DeleteError.Message);
-          this.uiService.unBlock()
+              this.reInitGrid();
+              setTimeout(() => this.closeModal(), 500);
+              this.uiService.unBlock();
+            },
+            error: (e) => {
+              this.handleErrorMessage(e, NotificationMessages.DeleteError.Message);
+              this.uiService.unBlock()
+            }
+          })
         }
-      })
-    }
-    // this.confirmationService.confirm({
-    //   message: ConfirmationMessages.ConfirmDelete.Message,
-    //   header: 'Confirmation',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-    //     this.uiService.block();
 
-
-    //   }
-    // })
+      }
+    })
 
   }
 
-  onExit() {
+  closeModal() {
     this.displayModal = false;
+  }
+
+  onExit() {
     this.recordId = 0;
+    this.formModel.reset();
   }
 
   mapData(record: any) {
@@ -258,64 +261,64 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     if (this.formModel.valid) {
       let record = this.formModel.getRawValue();
       let mappedData = this.mapData(record);
-      console.log('to save: ', mappedData);
+      console.log('mapped: ', mappedData);
 
       if (this.recordId > 0) {
-        // this.confirmationService.confirm({
-        //   message: ConfirmationMessages.ConfirmUpdate.Message,
-        //   header: 'Confirmation',
-        //   icon: 'pi pi-exclamation-triangle',
-        //   accept: () => {
-        this.uiService.block();
+        this.confirmationService.confirm({
+          message: ConfirmationMessages.ConfirmUpdate.Message,
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.uiService.block();
 
-        this.guestService.update(mappedData).subscribe({
-          next: (data: any) => {
-            console.log('updated: ', data);
+            this.guestService.update({ ...mappedData, id: this.recordId }).subscribe({
+              next: (data: any) => {
+                console.log('updated: ', data);
 
-            this.notifService.showSuccessToast(
-              NotificationMessages.SaveSuccessful.Title,
-              NotificationMessages.SaveSuccessful.Message);
+                this.notifService.showSuccessToast(
+                  NotificationMessages.SaveSuccessful.Title,
+                  NotificationMessages.SaveSuccessful.Message);
 
-            this._callLoadService();
-            this.recordId = 0;
-            setTimeout(() => this.displayModal = false, 1000);
-            this.uiService.unBlock()
-          },
-          error: (e) => {
-            this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
-            this.uiService.unBlock()
+                this.reInitGrid();
+                this.recordId = 0;
+                setTimeout(() => this.closeModal(), 500);
+                this.uiService.unBlock();
+              },
+              error: (e) => {
+                this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+                this.uiService.unBlock()
+              }
+            })
           }
         })
-        //   }
-        // })
       }
       else {
-        // this.confirmationService.confirm({
-        //   message: ConfirmationMessages.ConfirmSave.Message,
-        //   header: 'Confirmation',
-        //   icon: 'pi pi-exclamation-triangle',
-        //   accept: () => {
-        this.uiService.block();
+        this.confirmationService.confirm({
+          message: ConfirmationMessages.ConfirmSave.Message,
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.uiService.block();
 
-        this.guestService.create(mappedData).subscribe({
-          next: (data: any) => {
-            console.log('created: ', data);
+            this.guestService.create(mappedData).subscribe({
+              next: (data: any) => {
+                console.log('created: ', data);
 
-            this.notifService.showSuccessToast(
-              NotificationMessages.SaveSuccessful.Title,
-              NotificationMessages.SaveSuccessful.Message);
+                this.notifService.showSuccessToast(
+                  NotificationMessages.SaveSuccessful.Title,
+                  NotificationMessages.SaveSuccessful.Message);
 
-            this._callLoadService();
-            setTimeout(() => this.displayModal = false, 1000);
-            this.uiService.unBlock()
-          },
-          error: (e) => {
-            this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
-            this.uiService.unBlock()
+                this.reInitGrid();
+                setTimeout(() => this.closeModal(), 500);
+                this.uiService.unBlock()
+              },
+              error: (e) => {
+                this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+                this.uiService.unBlock()
+              }
+            })
           }
         })
-        //   }
-        // })
       }
     }
     else {

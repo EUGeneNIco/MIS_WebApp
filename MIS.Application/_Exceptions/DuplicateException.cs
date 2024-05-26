@@ -2,9 +2,9 @@ using System;
 
 namespace MIS.Application._Exceptions
 {
-    public class NotFoundException : Exception
+    public class DuplicateException : Exception
     {
-        public NotFoundException(string message)
+        public DuplicateException(string message)
             : base(message)
         {
         }

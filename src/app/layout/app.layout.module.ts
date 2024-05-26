@@ -17,6 +17,12 @@ import { AppFooterComponent } from './app.footer.component';
 import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { BlockUIModule } from 'primeng/blockui';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
     declarations: [
@@ -39,7 +45,13 @@ import { AppLayoutComponent } from "./app.layout.component";
         InputSwitchModule,
         RippleModule,
         RouterModule,
-        AppConfigModule
+        AppConfigModule,
+        ToastModule,
+        ConfirmDialogModule,
+        ProgressSpinnerModule,
+        BlockUIModule,
+        BreadcrumbModule,
+        PanelModule
     ],
     exports: [AppLayoutComponent]
 })

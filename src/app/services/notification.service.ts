@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
 })
 export class NotificationService {
 
-    constructor(public msgService: MessageService) { }
+    constructor(private msgService: MessageService) { }
 
     showErrorToast(header: string, message: string) {
         this.msgService.add({ key: 'tst', severity: 'error', summary: header, detail: message, life: 6000 });

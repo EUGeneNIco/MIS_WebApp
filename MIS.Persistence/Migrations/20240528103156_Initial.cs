@@ -24,7 +24,10 @@ namespace MIS.Persistence.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastSuccessfulLogin = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastSuccessfulLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastFailedLoginAttempt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FailedLogInAttempt = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -160,11 +163,12 @@ namespace MIS.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "FirstName", "LastName", "LastSuccessfulLogin", "MiddleName", "PasswordHash", "UserName" },
+                columns: new[] { "Id", "FailedLogInAttempt", "FirstName", "LastFailedLoginAttempt", "LastName", "LastSuccessfulLogin", "MiddleName", "PasswordHash", "Role", "UserName" },
                 values: new object[,]
                 {
-                    { 1L, "Admin", "Cabuyao", null, "JIL", "jesusislord", "admin@jilcabuyao" },
-                    { 2L, "Mia", "Fulgueras", null, "Alegre", "password123", "mia@jilcabuyao" }
+                    { 1L, 0, "Admin", null, "", null, "", "2741e321a59b784d694abe993f451119", "Admin", "admin@mis" },
+                    { 2L, 0, "Mia", null, "Fulgueras", null, "Alegre", "482c811da5d5b4bc6d497ffa98491e38", "Admin", "mia@mis" },
+                    { 3L, 0, "Staff", null, "", null, "", "2741e321a59b784d694abe993f451119", "Staff", "staff@mis" }
                 });
 
             migrationBuilder.CreateIndex(

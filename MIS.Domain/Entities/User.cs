@@ -12,5 +12,8 @@ namespace MIS.Domain.Entities
         public string MiddleName { get; set; }
 
         public DateTime? LastSuccessfulLogin { get; set; }
+        public DateTime? LastFailedLoginAttempt { get; set; }
+        public string Role { get; set; }
+        public int FailedLogInAttempt { get; set; }
     }
 }

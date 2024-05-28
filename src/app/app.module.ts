@@ -12,7 +12,7 @@ import { IconService } from './demo/service/icon.service';
 import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
 import { ImportMemberDataComponent } from './pages/management/import-member-data/import-member-data.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AvatarModule } from 'primeng/avatar';
 import { AccordionModule } from 'primeng/accordion';
@@ -103,6 +103,11 @@ import { GuestComponent } from './pages/management/guest/guest.component';
 import { FieldErrorDisplayComponent } from './_components/field-error-display/field-error-display.component';
 import { Validation } from './_helpers/validation';
 import { NotificationService } from './services/notification.service';
+import { ForbiddenComponent } from './pages/auth/forbidden/forbidden.component';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { Globals } from './_auth/globals';
+import { AuthInterceptor } from './_auth/auth.interceptor';
+import { DashboardComponent } from './pages/common/dashboard/dashboard.component';
 
 @NgModule({
     declarations: [
@@ -111,6 +116,9 @@ import { NotificationService } from './services/notification.service';
         ImportMemberDataComponent,
         GuestComponent,
         FieldErrorDisplayComponent,
+        ForbiddenComponent,
+        LoginComponent,
+        DashboardComponent
     ],
     imports: [
         BrowserModule,
@@ -206,8 +214,9 @@ import { NotificationService } from './services/notification.service';
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService, MessageService, ConfirmationService, Validation, NotificationService
+        PhotoService, ProductService, MessageService, ConfirmationService, Validation, NotificationService, Globals
     ],
     bootstrap: [AppComponent],
 })

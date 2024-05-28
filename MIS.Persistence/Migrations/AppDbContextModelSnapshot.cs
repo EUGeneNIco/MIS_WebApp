@@ -247,9 +247,15 @@ namespace MIS.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<int>("FailedLogInAttempt")
+                        .HasColumnType("int");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastFailedLoginAttempt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -266,6 +272,10 @@ namespace MIS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -279,20 +289,35 @@ namespace MIS.Persistence.Migrations
                         new
                         {
                             Id = 1L,
+                            FailedLogInAttempt = 0,
                             FirstName = "Admin",
-                            LastName = "Cabuyao",
-                            MiddleName = "JIL",
-                            PasswordHash = "jesusislord",
-                            UserName = "admin@jilcabuyao"
+                            LastName = "",
+                            MiddleName = "",
+                            PasswordHash = "2741e321a59b784d694abe993f451119",
+                            Role = "Admin",
+                            UserName = "admin@mis"
                         },
                         new
                         {
                             Id = 2L,
+                            FailedLogInAttempt = 0,
                             FirstName = "Mia",
                             LastName = "Fulgueras",
                             MiddleName = "Alegre",
-                            PasswordHash = "password123",
-                            UserName = "mia@jilcabuyao"
+                            PasswordHash = "482c811da5d5b4bc6d497ffa98491e38",
+                            Role = "Admin",
+                            UserName = "mia@mis"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            FailedLogInAttempt = 0,
+                            FirstName = "Staff",
+                            LastName = "",
+                            MiddleName = "",
+                            PasswordHash = "2741e321a59b784d694abe993f451119",
+                            Role = "Staff",
+                            UserName = "staff@mis"
                         });
                 });
 

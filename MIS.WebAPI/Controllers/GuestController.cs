@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MIS.Application._Exceptions;
 using MIS.Application.Members.Commands.CreateGuest;
@@ -8,6 +9,7 @@ using MIS.Application.Members.Queries.GetGuestGrid;
 
 namespace MIS.WebAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class GuestController : ApiControllerBase
     {
         private readonly ILogger<GuestController> _logger;

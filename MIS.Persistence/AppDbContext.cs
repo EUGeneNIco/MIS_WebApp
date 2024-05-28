@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using MIS.Application._Helpers;
 using MIS.Domain;
 using MIS.Domain.Entities;
 
@@ -35,8 +36,9 @@ namespace MIS.Persistence
 
             // Seed initial data
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, UserName = "admin@jilcabuyao", PasswordHash = "jesusislord", FirstName = "Admin", MiddleName = "JIL", LastName = "Cabuyao" },
-                new User { Id = 2, UserName = "mia@jilcabuyao", PasswordHash = "password123", FirstName = "Mia", MiddleName = "Alegre", LastName = "Fulgueras" }
+                new User { Id = 1, UserName = "admin@mis", Role = "Admin", PasswordHash = PasswordHelper.Hash("jesusislord"), FirstName = "Admin", MiddleName = "", LastName = "" },
+                new User { Id = 2, UserName = "mia@mis", Role = "Admin", PasswordHash = PasswordHelper.Hash("password123"), FirstName = "Mia", MiddleName = "Alegre", LastName = "Fulgueras" },
+                new User { Id = 3, UserName = "staff@mis", Role = "Staff", PasswordHash = PasswordHelper.Hash("jesusislord"), FirstName = "Staff", MiddleName = "", LastName = "" }
             );
 
             modelBuilder.Entity<Network>().HasData(

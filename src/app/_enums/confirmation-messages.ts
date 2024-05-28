@@ -4,6 +4,12 @@ export class ConfirmationMessages {
         Message: "This will add the record. Proceed?"
     };
 
+    static readonly ConfirmLogout = {
+        Header: "Confirm Logut",
+        Message: "Are you sure you want to logout?"
+    };
+
+
     static readonly ConfirmUpdate = {
         Header: "Confirm Saving",
         Message: "This will update the record. Proceed?"

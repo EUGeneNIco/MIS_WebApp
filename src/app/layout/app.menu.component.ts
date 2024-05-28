@@ -1,6 +1,8 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
+import { AuthService } from '../services/auth.service';
+import { UserRoles } from '../_enums/UserRoles';
 
 @Component({
     selector: 'app-menu',
@@ -9,22 +11,28 @@ import { LayoutService } from './service/app.layout.service';
 export class AppMenuComponent implements OnInit {
 
     model: any[] = [];
+    loggedInUserRole: any;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(
+        public layoutService: LayoutService,
+        public authService: AuthService,
+    ) { }
 
     ngOnInit() {
-        this.model = [
+        this.loggedInUserRole = this.authService.role;
+
+        let rawModel = [
             {
                 label: 'Home',
                 items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/'] }
+                    { label: 'Dashboard', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/'], requiredRoles: [UserRoles.Admin, UserRoles.Staff] },
                 ]
             },
             {
                 label: 'Management',
                 items: [
-                    { label: 'Import Member Data', icon: 'pi pi-fw pi-file-import', routerLink: ['/management/import-member-data'] },
-                    { label: 'Guest', icon: 'pi pi-fw pi-user-plus', routerLink: ['/management/guest'] },
+                    { label: 'Import Member Data', icon: 'pi pi-fw pi-file-import', routerLink: ['/management/import-member-data'], requiredRoles: [UserRoles.Admin] },
+                    { label: 'Guest', icon: 'pi pi-fw pi-user-plus', routerLink: ['/management/guest'], requiredRoles: [UserRoles.Admin] },
                 ]
             },
             // {
@@ -168,5 +176,23 @@ export class AppMenuComponent implements OnInit {
             //     ]
             // }
         ];
+        this.filterMenuBasedOnAuthorizedRoles(rawModel);
+    }
+
+    private filterMenuBasedOnAuthorizedRoles(rawModels: any) {
+        let filteredModels = [];
+        rawModels.forEach((rm: any, index: any) => {
+            let rawModel = { label: rm.label, items: [] };
+            rm.items.forEach((item: any) => {
+                if (item.requiredRoles.find(x => x === this.loggedInUserRole))
+                    rawModel.items.push(item);
+            });
+
+            if (rawModel.items.length > 0)
+                filteredModels.push(rawModel)
+        });
+
+
+        this.model = filteredModels;
     }
 }

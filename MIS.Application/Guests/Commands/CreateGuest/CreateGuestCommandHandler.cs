@@ -5,7 +5,7 @@ using MIS.Application._Exceptions;
 using MIS.Domain;
 using MIS.Domain.Entities;
 
-namespace MIS.Application.Members.Commands.CreateGuest
+namespace MIS.Application.Guests.Commands.CreateGuest
 {
     public class CreateGuestCommandHandler : IRequestHandler<CreateGuestCommand, long>
     {

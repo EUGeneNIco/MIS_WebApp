@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MIS.Application._Exceptions;
-using MIS.Application.Members.Commands.CreateGuest;
-using MIS.Application.Members.Commands.DeleteGuest;
-using MIS.Application.Members.Commands.UpdateGuest;
-using MIS.Application.Members.Queries.GetGuest;
-using MIS.Application.Members.Queries.GetGuestGrid;
+using MIS.Application.Guests.Commands.CreateGuest;
+using MIS.Application.Guests.Commands.DeleteGuest;
+using MIS.Application.Guests.Commands.UpdateGuest;
+using MIS.Application.Guests.Queries.GetGuest;
+using MIS.Application.Guests.Queries.GetGuestGrid;
 
 namespace MIS.WebAPI.Controllers
 {

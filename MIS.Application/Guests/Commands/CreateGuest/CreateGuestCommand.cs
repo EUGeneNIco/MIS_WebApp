@@ -3,7 +3,7 @@ using MediatR;
 using MIS.Application._Mappings;
 using MIS.Domain.Entities;
 
-namespace MIS.Application.Members.Commands.CreateGuest
+namespace MIS.Application.Guests.Commands.CreateGuest
 {
     public class CreateGuestCommand : IRequest<long>, IHaveCustomMapping
     {

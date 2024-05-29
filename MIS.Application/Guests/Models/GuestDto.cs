@@ -1,11 +1,10 @@
 using AutoMapper;
-using MediatR;
 using MIS.Application._Mappings;
 using MIS.Domain.Entities;
 
-namespace MIS.Application.Members.Commands.UpdateGuest
+namespace MIS.Application.Guests.Models
 {
-    public class UpdateGuestCommand : IRequest<long>, IHaveCustomMapping
+    public class GuestDto : IHaveCustomMapping
     {
         public long Id { get; set; }
         public string FirstName { get; set; }
@@ -17,12 +16,11 @@ namespace MIS.Application.Members.Commands.UpdateGuest
         public string CivilStatus { get; set; }
         public DateTime BirthDate { get; set; }
         public int Age { get; set; }
-
         public int NetworkId { get; set; }
 
         public void CreateMappings(Profile configuration)
         {
-            configuration.CreateMap<UpdateGuestCommand, Guest>();
+            configuration.CreateMap<Guest, GuestDto>();
         }
     }
 }

@@ -57,6 +57,10 @@ namespace MIS.Persistence.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -114,6 +118,10 @@ namespace MIS.Persistence.Migrations
                     b.Property<DateTime?>("Birthdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CivilStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -127,6 +135,10 @@ namespace MIS.Persistence.Migrations
 
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -143,7 +155,7 @@ namespace MIS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MemberNumber")
+                    b.Property<string>("MemberCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -157,8 +169,13 @@ namespace MIS.Persistence.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("NetworkId")
+                    b.Property<long?>("NetworkId")
+                        .IsRequired()
                         .HasColumnType("bigint");
+
+                    b.Property<string>("NetworkImported")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace MIS.Application.Members.Queries.GetGuestGrid
+namespace MIS.Application.Guests.Queries.GetGuestGrid
 {
     public class GuestGridItem : IHaveCustomMapping
     {

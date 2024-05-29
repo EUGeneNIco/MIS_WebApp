@@ -9,12 +9,11 @@ import { Injectable } from '@angular/core';
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
-    // private topBarService: TopBarService,
-    private router: Router) {
+    private router: Router
+  ) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     const clonedReq = req.clone({
       headers: req.headers.set('Authorization', 'Bearer ' + this.authService.authToken)
     });
@@ -25,8 +24,8 @@ export class AuthInterceptor implements HttpInterceptor {
           return next.handle(req.clone());
         },
         error: (e) => {
-          console.log('auth interceptor error', e);
-          if (e.status == ApiCallStatusCodes.UNAUTHORIZED) {
+          // console.log('auth interceptor error', e);
+          if (e.status == ApiCallStatusCodes.UNAUTHORIZED || e.status === 0) {
             console.log('Unauthorized: Navigated by Interceptor');
 
             this.authService.destroyAuthToken();
@@ -42,5 +41,4 @@ export class AuthInterceptor implements HttpInterceptor {
       })
     );
   }
-  // return next(req);
 };

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace MIS.Application.Members.Commands.DeleteGuest
+namespace MIS.Application.Guests.Commands.DeleteGuest
 {
     public class DeleteGuestCommand : IRequest<Unit>
     {

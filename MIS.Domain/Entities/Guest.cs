@@ -13,6 +13,7 @@ namespace MIS.Domain.Entities
         public string CivilStatus { get; set; }
         public DateTime BirthDate { get; set; }
         public int Age { get; set; }
+        public string Extension { get; set; }
 
         public long NetworkId { get; set; }
         public virtual Network Network { get; set; }

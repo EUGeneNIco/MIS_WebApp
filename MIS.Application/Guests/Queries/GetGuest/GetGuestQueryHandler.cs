@@ -3,15 +3,15 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
 using MIS.Application._Exceptions;
+using MIS.Application.Guests.Models;
 using MIS.Domain;
-using MIS.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MIS.Application.Members.Queries.GetGuest
+namespace MIS.Application.Guests.Queries.GetGuest
 {
     public class GetGuestQueryHandler : IRequestHandler<GetGuestQuery, GuestDto>
     {
@@ -30,7 +30,7 @@ namespace MIS.Application.Members.Queries.GetGuest
             if (guest is null)
                 throw new NotFoundException(ErrorMessages.EntityNotFound("Guest"));
 
-            return this.mapper.Map<GuestDto>(guest);
+            return mapper.Map<GuestDto>(guest);
         }
     }
 }

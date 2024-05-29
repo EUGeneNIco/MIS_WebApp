@@ -5,7 +5,7 @@ using MIS.Application._Enums;
 using MIS.Application._Exceptions;
 using MIS.Domain;
 
-namespace MIS.Application.Members.Commands.UpdateGuest
+namespace MIS.Application.Guests.Commands.UpdateGuest
 {
     public class UpdateGuestCommandHandler : IRequestHandler<UpdateGuestCommand, long>
     {
@@ -20,7 +20,7 @@ namespace MIS.Application.Members.Commands.UpdateGuest
         }
         public async Task<long> Handle(UpdateGuestCommand request, CancellationToken cancellationToken)
         {
-            var guest = await this.dbContext.Guests.FirstOrDefaultAsync(x => x.Id == request.Id && !x.IsDeleted);
+            var guest = await dbContext.Guests.FirstOrDefaultAsync(x => x.Id == request.Id && !x.IsDeleted);
             if (guest is null)
                 throw new NotFoundException(ErrorMessages.EntityNotFound("Guest"));
 

@@ -6,7 +6,7 @@ using MIS.Application._Exceptions;
 using MIS.Domain;
 using MIS.Domain.Entities;
 
-namespace MIS.Application.Members.Commands.DeleteGuest
+namespace MIS.Application.Guests.Commands.DeleteGuest
 {
     public class DeleteGuestCommandHandler : IRequestHandler<DeleteGuestCommand, Unit>
     {

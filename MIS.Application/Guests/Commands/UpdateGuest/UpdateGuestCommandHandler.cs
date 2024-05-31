@@ -24,7 +24,7 @@ namespace MIS.Application.Guests.Commands.UpdateGuest
             if (guest is null)
                 throw new NotFoundException(ErrorMessages.EntityNotFound("Guest"));
 
-            if (dbContext.Guests.Any(x => x.ContactNumber == request.ContactNumber && !x.IsDeleted && x.Id != request.Id))
+            if (!string.IsNullOrWhiteSpace(request.ContactNumber) && dbContext.Guests.Any(x => x.ContactNumber == request.ContactNumber && !x.IsDeleted && x.Id != request.Id))
                 throw new DuplicateException(ErrorMessages.DuplicateRecordError("contact number"));
 
             guest.ModifiedOn = DateTime.Now;
@@ -38,6 +38,8 @@ namespace MIS.Application.Guests.Commands.UpdateGuest
             guest.ContactNumber = request.ContactNumber;
             guest.CivilStatus = request.CivilStatus;
             guest.Age = request.Age;
+            guest.NetworkId = request.NetworkId;
+            guest.Extension = request.Extension;
 
             await dbContext.SaveChangesAsync(cancellationToken);
 

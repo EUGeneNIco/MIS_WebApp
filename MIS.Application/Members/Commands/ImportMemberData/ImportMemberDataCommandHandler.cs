@@ -21,10 +21,13 @@ namespace MIS.Application.Members.Commands.ImportMemberData
         }
         public async Task<Unit> Handle(ImportMemberDataCommand request, CancellationToken cancellationToken)
         {
-            //// Temporary
+            // Temporary
             var exitingRecords = dbContext.Members.ToList();
-            dbContext.Members.RemoveRange(exitingRecords);
-            await dbContext.SaveChangesAsync(cancellationToken);
+            if (exitingRecords.Any())
+            {
+                this.dbContext.Members.RemoveRange(exitingRecords);
+                await this.dbContext.SaveChangesAsync(cancellationToken);
+            }
 
             var memberList = new List<Member>();
 
@@ -48,8 +51,8 @@ namespace MIS.Application.Members.Commands.ImportMemberData
                 });
             }
             
-            dbContext.Members.AddRange(memberList);
-            await dbContext.SaveChangesAsync(cancellationToken);
+            this.dbContext.Members.AddRange(memberList);
+            await this.dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

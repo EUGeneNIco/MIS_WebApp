@@ -13,16 +13,16 @@ export class MemberService extends BaseService {
   get(id: number) {
     return this.http.get(this.API_URL + `/${this.resource}/` + id);
   }
-  create(data: any) {
-    return this.http.post(this.API_URL + `/${this.resource}`, data);
-  }
+  // create(data: any) {
+  //   return this.http.post(this.API_URL + `/${this.resource}`, data);
+  // }
   update(data: any) {
     return this.http.put(this.API_URL + `/${this.resource}`, data);
   }
-  delete(id: any) {
-    console.log(id)
-    return this.http.delete(this.API_URL + `/${this.resource}/${id}`);
-  }
+  // delete(id: any) {
+  //   console.log(id)
+  //   return this.http.delete(this.API_URL + `/${this.resource}/${id}`);
+  // }
   getGrid(data: any) {
     return this.http.post(this.API_URL + `/${this.resource}/getGrid`, data);
   }

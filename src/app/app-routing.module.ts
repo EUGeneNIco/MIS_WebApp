@@ -8,6 +8,7 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { ForbiddenComponent } from './pages/auth/forbidden/forbidden.component';
 import { AuthGuard } from './_auth/auth.guard';
 import { DashboardComponent } from './pages/common/dashboard/dashboard.component';
+import { MemberComponent } from './pages/management/member/member.component';
 
 @NgModule({
     imports: [
@@ -25,6 +26,7 @@ import { DashboardComponent } from './pages/common/dashboard/dashboard.component
                     { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
                     { path: 'management/import-member-data', component: ImportMemberDataComponent, canActivate: [AuthGuard], data: { role: "Admin" } },
                     { path: 'management/guest', component: GuestComponent, canActivate: [AuthGuard], data: { role: "Admin" } },
+                    { path: 'management/member', component: MemberComponent, canActivate: [AuthGuard], data: { role: "Admin" } },
                 ],
             },
             { path: 'login', component: LoginComponent },

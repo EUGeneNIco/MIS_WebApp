@@ -130,12 +130,6 @@ namespace MIS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("CreatedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -147,6 +141,9 @@ namespace MIS.Persistence.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ImportDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -170,7 +167,6 @@ namespace MIS.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("NetworkId")
-                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<string>("NetworkImported")
@@ -178,8 +174,6 @@ namespace MIS.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.HasIndex("ModifiedById");
 
@@ -228,7 +222,7 @@ namespace MIS.Persistence.Migrations
                         {
                             Id = 1L,
                             IsDeleted = false,
-                            Name = "Youth"
+                            Name = "KKB/CYN"
                         },
                         new
                         {
@@ -252,7 +246,7 @@ namespace MIS.Persistence.Migrations
                         {
                             Id = 5L,
                             IsDeleted = false,
-                            Name = "YAN"
+                            Name = "Y-AM"
                         });
                 });
 
@@ -363,21 +357,13 @@ namespace MIS.Persistence.Migrations
 
             modelBuilder.Entity("MIS.Domain.Entities.Member", b =>
                 {
-                    b.HasOne("MIS.Domain.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("MIS.Domain.Entities.User", "ModifiedBy")
                         .WithMany()
                         .HasForeignKey("ModifiedById");
 
                     b.HasOne("MIS.Domain.Entities.Network", "Network")
                         .WithMany()
-                        .HasForeignKey("NetworkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
+                        .HasForeignKey("NetworkId");
 
                     b.Navigation("ModifiedBy");
 

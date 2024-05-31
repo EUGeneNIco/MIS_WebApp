@@ -49,6 +49,10 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); // RMF: Fix for "Possible object cycle was detected which is not supported"
+
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(settings.DefaultConnectionStrings)
                     .UseLazyLoadingProxies());

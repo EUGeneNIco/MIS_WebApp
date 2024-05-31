@@ -1,34 +1,15 @@
-<div class="card">
-    <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-        </ng-template>
-        <ng-template pTemplate="right">
-            <button (click)="saveToDb()" *ngIf="rows && rows.length > 0" pButton pRipple label="Save to database"
-                icon="pi pi-check" class="p-button-raised p-button-success mr-2"></button>
-            <button (click)="fileInput.click()" pButton pRipple label="Import Member data from Excel"
-                icon="pi pi-download" class="p-button-raised p-button-info mr-2"><input style="display: none;"
-                    type="file" #fileInput (change)="readExcel($event)"></button>
-        </ng-template>
-    </p-toolbar>
-    <!-- <ng-template pTemplate="header">
-        <div class="flex justify-content-between">
-            <h5 style="padding:21px 0 0 21px; margin-bottom: 0;">Import Member Data</h5>
-        </div>
-    </ng-template> -->
+<div>
+    <p-blockUI [target]="dt" [blocked]="ongoingTransaction">
+    </p-blockUI>
     <p-table #dt [columns]="cols" currentPageReportTemplate="{{totalRecordCountLabel}}" dataKey="id" [lazy]="true"
         [loading]="loading" (onLazyLoad)="loadLazy($event)" (onRowSelect)="onRowSelect($event)" [paginator]="true"
         [responsive]="true" responsiveLayout="scroll" [rowHover]="true" [rows]="10"
         [rowsPerPageOptions]="[10,20,50,100]" [showCurrentPageReport]="true" selectionMode="single"
         [totalRecords]="totalRecords" [value]="rows">
-        <!-- <ng-template pTemplate="caption">
-            <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                <h5 class="m-0">Member's data to be imported</h5>
-            </div>
-        </ng-template> -->
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th *ngFor="let col of columns" [ngClass]="col.priority" [ngStyle]="col.style"
-                    [pSortableColumn]="col.field" [pSortableColumnDisabled]="!col.sortable">
+                <th style="font-size: smaller;" *ngFor="let col of columns" [ngClass]="col.priority"
+                    [ngStyle]="col.style" [pSortableColumn]="col.field" [pSortableColumnDisabled]="!col.sortable">
                     {{ col.header }}
                     <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
                 </th>
@@ -45,10 +26,10 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-columns="columns" let-rowData>
-            <tr [pSelectableRow]="rowData">
+            <tr>
                 <td class="table-cell" *ngFor="let col of columns" [ngStyle]="col.cellStyle">
                     <span class="p-column-title">{{col.header}}</span>
-                    <span *ngIf="col.type=='text'">
+                    <span style="font-size: smaller;" *ngIf="col.type=='text'">
                         {{rowData[col.field]}}
                         <!-- {{col.field === 'address'
                         ? rowData[col.field].length > 60
@@ -57,14 +38,14 @@
                         : rowData[col.field]}} -->
                     </span>
 
-                    <div *ngIf="col.type == 'actions' " class="flex">
+                    <!-- <div *ngIf="col.type == 'actions' " class="flex">
                         <button pButton pRipple icon="pi pi-pencil"
                             class="p-button-rounded p-button-raised p-button-success mr-2"
                             (click)="openEditModal(rowData)" pTooltip="Edit"></button>
                         <button pButton pRipple icon="pi pi-trash"
                             class="p-button-rounded p-button-raised p-button-warning" (click)="deleteRecord(rowData)"
                             pTooltip="Delete"></button>
-                    </div>
+                    </div> -->
                 </td>
             </tr>
         </ng-template>
@@ -75,4 +56,8 @@
             </tr>
         </ng-template>
     </p-table>
+    <div class="flex justify-content-end gap-2">
+        <p-button label="Cancel" (onClick)="onCancel()" severity="secondary" />
+        <p-button label="Start" (click)="saveToDb()" />
+    </div>
 </div>

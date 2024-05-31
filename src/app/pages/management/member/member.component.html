@@ -3,8 +3,10 @@
         <ng-template pTemplate="left">
         </ng-template>
         <ng-template pTemplate="right">
-            <button pButton pRipple label="Register new guest" icon="pi pi-plus"
-                class="p-button-raised p-button-info mr-2" (click)="openModal()"></button>
+            <button pTooltip="Import Member Data" tooltipPosition="bottom" (click)="fileInput.click()"
+                accept=".xls,.xlsx" pButton pRipple icon="pi pi-download"
+                class="p-button-raised p-button-info mr-2"><input style="display: none;" type="file" #fileInput
+                    (change)="openImportModal($event)"></button>
         </ng-template>
     </p-toolbar>
 
@@ -15,7 +17,7 @@
         [totalRecords]="totalRecords" [value]="rows">
         <ng-template pTemplate="caption">
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                <h5 class="m-0">Guests</h5>
+                <h5 class="m-0">Members</h5>
             </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -29,7 +31,7 @@
             <tr>
                 <th *ngFor="let col of columns" [ngStyle]="col.cellStyle" [ngClass]="col.priority">
 
-                    <input *ngIf="col.filter" pInputText placeholder="Enter guest name here"
+                    <input *ngIf="col.filter" pInputText placeholder="Enter member name here"
                         class="p-inputtext p-component p-element ng-star-inserted p-filled"
                         (keyup.enter)="columnFilter(col.field, $event.target.value)" type="text"
                         [style]="{'width': '100%'}" />
@@ -54,9 +56,6 @@
                         <button pButton pRipple icon="pi pi-pencil"
                             class="p-button-rounded p-button-raised p-button-success mr-2"
                             (click)="openEditModal(rowData)" pTooltip="Edit"></button>
-                        <button pButton pRipple icon="pi pi-trash"
-                            class="p-button-rounded p-button-raised p-button-warning" (click)="deleteRecord(rowData)"
-                            pTooltip="Delete"></button>
                     </div>
                 </td>
             </tr>
@@ -73,10 +72,14 @@
 
 <!-- Modal -->
 <p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '65vw'}" [(visible)]="displayModal"
-    (onHide)="onExit()" [header]="addMode ? createFormTitle : updateFormTitle">
+    (onHide)="onExit()" header="Member Details">
 
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-4">
+                <label htmlfor="memberCode">Code</label>
+                <input pInputText formControlName="memberCode" type="text" readonly>
+            </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="firstName">First Name</label>
                 <input pInputText formControlName="firstName" type="text">
@@ -86,8 +89,6 @@
             <div class="field col-12 md:col-4">
                 <label htmlfor="middleName">Middle Name</label>
                 <input pInputText formControlName="middleName" type="text">
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.middleName, 'required')"
-                    errorMsg="Amount is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="lastName">Last Name</label>
@@ -99,54 +100,41 @@
                 <label htmlfor="birthDate">Birth Date</label>
                 <p-calendar dataType="string" formControlName="birthDate" dateFormat="mm/dd/yy" [readonlyInput]="false"
                     type="date"></p-calendar>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.birthDate, 'required')"
-                    errorMsg="Birth Date is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="age">Age</label>
                 <input pInputText formControlName="age" type="number">
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.age, 'required')"
-                    errorMsg="Age is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="contactNumber">Contact No.</label>
                 <input pInputText formControlName="contactNumber" type="text">
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.contactNumber, 'required')"
-                    errorMsg="Contact No. is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="civilStatus">Civil Status</label>
                 <p-dropdown appendTo="body" [filter]="false" formControlName="civilStatus" optionLabel="label"
                     placeholder="Select" [options]="civilStatuses"></p-dropdown>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.civilStatus, 'required')"
-                    errorMsg="Civil Status is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="gender">Gender</label>
                 <p-dropdown appendTo="body" [filter]="false" formControlName="gender" optionLabel="label"
                     placeholder="Select" [options]="genders"></p-dropdown>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.gender, 'required')"
-                    errorMsg="Gender is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="network">Network</label>
                 <p-dropdown appendTo="body" [filter]="false" formControlName="network" optionLabel="label"
                     [options]="networks" placeholder="Select"></p-dropdown>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.network, 'required')"
-                    errorMsg="Network is required"></app-field-error-display>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlfor="category">Category</label>
+                <input pInputText formControlName="category" type="text">
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="extension">Extension</label>
-                <p-dropdown appendTo="body" [filter]="false" formControlName="extension" optionLabel="label"
-                    placeholder="Select" [options]="extensions"></p-dropdown>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.extension, 'required')"
-                    errorMsg="Extension is required"></app-field-error-display>
+                <input pInputText formControlName="extension" type="text">
             </div>
-            <div class="field col-12 md:col-8">
+            <div class="field col-12 md:col-12">
                 <label htmlfor="address">Address</label>
                 <input pInputText formControlName="address" type="text">
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.address, 'required')"
-                    errorMsg="Address is required"></app-field-error-display>
             </div>
         </div>
     </form>
@@ -160,4 +148,9 @@
         <button *ngIf="!editMode" pButton pRipple icon="pi pi-check" class="p-button-raised p-button-success"
             label="Edit" style="float:right;width:auto" type="button" (click)="onEditMode()"></button>
     </div>
+</p-dialog>
+
+<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '95vw'}"
+    [(visible)]="displayImportModal" (onHide)="onHideImportModal()" header="Import Member Data">
+    <app-import-member-data (initComponent)="onInitImport($event)"></app-import-member-data>
 </p-dialog>

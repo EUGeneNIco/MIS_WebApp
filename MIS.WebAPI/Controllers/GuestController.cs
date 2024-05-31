@@ -123,10 +123,6 @@ namespace MIS.WebAPI.Controllers
 
                 return Ok(data);
             }
-            catch (NotFoundException ex)
-            {
-                return BadRequest(ex.Message);
-            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);

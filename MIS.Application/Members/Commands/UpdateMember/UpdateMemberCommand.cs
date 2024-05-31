@@ -3,9 +3,9 @@ using MediatR;
 using MIS.Application._Mappings;
 using MIS.Domain.Entities;
 
-namespace MIS.Application.Guests.Commands.UpdateGuest
+namespace MIS.Application.Members.Commands.UpdateMember
 {
-    public class UpdateGuestCommand : IRequest<long>, IHaveCustomMapping
+    public class UpdateMemberCommand : IRequest<long>, IHaveCustomMapping
     {
         public long Id { get; set; }
         public string FirstName { get; set; }
@@ -15,14 +15,14 @@ namespace MIS.Application.Guests.Commands.UpdateGuest
         public string Gender { get; set; }
         public string ContactNumber { get; set; }
         public string CivilStatus { get; set; }
-        public DateTime BirthDate { get; set; }
-        public int Age { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public int? Age { get; set; }
+        public int? NetworkId { get; set; }
         public string Extension { get; set; }
-        public int NetworkId { get; set; }
 
         public void CreateMappings(Profile configuration)
         {
-            configuration.CreateMap<UpdateGuestCommand, Guest>();
+            configuration.CreateMap<UpdateMemberCommand, Member>();
         }
     }
 }

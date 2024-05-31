@@ -1,15 +1,14 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ConfirmationService, LazyLoadEvent, MessageService, SelectItem } from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AppPageBaseComponent } from 'src/app/_components/base/app-page-base.component';
-import { MasterBaseComponent } from 'src/app/_components/base/master-base.component';
-import { ConfirmationMessages } from 'src/app/_enums/confirmation-messages';
 import { NotificationMessages } from 'src/app/_enums/notification-messages';
 import { IDataParameter } from 'src/app/_models/data-parameter.model';
 import { UiService } from 'src/app/layout/service/ui.service';
 import { MemberService } from 'src/app/services/member.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import * as XLSX from 'xlsx';
+import { EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-import-member-data',
@@ -21,15 +20,21 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
 
   uploadedData: any[] = [];
 
+  loading: boolean;
+  hasLoaded: boolean = false;
+  hasLoadedButNotSuccessful: boolean = false;
+  ongoingTransaction: boolean = false;
+
   // grid fields
 
   cols: any[];
   dataParameter: IDataParameter;
   rows: any[];
-  loading: boolean;
   totalRecords: number;
   totalRecordCountLabel: string
   table: Table;
+
+  @Output() initComponent = new EventEmitter();
 
   constructor(
     private messageService: MessageService,
@@ -54,15 +59,15 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     this.cols = [
       { field: 'NAME', filter: false, header: 'Name', sortable: false, type: 'text' },
       { field: 'ADDRESS', filter: false, header: 'Address', sortable: false, type: 'text' },
+      { field: 'BIRTHDAY', filter: false, header: 'Birthday', sortable: false, type: 'text' },
+      { field: 'AGE', filter: false, header: 'Age', sortable: false, type: 'text' },
+      { field: 'GENDER', filter: false, header: 'Gender', sortable: false, type: 'text' },
       { field: 'CONTACTNUMBER', filter: false, header: 'Contact No.', sortable: false, type: 'text' },
+      { field: 'CIVILSTATUS', filter: false, header: 'Civil Status', sortable: false, type: 'text' },
       { field: 'CATEGORY', filter: false, header: 'Category', sortable: false, type: 'text' },
-      { field: 'EXTENSION', filter: false, header: 'Extension', sortable: false, type: 'text' },
+      { field: 'CODE', filter: false, header: 'Code', sortable: false, type: 'text' },
       { field: 'NETWORK', filter: false, header: 'Network', sortable: false, type: 'text' },
-      // { field: 'BIRTHDAY', filter: false, header: 'Birthday', sortable: false, type: 'text' },
-      // { field: 'CODE', filter: false, header: 'Code', sortable: false, type: 'text' },
-      // { field: 'GENDER', filter: false, header: 'Gender', sortable: false, type: 'text' },
-      // { field: 'CIVILSTATUS', filter: false, header: 'Civil Status', sortable: false, type: 'text' },
-      // { field: 'AGE', filter: false, header: 'Age', sortable: false, type: 'text' },
+      { field: 'EXTENSION', filter: false, header: 'Extension', sortable: false, type: 'text' },
       // { field: 'FIRSTNAME', filter: false, header: 'First Name', sortable: false, type: 'text' },
       // { field: 'MIDDLENAME', filter: false, header: 'Middle Name', sortable: false, type: 'text' },
       // { field: 'LASTNAME', filter: false, header: 'Last Name', sortable: false, type: 'text' },
@@ -87,9 +92,28 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     ]);
   }
 
-  readExcel(event) {
-    let file = event.target.files[0];
+  openImportModal(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      if (this.isValidExcelFile(file)) {
+        this.readExcel(file);
+      } else {
+        this.hasLoadedButNotSuccessful = true;
+        this.notifService.showErrorToast(
+          NotificationMessages.GenericError.Title,
+          'Please select a valid Excel file.');
+      }
+    }
+  }
 
+  isValidExcelFile(file: File): boolean {
+    const validExtensions = ['xls', 'xlsx'];
+    const fileExtension = file.name.split('.').pop();
+    return fileExtension ? validExtensions.includes(fileExtension.toLowerCase()) : false;
+  }
+
+  readExcel(file: File) {
     let fileReader = new FileReader();
     fileReader.readAsBinaryString(file);
     fileReader.onload = (e) => {
@@ -97,8 +121,35 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
       var sheetNames = wb.SheetNames;
       this.excelData = XLSX.utils.sheet_to_json(wb.Sheets[sheetNames[0]]);
 
+      this.validateImportedData();
+    }
+  }
+
+  validateImportedData() {
+    let validated = true;
+
+    if (!this.excelData || this.excelData.length === 0) validated = false
+
+    let firstData = this.excelData[0];
+
+    let firstNameData = firstData['FIRSTNAME'];
+    let lastNameData = firstData['LASTNAME'];
+
+    if (!firstNameData || !lastNameData) validated = false;
+
+    if (validated) {
+      console.log('file validated!')
+      this.hasLoaded = true;
       this.reloadData();
     }
+    else {
+      this.hasLoadedButNotSuccessful = true;
+      this.notifService.showErrorToast(
+        NotificationMessages.GenericError.Title,
+        'There is something wrong with the file you have uploaded. Please check if you are selecting the correct file.');
+    }
+
+    this.loading = false;
   }
 
   mapData() {
@@ -136,13 +187,26 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     })
   }
 
+  onCancel() {
+    this.initializeComponent();
+  }
+
+  initializeComponent(fromParent?: boolean) {
+    this.hasLoaded = false;
+    this.hasLoadedButNotSuccessful = false;
+    if (!fromParent)
+      this.initComponent.emit(true);
+
+    setTimeout(() => this.excelData = [], 3000);
+  }
+
   saveToDb() {
     this.confirmationService.confirm({
       message: 'This action will import member data to database and there is a possibility to update existing records. Proceed?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.uiService.block();
+        this.ongoingTransaction = true;
 
         let mappedData = this.mapData();
 
@@ -152,7 +216,8 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
               NotificationMessages.SaveSuccessful.Title,
               NotificationMessages.SaveSuccessful.Message);
 
-            this.uiService.unBlock()
+            this.initializeComponent();
+            this.ongoingTransaction = false;
           },
           error: (e) => {
             this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
@@ -165,14 +230,11 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
 
   //********************************* Grid Methods - from Masterbase component *********************************
   _callLoadService() {
-    // console.log('call load service');
-
     this.reloadData();
   };
 
   onRowSelect(event: any) {
     const selectedRowData = event.data;
-    console.log('data:', selectedRowData);
   }
 
   public loadLazy(event: LazyLoadEvent) {
@@ -182,8 +244,6 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     this.dataParameter.sortDirection = event.sortOrder;
     this.dataParameter.offset = event.first;
     this.dataParameter.limit = event.rows;
-
-    // console.log(this.dataParameter);
 
     this._callLoadService();
   }
@@ -213,8 +273,6 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     let dataIndex = this.dataParameter.filters.findIndex(p => p.field == filterField);
 
     this.dataParameter.filters.splice(dataIndex, 1);
-
-    // console.log(this.dataParameter.filters);
   }
 
   private upSertFilterData(filterField: string, filterValue: string): void {
@@ -225,7 +283,5 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     } else {
       filterData.value = filterValue;
     }
-
-    // console.log(this.dataParameter.filters);
   }
 }

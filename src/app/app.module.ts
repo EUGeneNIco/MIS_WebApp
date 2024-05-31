@@ -108,6 +108,7 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { Globals } from './_auth/globals';
 import { AuthInterceptor } from './_auth/auth.interceptor';
 import { DashboardComponent } from './pages/common/dashboard/dashboard.component';
+import { MemberComponent } from './pages/management/member/member.component';
 
 @NgModule({
     declarations: [
@@ -118,7 +119,8 @@ import { DashboardComponent } from './pages/common/dashboard/dashboard.component
         FieldErrorDisplayComponent,
         ForbiddenComponent,
         LoginComponent,
-        DashboardComponent
+        DashboardComponent,
+        MemberComponent
     ],
     imports: [
         BrowserModule,

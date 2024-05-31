@@ -42,11 +42,11 @@ namespace MIS.Persistence
             );
 
             modelBuilder.Entity<Network>().HasData(
-                new Network { Id = 1, Name = "Youth" },
+                new Network { Id = 1, Name = "KKB/CYN" },
                 new Network { Id = 2, Name = "Women" },
                 new Network { Id = 3, Name = "Men" },
                 new Network { Id = 4, Name = "Children" },
-                new Network { Id = 5, Name = "YAN" }
+                new Network { Id = 5, Name = "Y-AM" }
             );
         }
     }

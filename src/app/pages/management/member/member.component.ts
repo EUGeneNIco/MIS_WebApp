@@ -8,32 +8,29 @@ import { NotificationMessages } from 'src/app/_enums/notification-messages';
 import { DateUtils } from 'src/app/_helpers/dateUtils';
 import { Validation } from 'src/app/_helpers/validation';
 import { UiService } from 'src/app/layout/service/ui.service';
-import { GuestService } from 'src/app/services/guest.service';
+import { MemberService } from 'src/app/services/member.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { ImportMemberDataComponent } from '../import-member-data/import-member-data.component';
 
 @Component({
-  selector: 'app-guest',
-  templateUrl: './guest.component.html',
-  styleUrl: './guest.component.scss'
+  selector: 'app-member',
+  templateUrl: './member.component.html',
+  styleUrl: './member.component.scss'
 })
-export class GuestComponent extends MasterBaseComponent implements AfterViewInit, OnInit {
+export class MemberComponent extends MasterBaseComponent implements AfterViewInit, OnInit {
   formModel: FormGroup;
   recordId: any = 0;
   initialGridParams: any;
+  cutOffLoading: number = 20;
   civilStatuses: SelectItem[] = [
     { label: 'Single', value: 'Single' },
     { label: 'Married', value: 'Married' },
     { label: 'Widowed', value: 'Widowed' },
   ];
-  extensions: SelectItem[] = [
-    { label: 'Cabuyao', value: 'Cabuyao' },
-    { label: 'HK Village', value: 'HK Village' },
-    { label: 'SJV7', value: 'SJV7' },
-  ];
   networks: SelectItem[] = [
     { label: 'KKB/CYN', value: 1 },
-    { label: 'Men', value: 2 },
-    { label: 'Women', value: 3 },
+    { label: 'Women', value: 2 },
+    { label: 'Men', value: 3 },
     { label: 'Children', value: 4 },
     { label: 'Y-AM', value: 5 },
   ];
@@ -41,11 +38,10 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
   ];
-  readonly createFormTitle: string = 'Guest Registration Form';
-  readonly updateFormTitle: string = 'Guest Details';
 
   // Modal
   displayModal: boolean;
+  displayImportModal: boolean;
   formMode: string;
   editMode: boolean;
 
@@ -59,6 +55,8 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   get birthDate() { return this.formModel.get('birthDate'); }
   get age() { return this.formModel.get('age'); }
   get network() { return this.formModel.get('network'); }
+  get memberCode() { return this.formModel.get('memberCode'); }
+  get category() { return this.formModel.get('category'); }
   get extension() { return this.formModel.get('extension'); }
 
   get addMode() {
@@ -66,8 +64,10 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   }
 
   @ViewChild('dt') dt: Table;
+  @ViewChild(ImportMemberDataComponent) importComponent!: ImportMemberDataComponent;
+
   constructor(
-    private guestService: GuestService,
+    private memberService: MemberService,
     private fb: FormBuilder,
     private uiService: UiService,
     public confirmationService: ConfirmationService,
@@ -98,7 +98,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   }
 
   _callLoadService(): void {
-    this.guestService.getGrid(this.dataParameter).subscribe({
+    this.memberService.getGrid(this.dataParameter).subscribe({
       next: (data: any) => {
         this.reloadData(data);
       },
@@ -112,16 +112,18 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     if (!this.formModel) {
       this.formModel = this.fb.group({
         firstName: ['', Validators.required],
-        middleName: ['', Validators.required],
+        middleName: [''],
         lastName: ['', Validators.required],
-        address: ['', Validators.required],
-        age: ['', Validators.required],
-        birthDate: ['', Validators.required],
-        civilStatus: ['', Validators.required],
-        contactNumber: ['', Validators.required],
-        network: ['', Validators.required],
-        gender: ['', Validators.required],
-        extension: ['', Validators.required],
+        address: [''],
+        age: [''],
+        birthDate: [''],
+        civilStatus: [''],
+        contactNumber: [''],
+        network: [''],
+        gender: [''],
+        memberCode: [''],
+        category: [''],
+        extension: [''],
       })
     }
   }
@@ -129,7 +131,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   _setBreadcrumbs(): void {
     this.setBreadcrumbs([
       { label: 'Management' },
-      { label: 'Guest', url: '' }
+      { label: 'Member', url: '' }
     ]);
   }
 
@@ -191,7 +193,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
 
   getDetails(id: any) {
     this.recordId = id;
-    this.guestService.get(id).subscribe({
+    this.memberService.get(id).subscribe({
       next: (data: any) => {
         // console.log("get data: ", data);
 
@@ -199,49 +201,23 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
 
         this.civilStatus.setValue(this.civilStatuses.find(x => x.value === data.civilStatus));
         this.gender.setValue(this.genders.find(x => x.value === data.gender));
-        this.network.setValue(this.networks.find(x => x.value === data.networkId));
-        this.extension.setValue(this.extensions.find(x => x.value === data.extension));
 
-        const formattedDate = new Date(data.birthDate)
-        this.birthDate.setValue(formattedDate);
+        if (data.networkId) {
+          this.network.setValue(this.networks.find(x => x.value === data.networkId));
+        }
+        else {
+          this.network.setValue(this.networks.find(x => x.label === data.networkImported));
+        }
+
+        if (data.birthDate) {
+          const formattedDate = new Date(data.birthDate)
+          this.birthDate.setValue(formattedDate);
+        }
       },
       error: (e) => {
         this.handleErrorMessage(e, NotificationMessages.GenericError.Message);
       }
     })
-  }
-
-  deleteRecord(record: any) {
-    this.confirmationService.confirm({
-      message: ConfirmationMessages.ConfirmDelete.Message,
-      header: 'Confirmation',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.uiService.block();
-        const recordId = record.id;
-        if (recordId > 0) {
-          this.guestService.delete(recordId).subscribe({
-            next: (data: any) => {
-              // console.log('deleted: ', data);
-
-              this.notifService.showSuccessToast(
-                NotificationMessages.DeleteSuccessful.Title,
-                NotificationMessages.DeleteSuccessful.Message);
-
-              this.reInitGrid();
-              setTimeout(() => this.closeModal(), 500);
-              this.uiService.unBlock();
-            },
-            error: (e) => {
-              this.handleErrorMessage(e, NotificationMessages.DeleteError.Message);
-              this.uiService.unBlock()
-            }
-          })
-        }
-
-      }
-    })
-
   }
 
   closeModal() {
@@ -251,6 +227,53 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   onExit() {
     this.recordId = 0;
     this.formModel.reset();
+  }
+
+  onInitImport(event: Event) {
+    // console.log('onInitImport', event)
+    if (!event) return;
+
+    this.setDisplayImportModal(false);
+    // console.log('exit modal from parent');
+    window.location.reload();
+  }
+
+  setDisplayImportModal(opt: boolean) {
+    this.displayImportModal = opt;
+  }
+
+  onHideImportModal() {
+    this.importComponent.initializeComponent(true);
+    // console.log('hide modal from parent');
+  }
+
+  openImportModal(event: Event) {
+    // console.log('openImportModal from parent');
+    this.importComponent.openImportModal(event);
+
+    this.waitForImporting();
+  }
+
+  waitForImporting() {
+    console.log('waitForImporting', this.cutOffLoading);
+    if (this.cutOffLoading > 0) {
+      if (this.importComponent.hasLoaded) {
+        this.setDisplayImportModal(true);
+        this.cutOffLoading = 20
+      }
+      else if (this.importComponent.hasLoadedButNotSuccessful) {
+        this.cutOffLoading = 20
+      }
+      else {
+        setTimeout(() => {
+          this.cutOffLoading -= 1;
+          this.waitForImporting();
+        }, 1000);
+      }
+    }
+    else {
+      console.log('time is up!');
+    }
   }
 
   mapData(record: any) {
@@ -265,73 +288,45 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
       networkId: record.network?.value,
       gender: record.gender?.value,
       contactNumber: record.contactNumber,
-      extension: record.extension?.value,
+      extension: record.extension,
+      category: record.category,
     }
   }
 
   onSubmit() {
-    if (this.formModel.valid) {
+    if (this.formModel.valid && this.recordId > 0) {
       let record = this.formModel.getRawValue();
       let mappedData = this.mapData(record);
       // console.log('mapped: ', mappedData);
 
-      if (this.recordId > 0) {
-        this.confirmationService.confirm({
-          message: ConfirmationMessages.ConfirmUpdate.Message,
-          header: 'Confirmation',
-          icon: 'pi pi-exclamation-triangle',
-          accept: () => {
-            this.uiService.block();
+      this.confirmationService.confirm({
+        message: ConfirmationMessages.ConfirmUpdate.Message,
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.uiService.block();
 
-            this.guestService.update({ ...mappedData, id: this.recordId }).subscribe({
-              next: (data: any) => {
-                // console.log('updated: ', data);
+          this.memberService.update({ ...mappedData, id: this.recordId }).subscribe({
+            next: (data: any) => {
+              // console.log('updated: ', data);
 
-                this.notifService.showSuccessToast(
-                  NotificationMessages.SaveSuccessful.Title,
-                  NotificationMessages.SaveSuccessful.Message);
+              this.notifService.showSuccessToast(
+                NotificationMessages.SaveSuccessful.Title,
+                NotificationMessages.SaveSuccessful.Message);
 
-                this.reInitGrid();
-                this.recordId = 0;
-                setTimeout(() => this.closeModal(), 500);
-                this.uiService.unBlock();
-              },
-              error: (e) => {
-                this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
-                this.uiService.unBlock()
-              }
-            })
-          }
-        })
-      }
-      else {
-        this.confirmationService.confirm({
-          message: ConfirmationMessages.ConfirmSave.Message,
-          header: 'Confirmation',
-          icon: 'pi pi-exclamation-triangle',
-          accept: () => {
-            this.uiService.block();
+              this.reInitGrid();
+              this.recordId = 0;
+              setTimeout(() => this.closeModal(), 500);
+              this.uiService.unBlock();
+            },
+            error: (e) => {
+              this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+              this.uiService.unBlock()
+            }
+          })
+        }
+      })
 
-            this.guestService.create(mappedData).subscribe({
-              next: (data: any) => {
-                // console.log('created: ', data);
-
-                this.notifService.showSuccessToast(
-                  NotificationMessages.SaveSuccessful.Title,
-                  NotificationMessages.SaveSuccessful.Message);
-
-                this.reInitGrid();
-                setTimeout(() => this.closeModal(), 500);
-                this.uiService.unBlock()
-              },
-              error: (e) => {
-                this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
-                this.uiService.unBlock()
-              }
-            })
-          }
-        })
-      }
     }
     else {
       this.validation.validateAllFormFields(this.formModel);

@@ -31,8 +31,9 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Management',
                 items: [
-                    { label: 'Import Member Data', icon: 'pi pi-fw pi-file-import', routerLink: ['/management/import-member-data'], requiredRoles: [UserRoles.Admin] },
                     { label: 'Guest', icon: 'pi pi-fw pi-user-plus', routerLink: ['/management/guest'], requiredRoles: [UserRoles.Admin] },
+                    // { label: 'Import Member Data', icon: 'pi pi-fw pi-file-import', routerLink: ['/management/import-member-data'], requiredRoles: [UserRoles.Admin] },
+                    { label: 'Member', icon: 'pi pi-fw pi-user-plus', routerLink: ['/management/member'], requiredRoles: [UserRoles.Admin] },
                 ]
             },
             // {

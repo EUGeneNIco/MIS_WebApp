@@ -16,6 +16,7 @@ namespace MIS.Application.Guests.Commands.CreateGuest
         public string CivilStatus { get; set; }
         public DateTime BirthDate { get; set; }
         public int Age { get; set; }
+        public string Extension { get; set; }
 
         public int NetworkId { get; set; }
 

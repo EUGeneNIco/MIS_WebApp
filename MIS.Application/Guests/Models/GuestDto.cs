@@ -17,6 +17,7 @@ namespace MIS.Application.Guests.Models
         public DateTime BirthDate { get; set; }
         public int Age { get; set; }
         public int NetworkId { get; set; }
+        public string Extension { get; set; }
 
         public void CreateMappings(Profile configuration)
         {

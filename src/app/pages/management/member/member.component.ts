@@ -297,7 +297,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
     if (this.formModel.valid && this.recordId > 0) {
       let record = this.formModel.getRawValue();
       let mappedData = this.mapData(record);
-      console.log('mapped: ', mappedData);
+      // console.log('mapped: ', mappedData);
 
       this.confirmationService.confirm({
         message: ConfirmationMessages.ConfirmUpdate.Message,

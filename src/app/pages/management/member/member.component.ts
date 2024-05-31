@@ -282,11 +282,11 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
       lastName: record.lastName,
       middleName: record.middleName,
       address: record.address,
-      civilStatus: record.civilStatus?.value,
+      civilStatus: record.civilStatus?.value ?? "",
       age: +record.age,
       birthDate: DateUtils.getFormattedDate(record.birthDate),
-      networkId: record.network?.value,
-      gender: record.gender?.value,
+      networkId: record.network?.value ?? "",
+      gender: record.gender?.value ?? "",
       contactNumber: record.contactNumber,
       extension: record.extension,
       category: record.category,
@@ -297,7 +297,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
     if (this.formModel.valid && this.recordId > 0) {
       let record = this.formModel.getRawValue();
       let mappedData = this.mapData(record);
-      // console.log('mapped: ', mappedData);
+      console.log('mapped: ', mappedData);
 
       this.confirmationService.confirm({
         message: ConfirmationMessages.ConfirmUpdate.Message,

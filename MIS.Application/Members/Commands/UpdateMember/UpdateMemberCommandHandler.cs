@@ -37,7 +37,7 @@ namespace MIS.Application.Members.Commands.UpdateMember
             member.Gender = request.Gender;
             member.ContactNumber = request.ContactNumber;
             member.CivilStatus = request.CivilStatus;
-            member.Age = request.Age;
+            member.Age = request.Age != null && request.Age > 0 ? request.Age : null;
             member.Extension = request.Extension;
             member.NetworkId = request.NetworkId;
 

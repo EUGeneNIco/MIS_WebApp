@@ -31,11 +31,6 @@
                     <span class="p-column-title">{{col.header}}</span>
                     <span style="font-size: smaller;" *ngIf="col.type=='text'">
                         {{rowData[col.field]}}
-                        <!-- {{col.field === 'address'
-                        ? rowData[col.field].length > 60
-                        ? rowData[col.field].slice(0, 55) + '...'
-                        : rowData[col.field]
-                        : rowData[col.field]}} -->
                     </span>
 
                     <!-- <div *ngIf="col.type == 'actions' " class="flex">

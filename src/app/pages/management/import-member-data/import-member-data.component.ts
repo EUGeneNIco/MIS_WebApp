@@ -92,7 +92,15 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     ]);
   }
 
+  private initFields() {
+    this.hasLoaded = false;
+    this.hasLoadedButNotSuccessful = false;
+  }
+
   openImportModal(event: Event): void {
+    // init boolean values
+    this.initFields();
+
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
@@ -107,13 +115,13 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     }
   }
 
-  isValidExcelFile(file: File): boolean {
+  private isValidExcelFile(file: File): boolean {
     const validExtensions = ['xls', 'xlsx'];
     const fileExtension = file.name.split('.').pop();
     return fileExtension ? validExtensions.includes(fileExtension.toLowerCase()) : false;
   }
 
-  readExcel(file: File) {
+  private readExcel(file: File) {
     let fileReader = new FileReader();
     fileReader.readAsBinaryString(file);
     fileReader.onload = (e) => {
@@ -125,7 +133,7 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     }
   }
 
-  validateImportedData() {
+  private validateImportedData() {
     let validated = true;
 
     if (!this.excelData || this.excelData.length === 0) validated = false
@@ -152,7 +160,19 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     this.loading = false;
   }
 
-  mapData() {
+  onCancel() {
+    this.initializeComponent();
+  }
+
+  initializeComponent(fromParent?: boolean) {
+    this.initFields();
+    if (!fromParent)
+      this.initComponent.emit(true);
+
+    setTimeout(() => this.excelData = [], 1000);
+  }
+
+  private mapData() {
     return this.excelData.map(d => {
       let birthDate: string = null;
 
@@ -185,19 +205,6 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
         networkImported: d.NETWORK ?? '',
       }
     })
-  }
-
-  onCancel() {
-    this.initializeComponent();
-  }
-
-  initializeComponent(fromParent?: boolean) {
-    this.hasLoaded = false;
-    this.hasLoadedButNotSuccessful = false;
-    if (!fromParent)
-      this.initComponent.emit(true);
-
-    setTimeout(() => this.excelData = [], 3000);
   }
 
   saveToDb() {

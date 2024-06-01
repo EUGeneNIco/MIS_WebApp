@@ -239,6 +239,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   }
 
   setDisplayImportModal(opt: boolean) {
+    // console.log('setDisplayImportModal', opt);
     this.displayImportModal = opt;
   }
 
@@ -255,13 +256,15 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   }
 
   waitForImporting() {
-    console.log('waitForImporting', this.cutOffLoading);
+    // console.log('waitForImporting', this.cutOffLoading);
     if (this.cutOffLoading > 0) {
       if (this.importComponent.hasLoaded) {
+        // console.log('loaded')
         this.setDisplayImportModal(true);
         this.cutOffLoading = 20
       }
       else if (this.importComponent.hasLoadedButNotSuccessful) {
+        // console.log('loaded but not successful')
         this.cutOffLoading = 20
       }
       else {
@@ -282,11 +285,11 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
       lastName: record.lastName,
       middleName: record.middleName,
       address: record.address,
-      civilStatus: record.civilStatus?.value,
+      civilStatus: record.civilStatus?.value ?? "",
       age: +record.age,
       birthDate: DateUtils.getFormattedDate(record.birthDate),
-      networkId: record.network?.value,
-      gender: record.gender?.value,
+      networkId: record.network?.value ?? "",
+      gender: record.gender?.value ?? "",
       contactNumber: record.contactNumber,
       extension: record.extension,
       category: record.category,

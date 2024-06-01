@@ -239,6 +239,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   }
 
   setDisplayImportModal(opt: boolean) {
+    // console.log('setDisplayImportModal', opt);
     this.displayImportModal = opt;
   }
 
@@ -255,13 +256,15 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   }
 
   waitForImporting() {
-    console.log('waitForImporting', this.cutOffLoading);
+    // console.log('waitForImporting', this.cutOffLoading);
     if (this.cutOffLoading > 0) {
       if (this.importComponent.hasLoaded) {
+        // console.log('loaded')
         this.setDisplayImportModal(true);
         this.cutOffLoading = 20
       }
       else if (this.importComponent.hasLoadedButNotSuccessful) {
+        // console.log('loaded but not successful')
         this.cutOffLoading = 20
       }
       else {

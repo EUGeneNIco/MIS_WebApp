@@ -146,7 +146,7 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     if (!firstNameData || !lastNameData) validated = false;
 
     if (validated) {
-      console.log('file validated!')
+      // console.log('file validated!')
       this.hasLoaded = true;
       this.reloadData();
     }

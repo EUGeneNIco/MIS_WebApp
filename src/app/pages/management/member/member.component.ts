@@ -230,41 +230,33 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   }
 
   onInitImport(event: Event) {
-    // console.log('onInitImport', event)
     if (!event) return;
 
     this.setDisplayImportModal(false);
-    // console.log('exit modal from parent');
     window.location.reload();
   }
 
   setDisplayImportModal(opt: boolean) {
-    // console.log('setDisplayImportModal', opt);
     this.displayImportModal = opt;
   }
 
   onHideImportModal() {
     this.importComponent.initializeComponent(true);
-    // console.log('hide modal from parent');
   }
 
   openImportModal(event: Event) {
-    // console.log('openImportModal from parent');
     this.importComponent.openImportModal(event);
 
     this.waitForImporting();
   }
 
   waitForImporting() {
-    // console.log('waitForImporting', this.cutOffLoading);
     if (this.cutOffLoading > 0) {
       if (this.importComponent.hasLoaded) {
-        // console.log('loaded')
         this.setDisplayImportModal(true);
         this.cutOffLoading = 20
       }
       else if (this.importComponent.hasLoadedButNotSuccessful) {
-        // console.log('loaded but not successful')
         this.cutOffLoading = 20
       }
       else {
@@ -280,6 +272,10 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   }
 
   mapData(record: any) {
+    let birthDate = null;
+    if (record.birthDate)
+      birthDate = DateUtils.getFormattedDate(record.birthDate);
+
     return {
       firstName: record.firstName,
       lastName: record.lastName,
@@ -287,7 +283,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
       address: record.address,
       civilStatus: record.civilStatus?.value ?? "",
       age: +record.age,
-      birthDate: DateUtils.getFormattedDate(record.birthDate),
+      birthDate: birthDate,
       networkId: record.network?.value ?? "",
       gender: record.gender?.value ?? "",
       contactNumber: record.contactNumber,

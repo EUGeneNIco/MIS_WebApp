@@ -254,6 +254,10 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   }
 
   mapData(record: any) {
+    let birthDate = null;
+    if (record.birthDate)
+      birthDate = DateUtils.getFormattedDate(record.birthDate);
+
     return {
       firstName: record.firstName,
       lastName: record.lastName,
@@ -261,7 +265,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
       address: record.address,
       civilStatus: record.civilStatus?.value,
       age: +record.age,
-      birthDate: DateUtils.getFormattedDate(record.birthDate),
+      birthDate: birthDate,
       networkId: record.network?.value,
       gender: record.gender?.value,
       contactNumber: record.contactNumber,

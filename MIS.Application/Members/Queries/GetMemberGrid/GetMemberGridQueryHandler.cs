@@ -41,8 +41,9 @@ namespace MIS.Application.Members.Queries.GetMemberGrid
             //Sort
             if (request.SortKey == "network")
             {
-                query = request.SortDirection == SortDirection.Ascending ? query.OrderBy(x => x.NetworkId)
-                    : query.OrderByDescending(x => x.NetworkId);
+                //query = request.SortDirection == SortDirection.Ascending
+                //    ? query.OrderBy(x => x.NetworkId)
+                //    : query.OrderByDescending(x => x.NetworkId);
             }
             else if (request.SortKey == "name")
             {

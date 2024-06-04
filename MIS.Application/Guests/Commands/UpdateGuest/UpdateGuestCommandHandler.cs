@@ -32,12 +32,12 @@ namespace MIS.Application.Guests.Commands.UpdateGuest
             guest.FirstName = request.FirstName.Trim();
             guest.LastName = request.LastName.Trim();
             guest.MiddleName = request.MiddleName.Trim();
-            guest.BirthDate = request.BirthDate.Date;
+            guest.BirthDate = request.BirthDate?.Date;
             guest.Address = request.Address;
             guest.Gender = request.Gender;
             guest.ContactNumber = request.ContactNumber;
             guest.CivilStatus = request.CivilStatus;
-            guest.Age = request.Age;
+            guest.Age = request.Age != null && request.Age > 0 ? request.Age : null;
             guest.NetworkId = request.NetworkId;
             guest.Extension = request.Extension;
 

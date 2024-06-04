@@ -8,8 +8,6 @@ namespace MIS.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Guest> builder)
         {
-            builder.Property(b => b.NetworkId)
-                .IsRequired();
         }
     }
 }

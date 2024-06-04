@@ -11,11 +11,11 @@ namespace MIS.Domain.Entities
         public string Gender { get; set; }
         public string ContactNumber { get; set; }
         public string CivilStatus { get; set; }
-        public DateTime BirthDate { get; set; }
-        public int Age { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public int? Age { get; set; }
         public string Extension { get; set; }
 
-        public long NetworkId { get; set; }
+        public long? NetworkId { get; set; }
         public virtual Network Network { get; set; }
     }
 }

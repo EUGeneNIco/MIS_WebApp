@@ -112,16 +112,16 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     if (!this.formModel) {
       this.formModel = this.fb.group({
         firstName: ['', Validators.required],
-        middleName: ['', Validators.required],
+        middleName: [''],
         lastName: ['', Validators.required],
-        address: ['', Validators.required],
-        age: ['', Validators.required],
-        birthDate: ['', Validators.required],
-        civilStatus: ['', Validators.required],
-        contactNumber: ['', Validators.required],
-        network: ['', Validators.required],
-        gender: ['', Validators.required],
-        extension: ['', Validators.required],
+        address: [''],
+        age: [''],
+        birthDate: [''],
+        civilStatus: [''],
+        contactNumber: [''],
+        network: [''],
+        gender: [''],
+        extension: [''],
       })
     }
   }
@@ -202,8 +202,14 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
         this.network.setValue(this.networks.find(x => x.value === data.networkId));
         this.extension.setValue(this.extensions.find(x => x.value === data.extension));
 
-        const formattedDate = new Date(data.birthDate)
-        this.birthDate.setValue(formattedDate);
+        if (data.networkId) {
+          this.network.setValue(this.networks.find(x => x.value === data.networkId));
+        }
+
+        if (data.birthDate) {
+          const formattedDate = new Date(data.birthDate)
+          this.birthDate.setValue(formattedDate);
+        }
       },
       error: (e) => {
         this.handleErrorMessage(e, NotificationMessages.GenericError.Message);
@@ -259,17 +265,17 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
       birthDate = DateUtils.getFormattedDate(record.birthDate);
 
     return {
-      firstName: record.firstName,
-      lastName: record.lastName,
-      middleName: record.middleName,
-      address: record.address,
-      civilStatus: record.civilStatus?.value,
+      firstName: record.firstName ?? '',
+      lastName: record.lastName ?? '',
+      middleName: record.middleName ?? '',
+      address: record.address ?? '',
+      civilStatus: record.civilStatus?.value ?? '',
       age: +record.age,
       birthDate: birthDate,
-      networkId: record.network?.value,
-      gender: record.gender?.value,
-      contactNumber: record.contactNumber,
-      extension: record.extension?.value,
+      networkId: record.network?.value ?? null,
+      gender: record.gender?.value ?? '',
+      contactNumber: record.contactNumber ?? '',
+      extension: record.extension?.value ?? '',
     }
   }
 

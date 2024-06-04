@@ -86,8 +86,8 @@
             <div class="field col-12 md:col-4">
                 <label htmlfor="middleName">Middle Name</label>
                 <input pInputText formControlName="middleName" type="text">
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.middleName, 'required')"
-                    errorMsg="Amount is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.middleName, 'required')"
+                    errorMsg="Amount is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="lastName">Last Name</label>
@@ -99,54 +99,54 @@
                 <label htmlfor="birthDate">Birth Date</label>
                 <p-calendar dataType="string" formControlName="birthDate" dateFormat="mm/dd/yy" [readonlyInput]="false"
                     type="date"></p-calendar>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.birthDate, 'required')"
-                    errorMsg="Birth Date is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.birthDate, 'required')"
+                    errorMsg="Birth Date is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="age">Age</label>
                 <input pInputText formControlName="age" type="number">
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.age, 'required')"
-                    errorMsg="Age is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.age, 'required')"
+                    errorMsg="Age is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="contactNumber">Contact No.</label>
                 <input pInputText formControlName="contactNumber" type="text">
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.contactNumber, 'required')"
-                    errorMsg="Contact No. is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.contactNumber, 'required')"
+                    errorMsg="Contact No. is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="civilStatus">Civil Status</label>
                 <p-dropdown appendTo="body" [filter]="false" formControlName="civilStatus" optionLabel="label"
                     placeholder="Select" [options]="civilStatuses"></p-dropdown>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.civilStatus, 'required')"
-                    errorMsg="Civil Status is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.civilStatus, 'required')"
+                    errorMsg="Civil Status is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="gender">Gender</label>
                 <p-dropdown appendTo="body" [filter]="false" formControlName="gender" optionLabel="label"
                     placeholder="Select" [options]="genders"></p-dropdown>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.gender, 'required')"
-                    errorMsg="Gender is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.gender, 'required')"
+                    errorMsg="Gender is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="network">Network</label>
                 <p-dropdown appendTo="body" [filter]="false" formControlName="network" optionLabel="label"
                     [options]="networks" placeholder="Select"></p-dropdown>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.network, 'required')"
-                    errorMsg="Network is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.network, 'required')"
+                    errorMsg="Network is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="extension">Extension</label>
                 <p-dropdown appendTo="body" [filter]="false" formControlName="extension" optionLabel="label"
                     placeholder="Select" [options]="extensions"></p-dropdown>
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.extension, 'required')"
-                    errorMsg="Extension is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.extension, 'required')"
+                    errorMsg="Extension is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-8">
                 <label htmlfor="address">Address</label>
                 <input pInputText formControlName="address" type="text">
-                <app-field-error-display [displayError]="validation.isFieldInvalid(this.address, 'required')"
-                    errorMsg="Address is required"></app-field-error-display>
+                <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.address, 'required')"
+                    errorMsg="Address is required"></app-field-error-display> -->
             </div>
         </div>
     </form>

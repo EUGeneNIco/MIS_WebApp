@@ -9,6 +9,8 @@ import { ForbiddenComponent } from './pages/auth/forbidden/forbidden.component';
 import { AuthGuard } from './_auth/auth.guard';
 import { DashboardComponent } from './pages/common/dashboard/dashboard.component';
 import { MemberComponent } from './pages/management/member/member.component';
+import { UserRoles } from './_enums/UserRoles';
+import { AttendancelogComponent } from './pages/transaction/attendancelog/attendancelog.component';
 
 @NgModule({
     imports: [
@@ -24,9 +26,11 @@ import { MemberComponent } from './pages/management/member/member.component';
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
 
                     { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
-                    { path: 'management/import-member-data', component: ImportMemberDataComponent, canActivate: [AuthGuard], data: { role: "Admin" } },
-                    { path: 'management/guest', component: GuestComponent, canActivate: [AuthGuard], data: { role: "Admin" } },
-                    { path: 'management/member', component: MemberComponent, canActivate: [AuthGuard], data: { role: "Admin" } },
+                    { path: 'management/import-member-data', component: ImportMemberDataComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
+                    { path: 'management/guest', component: GuestComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
+                    { path: 'management/member', component: MemberComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
+
+                    { path: 'transaction/attendance-log', component: AttendancelogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Staff } },
                 ],
             },
             { path: 'login', component: LoginComponent },

@@ -1,0 +1,12 @@
+<!-- Modal -->
+<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '40vw'}" [(visible)]="displayModal"
+    (onHide)="onExit()" header="Attendance log">
+
+    <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12">
+                <input pInputText formControlName="code" type="text">
+            </div>
+        </div>
+    </form>
+</p-dialog>

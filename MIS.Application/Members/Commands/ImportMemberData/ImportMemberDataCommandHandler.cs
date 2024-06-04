@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
 using MIS.Application._Exceptions;
+using MIS.Application._Helpers;
 using MIS.Domain;
 using MIS.Domain.Entities;
 
@@ -31,11 +32,12 @@ namespace MIS.Application.Members.Commands.ImportMemberData
 
             var memberList = new List<Member>();
 
+            var count = 1;
             foreach (var data in request.ImportedData)
             {
                 memberList.Add(new Member
                 {
-                    MemberCode = data.MemberCode,
+                    MemberCode = CodeHelper.GenerateMemberCode(count),
                     FirstName = data.FirstName,
                     MiddleName = data.MiddleName,
                     LastName = data.LastName,
@@ -49,6 +51,8 @@ namespace MIS.Application.Members.Commands.ImportMemberData
                     CivilStatus = data.CivilStatus,
                     ContactNumber = data.ContactNumber,
                 });
+
+                count += 1;
             }
             
             this.dbContext.Members.AddRange(memberList);

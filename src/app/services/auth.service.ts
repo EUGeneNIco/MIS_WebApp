@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { HttpClient } from '@angular/common/http';
 import { Globals } from '../_auth/globals';
+import { UserRoles } from '../_enums/UserRoles';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +52,10 @@ export class AuthService extends BaseService {
   }
 
   userRoleHasAccessToResource(roleToCheck: string): boolean {
-    return this.role === roleToCheck;
+    let hasAccess = this.role === roleToCheck;
+    if (!hasAccess && this.role === UserRoles.Admin) hasAccess = true;
+
+    return hasAccess;
   }
 
   getPayload() {

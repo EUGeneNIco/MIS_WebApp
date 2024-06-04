@@ -47,6 +47,10 @@ namespace MIS.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ContactNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -98,6 +102,56 @@ namespace MIS.Persistence.Migrations
                     b.HasIndex("NetworkId");
 
                     b.ToTable("Guests");
+                });
+
+            modelBuilder.Entity("MIS.Domain.Entities.GuestAttendanceLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("GuestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("LogDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ServiceId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GuestId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("GuestAttendanceLogs");
+                });
+
+            modelBuilder.Entity("MIS.Domain.Entities.GuestAttendanceUnidentifiedLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("GuestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("LogDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("SettledDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GuestId");
+
+                    b.ToTable("GuestAttendanceUnidentifiedLogs");
                 });
 
             modelBuilder.Entity("MIS.Domain.Entities.Member", b =>
@@ -182,6 +236,56 @@ namespace MIS.Persistence.Migrations
                     b.ToTable("Members");
                 });
 
+            modelBuilder.Entity("MIS.Domain.Entities.MemberAttendanceLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("LogDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("MemberId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ServiceId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("MemberAttendanceLogs");
+                });
+
+            modelBuilder.Entity("MIS.Domain.Entities.MemberAttendanceUnidentifiedLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("LogDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("MemberId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("SettledDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("MemberAttendanceUnidentifiedLogs");
+                });
+
             modelBuilder.Entity("MIS.Domain.Entities.Network", b =>
                 {
                     b.Property<long>("Id")
@@ -247,6 +351,80 @@ namespace MIS.Persistence.Migrations
                             Id = 5L,
                             IsDeleted = false,
                             Name = "Y-AM"
+                        });
+                });
+
+            modelBuilder.Entity("MIS.Domain.Entities.Service", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("ModifiedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("ModifiedById");
+
+                    b.ToTable("Services");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            EndTime = new TimeSpan(0, 9, 30, 0, 0),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "1st",
+                            StartTime = new TimeSpan(0, 7, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            EndTime = new TimeSpan(0, 11, 30, 0, 0),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "2nd",
+                            StartTime = new TimeSpan(0, 10, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            EndTime = new TimeSpan(0, 13, 30, 0, 0),
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "3rd",
+                            StartTime = new TimeSpan(0, 12, 0, 0, 0)
                         });
                 });
 
@@ -353,6 +531,36 @@ namespace MIS.Persistence.Migrations
                     b.Navigation("Network");
                 });
 
+            modelBuilder.Entity("MIS.Domain.Entities.GuestAttendanceLog", b =>
+                {
+                    b.HasOne("MIS.Domain.Entities.Guest", "Guest")
+                        .WithMany()
+                        .HasForeignKey("GuestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MIS.Domain.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Guest");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("MIS.Domain.Entities.GuestAttendanceUnidentifiedLog", b =>
+                {
+                    b.HasOne("MIS.Domain.Entities.Guest", "Guest")
+                        .WithMany()
+                        .HasForeignKey("GuestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Guest");
+                });
+
             modelBuilder.Entity("MIS.Domain.Entities.Member", b =>
                 {
                     b.HasOne("MIS.Domain.Entities.User", "ModifiedBy")
@@ -368,7 +576,52 @@ namespace MIS.Persistence.Migrations
                     b.Navigation("Network");
                 });
 
+            modelBuilder.Entity("MIS.Domain.Entities.MemberAttendanceLog", b =>
+                {
+                    b.HasOne("MIS.Domain.Entities.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MIS.Domain.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("MIS.Domain.Entities.MemberAttendanceUnidentifiedLog", b =>
+                {
+                    b.HasOne("MIS.Domain.Entities.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+                });
+
             modelBuilder.Entity("MIS.Domain.Entities.Network", b =>
+                {
+                    b.HasOne("MIS.Domain.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("MIS.Domain.Entities.User", "ModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("ModifiedBy");
+                });
+
+            modelBuilder.Entity("MIS.Domain.Entities.Service", b =>
                 {
                     b.HasOne("MIS.Domain.Entities.User", "CreatedBy")
                         .WithMany()

@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using MIS.Application._Enums;
 using MIS.Application._Exceptions;
+using MIS.Application._Helpers;
 using MIS.Domain;
 using MIS.Domain.Entities;
 
@@ -26,7 +27,9 @@ namespace MIS.Application.Guests.Commands.CreateGuest
             if (!string.IsNullOrWhiteSpace(request.ContactNumber) && dbContext.Guests.Any(x => x.ContactNumber == request.ContactNumber && !x.IsDeleted))
                 throw new DuplicateException(ErrorMessages.DuplicateRecordError("contact number"));
 
-            guest.CreatedOn = DateTime.Now;
+            var dateNow = DateTime.Now;
+            guest.CreatedOn = dateNow;
+            guest.Code = CodeHelper.GenerateGuestCode();
 
             dbContext.Guests.Add(guest);
             await dbContext.SaveChangesAsync(cancellationToken);

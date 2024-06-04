@@ -83,7 +83,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
     this.cols = [
       { field: 'name', filter: true, header: 'Name', sortable: true, type: 'text' },
       { field: 'address', filter: false, header: 'Address', sortable: false, type: 'text' },
-      { field: 'network', filter: false, header: 'Network', sortable: false, type: 'text' },
+      { field: 'network', filter: false, header: 'Network', sortable: true, type: 'text' },
       { field: 'contactNumber', filter: false, header: 'Contact No.', sortable: false, type: 'text' },
       { field: 'id', filter: false, header: 'Action', sortable: false, type: 'actions' }
     ];

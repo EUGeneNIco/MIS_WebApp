@@ -29,6 +29,12 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
+                label: 'Transaction',
+                items: [
+                    { label: 'Attendance Log', icon: 'pi pi-fw pi-qrcode', routerLink: ['/transaction/attendance-log'], requiredRoles: [UserRoles.Admin, UserRoles.Staff] },
+                ]
+            },
+            {
                 label: 'Management',
                 items: [
                     { label: 'Guest', icon: 'pi pi-fw pi-user-plus', routerLink: ['/management/guest'], requiredRoles: [UserRoles.Admin] },

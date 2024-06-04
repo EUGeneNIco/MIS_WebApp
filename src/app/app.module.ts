@@ -109,6 +109,7 @@ import { Globals } from './_auth/globals';
 import { AuthInterceptor } from './_auth/auth.interceptor';
 import { DashboardComponent } from './pages/common/dashboard/dashboard.component';
 import { MemberComponent } from './pages/management/member/member.component';
+import { AttendancelogComponent } from './pages/transaction/attendancelog/attendancelog.component';
 
 @NgModule({
     declarations: [
@@ -120,7 +121,8 @@ import { MemberComponent } from './pages/management/member/member.component';
         ForbiddenComponent,
         LoginComponent,
         DashboardComponent,
-        MemberComponent
+        MemberComponent,
+        AttendancelogComponent
     ],
     imports: [
         BrowserModule,

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { UserRoles } from '../_enums/UserRoles';
 
 @Injectable({
     providedIn: 'root'
@@ -19,8 +20,7 @@ export class AuthGuard {
             }
 
             const role = next.data['role'];
-            const hasAccess = this.authService.userRoleHasAccessToResource(role);
-
+            let hasAccess = this.authService.userRoleHasAccessToResource(role);
             if (!hasAccess) {
                 this.router.navigate(['access-denied']);
             }

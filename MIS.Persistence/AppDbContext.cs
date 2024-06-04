@@ -10,9 +10,14 @@ namespace MIS.Persistence
     public class AppDbContext : DbContext, IAppDbContext
     {
         public DbSet<Guest> Guests { get; set; }
+        public DbSet<GuestAttendanceLog> GuestAttendanceLogs { get; set; }
+        public DbSet<GuestAttendanceUnidentifiedLog> GuestAttendanceUnidentifiedLogs { get; set; }
         public DbSet<Member> Members { get; set; }
+        public DbSet<MemberAttendanceLog> MemberAttendanceLogs { get; set; }
+        public DbSet<MemberAttendanceUnidentifiedLog> MemberAttendanceUnidentifiedLogs { get; set; }
         public DbSet<Network> Networks { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Service> Services { get; set; }
 
         public AppDbContext() { }
 
@@ -47,6 +52,12 @@ namespace MIS.Persistence
                 new Network { Id = 3, Name = "Men" },
                 new Network { Id = 4, Name = "Children" },
                 new Network { Id = 5, Name = "Y-AM" }
+            );
+
+            modelBuilder.Entity<Service>().HasData(
+                new Service { Id = 1, Name = "1st", StartTime = new TimeSpan(7, 0, 0), EndTime = new TimeSpan(9, 30, 0), IsActive = true },
+                new Service { Id = 2, Name = "2nd", StartTime = new TimeSpan(10, 0, 0), EndTime = new TimeSpan(11, 30, 0), IsActive = true },
+                new Service { Id = 3, Name = "3rd", StartTime = new TimeSpan(12, 0, 0), EndTime = new TimeSpan(13, 30, 0), IsActive = true }
             );
         }
     }

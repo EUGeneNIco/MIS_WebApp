@@ -35,6 +35,7 @@ namespace MIS.Application.GuestAttendanceLogs.Commands.LogGuestAttendance
             var service = GetService(logTime);
             if (service == null)
             {
+                // Save unindentified log
                 dbContext.MemberAttendanceUnidentifiedLogs.Add(new MemberAttendanceUnidentifiedLog
                 {
                     Member = member,
@@ -69,7 +70,14 @@ namespace MIS.Application.GuestAttendanceLogs.Commands.LogGuestAttendance
             var service = GetService(logTime);
             if (service == null)
             {
-                await SaveUnidentifiedGuestAttendanceLog(guest, logTime, cancellationToken);
+                // Save unindentified log
+                dbContext.GuestAttendanceUnidentifiedLogs.Add(new GuestAttendanceUnidentifiedLog
+                {
+                    Guest = guest,
+                    LogDateTime = logTime
+                });
+
+                await dbContext.SaveChangesAsync(cancellationToken);
                 return $"{guest.FirstName} {guest.LastName} is logged in. However, current time is out of service options so an admin needs to classify this.";
             }
 
@@ -94,17 +102,6 @@ namespace MIS.Application.GuestAttendanceLogs.Commands.LogGuestAttendance
             var service = dbContext.Services.FirstOrDefault(x => x.IsActive && !x.IsDeleted && TimeSpan.Compare(logTimeSpan, x.StartTime) >= 0 &&  TimeSpan.Compare(x.EndTime, logTimeSpan) >= 0);
 
             return service;
-        }
-
-        private async Task SaveUnidentifiedGuestAttendanceLog(Guest guest, DateTime logDateTime, CancellationToken cancellationToken)
-        {
-            dbContext.GuestAttendanceUnidentifiedLogs.Add(new GuestAttendanceUnidentifiedLog
-            {
-                Guest = guest,
-                LogDateTime = logDateTime
-            });
-
-            await dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -1,12 +1,20 @@
 <!-- Modal -->
-<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '40vw'}" [(visible)]="displayModal"
-    (onHide)="onExit()" header="Attendance log">
+<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '60vw'}" [(visible)]="displayModal"
+    (onHide)="onExit()" header="Attendance Log">
 
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid">
-            <div class="field col-12">
+            <div class="field col-2">
+                <p-dropdown appendTo="body" [options]="logOptions" placeholder="Sort By Price"
+                    (onChange)="onLogOptionChange($event)"></p-dropdown>
+            </div>
+            <div *ngIf="isQrLog" class="field col-10">
+                <input pInputText formControlName="code" type="text">
+            </div>
+            <div *ngIf="!isQrLog" class="field col-10">
                 <input pInputText formControlName="code" type="text">
             </div>
         </div>
     </form>
+    <p-messages *ngIf="this.messages.length > 0" [(value)]="messages" [closable]="false" />
 </p-dialog>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, Message, SelectItem } from 'primeng/api';
 import { AppPageBaseComponent } from 'src/app/_components/base/app-page-base.component';
 import { MasterBaseComponent } from 'src/app/_components/base/master-base.component';
 import { ConfirmationMessages } from 'src/app/_enums/confirmation-messages';
@@ -22,11 +22,22 @@ export class AttendancelogComponent extends AppPageBaseComponent implements OnIn
   readonly createFormTitle: string = 'Guest Registration Form';
 
   // Modal
-  displayModal: boolean;
   formMode: string;
+  messages: Message[] = [];
+  displayModal: boolean;
   editMode: boolean;
+  isQrLog: boolean;
+
+  readonly QR: string = 'QR';
+  readonly Name: string = 'Name';
+
+  logOptions: SelectItem[] = [
+    { label: this.QR, value: this.QR },
+    { label: this.Name, value: this.Name }
+  ]
 
   get code() { return this.formModel.get('code'); }
+  get name() { return this.formModel.get('name'); }
 
   constructor(
     private attendanceLogService: AttendancelogService,
@@ -46,41 +57,47 @@ export class AttendancelogComponent extends AppPageBaseComponent implements OnIn
       { label: 'Transaction' },
       { label: 'Attendance', url: '' }
     ]);
+
+    this.isQrLog = true;
   }
 
   _initializeFormModel(): void {
     if (!this.formModel) {
       this.formModel = this.fb.group({
         code: [''],
+        name: [''],
       })
     }
   }
-
 
   onExit() {
     this.router.navigateByUrl('');
   }
 
-  onSubmit() {
-    if (this.code && this.code.value.trim().length > 0) {
-      this.attendanceLogService.log({ code: this.code.value }).subscribe({
-        next: (data: any) => {
-          // console.log('logged: ', data);
+  onLogOptionChange(event: any) {
+    this.isQrLog = event.value === this.QR;
+  }
 
-          this.notifService.showSuccessToast(
-            "Success",
-            data.message
-          );
-          this.code.setValue('');
-        },
-        error: (e) => {
-          this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
-          this.code.setValue('');
-        }
-      })
+  onSubmit() {
+    this.messages = [];
+    if (this.isQrLog) {
+      if (this.code && this.code.value.trim().length > 0) {
+        this.attendanceLogService.log({ code: this.code.value }).subscribe({
+          next: (data: any) => {
+            // console.log('logged: ', data);
+            this.code.setValue('');
+            if (data && data.message?.trim().length > 0) {
+              this.messages.push({ key: 'tst', severity: 'success', detail: data.message, life: 5000 })
+            }
+          },
+          error: (e) => {
+            this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+            this.code.setValue('');
+          }
+        })
+      }
     }
     else {
-      this.validation.validateAllFormFields(this.formModel);
     }
   }
 }

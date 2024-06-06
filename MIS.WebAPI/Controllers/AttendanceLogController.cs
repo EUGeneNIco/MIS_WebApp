@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MIS.Application._Exceptions;
 using MIS.Application.AttendanceLogs.Commands.LogGuestAttendance;
+using MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceLogsGrid;
 using MIS.Application.AttendanceLogs.Queries.GetMemberGuest;
 
 namespace MIS.WebAPI.Controllers
@@ -46,6 +47,21 @@ namespace MIS.WebAPI.Controllers
                 var result = await Mediator.Send(command);
 
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("getGrid")]
+        public async Task<ActionResult> GetGrid([FromBody] GetMemberAttendanceLogsGridQuery query)
+        {
+            try
+            {
+                var data = await Mediator.Send(query);
+
+                return Ok(data);
             }
             catch (Exception ex)
             {

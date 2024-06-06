@@ -1,0 +1,73 @@
+<div class="card">
+    <!-- <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+        </ng-template>
+        <ng-template pTemplate="right">
+        </ng-template>
+    </p-toolbar> -->
+
+    <p-table #dt [columns]="cols" currentPageReportTemplate="{{totalRecordCountLabel}}" dataKey="id" [lazy]="true"
+        [loading]="loading" (onLazyLoad)="loadLazy($event)" (onRowSelect)="onRowSelect($event)" [paginator]="true"
+        [responsive]="true" responsiveLayout="scroll" [rowHover]="true" [rows]="10"
+        [rowsPerPageOptions]="[10,20,50,100]" [showCurrentPageReport]="true" selectionMode="single"
+        [totalRecords]="totalRecords" [value]="rows">
+        <ng-template pTemplate="caption">
+            <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <h5 class="m-0">Attendance Logs</h5>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [ngClass]="col.priority" [ngStyle]="col.style"
+                    [pSortableColumn]="col.field" [pSortableColumnDisabled]="!col.sortable">
+                    {{ col.header }}
+                    <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+                </th>
+            </tr>
+            <tr>
+                <th *ngFor="let col of columns" [ngStyle]="col.cellStyle" [ngClass]="col.priority">
+                    <input *ngIf="col.filter && col.type === 'text' && !col.isDate" pInputText
+                        placeholder="Enter guest name here"
+                        class="p-inputtext p-component p-element ng-star-inserted p-filled"
+                        (keyup.enter)="columnFilter(col.field, $event.target.value)" type="text"
+                        [style]="{'width': '100%'}" />
+
+                    <p-calendar (keyup.enter)="columnFilter(col.field, $event.target.value)" appendTo="body"
+                        *ngIf="col.filter && col.isDate" dataType="string" dateFormat="mm/dd/yy" [readonlyInput]="false"
+                        type="date" [style]="{'width': '100%'}"></p-calendar>
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-columns="columns" let-rowData>
+            <tr [pSelectableRow]="rowData">
+                <td class="table-cell" *ngFor="let col of columns" [ngStyle]="col.cellStyle">
+                    <span class="p-column-title">{{col.header}}</span>
+
+                    <span *ngIf="col.type=='text'">
+                        {{col.field === 'address'
+                        ? rowData[col.field].length > 60
+                        ? rowData[col.field].slice(0, 55) + '...'
+                        : rowData[col.field]
+                        : rowData[col.field]}}
+                    </span>
+
+                    <div *ngIf="col.type == 'actions' " class="flex">
+                        <button pButton pRipple icon="pi pi-pencil"
+                            class="p-button-rounded p-button-raised p-button-success mr-2"
+                            (click)="openEditModal(rowData)" pTooltip="Edit"></button>
+                        <button pButton pRipple icon="pi pi-trash"
+                            class="p-button-rounded p-button-raised p-button-warning" (click)="deleteRecord(rowData)"
+                            pTooltip="Delete"></button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">No record found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

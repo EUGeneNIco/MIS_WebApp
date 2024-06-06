@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MIS.Application._Exceptions;
+using MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceLogsGrid;
 using MIS.Application.Guests.Commands.CreateGuest;
 using MIS.Application.Guests.Commands.DeleteGuest;
 using MIS.Application.Guests.Commands.UpdateGuest;

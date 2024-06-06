@@ -110,6 +110,7 @@ import { AuthInterceptor } from './_auth/auth.interceptor';
 import { DashboardComponent } from './pages/common/dashboard/dashboard.component';
 import { MemberComponent } from './pages/management/member/member.component';
 import { AttendancelogComponent } from './pages/transaction/attendancelog/attendancelog.component';
+import { MemberAttendanceLogComponent } from './pages/management/member-attendance-log/member-attendance-log.component';
 
 @NgModule({
     declarations: [
@@ -122,7 +123,8 @@ import { AttendancelogComponent } from './pages/transaction/attendancelog/attend
         LoginComponent,
         DashboardComponent,
         MemberComponent,
-        AttendancelogComponent
+        AttendancelogComponent,
+        MemberAttendanceLogComponent,
     ],
     imports: [
         BrowserModule,

@@ -11,6 +11,7 @@ import { DashboardComponent } from './pages/common/dashboard/dashboard.component
 import { MemberComponent } from './pages/management/member/member.component';
 import { UserRoles } from './_enums/UserRoles';
 import { AttendancelogComponent } from './pages/transaction/attendancelog/attendancelog.component';
+import { MemberAttendanceLogComponent } from './pages/management/member-attendance-log/member-attendance-log.component';
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import { AttendancelogComponent } from './pages/transaction/attendancelog/attend
                     { path: 'management/import-member-data', component: ImportMemberDataComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
                     { path: 'management/guest', component: GuestComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
                     { path: 'management/member', component: MemberComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
+                    { path: 'management/member-attendance-log', component: MemberAttendanceLogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
 
                     { path: 'transaction/attendance-log', component: AttendancelogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Staff } },
                 ],

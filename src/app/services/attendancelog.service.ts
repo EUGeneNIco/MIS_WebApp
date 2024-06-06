@@ -13,4 +13,8 @@ export class AttendancelogService extends BaseService {
   log(data: any) {
     return this.http.post(this.API_URL + `/${this.resource}/log`, data);
   }
+
+  getQuery(data: any) {
+    return this.http.post(this.API_URL + `/${this.resource}/getQuery`, data);
+  }
 }

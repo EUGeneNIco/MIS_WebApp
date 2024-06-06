@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MIS.Application._Exceptions;
-using MIS.Application.GuestAttendanceLogs.Commands.LogGuestAttendance;
+using MIS.Application.AttendanceLogs.Commands.LogGuestAttendance;
+using MIS.Application.AttendanceLogs.Queries.GetMemberGuest;
 
 namespace MIS.WebAPI.Controllers
 {
@@ -30,6 +31,21 @@ namespace MIS.WebAPI.Controllers
             catch (NotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("getQuery")]
+        public async Task<IActionResult> GetQuery(GetMemberGuestQuery command)
+        {
+            try
+            {
+                var result = await Mediator.Send(command);
+
+                return Ok(result);
             }
             catch (Exception ex)
             {

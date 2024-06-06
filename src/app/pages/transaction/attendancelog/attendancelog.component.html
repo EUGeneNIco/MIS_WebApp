@@ -1,19 +1,33 @@
 <!-- Modal -->
-<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '60vw'}" [(visible)]="displayModal"
+<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '30vw'}" [(visible)]="displayModal"
     (onHide)="onExit()" header="Attendance Log">
 
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
-        <div class="p-fluid p-formgrid grid">
-            <div class="field col-2">
-                <p-dropdown appendTo="body" [options]="logOptions" placeholder="Sort By Price"
-                    (onChange)="onLogOptionChange($event)"></p-dropdown>
+        <div class="p-fluid p-formgrid grid pt-2" style="display: flex;justify-content: center;align-items: center">
+            <div class="field col-12" style="display: flex;justify-content: center;align-items: center">
+                <p-selectButton (onChange)="onLogOptionChange($event)" [options]="logOptions"
+                    formControlName="selectedLogOption" optionLabel="label" optionValue="value" />
             </div>
-            <div *ngIf="isQrLog" class="field col-10">
-                <input pInputText formControlName="code" type="text">
+            <div class="field col-12">
+                <input *ngIf="isQrLog" pInputText formControlName="code" type="text">
+                <input *ngIf="!isQrLog" pInputText formControlName="name" type="text" placeholder="Enter name here">
             </div>
-            <div *ngIf="!isQrLog" class="field col-10">
-                <input pInputText formControlName="code" type="text">
-            </div>
+            <p-table *ngIf="!isQrLog && nameQueryResults.length > 0" [value]="nameQueryResults" [responsive]="true"
+                responsiveLayout="scroll" (onRowSelect)="onSelectMemberOrGuest($event)" selectionMode="single"
+                [tableStyle]="{'max-width': '100%'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Name</th>
+                        <th>Network</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-data>
+                    <tr [pSelectableRow]="data">
+                        <td>{{ data.fullName }}</td>
+                        <td>{{ data.network }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </form>
     <p-messages *ngIf="this.messages.length > 0" [(value)]="messages" [closable]="false" />

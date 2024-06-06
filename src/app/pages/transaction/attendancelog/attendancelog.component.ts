@@ -36,8 +36,11 @@ export class AttendancelogComponent extends AppPageBaseComponent implements OnIn
     { label: this.Name, value: this.Name }
   ]
 
+  nameQueryResults: any[] = [];
+
   get code() { return this.formModel.get('code'); }
   get name() { return this.formModel.get('name'); }
+  get selectedLogOption() { return this.formModel.get('selectedLogOption'); }
 
   constructor(
     private attendanceLogService: AttendancelogService,
@@ -59,6 +62,7 @@ export class AttendancelogComponent extends AppPageBaseComponent implements OnIn
     ]);
 
     this.isQrLog = true;
+    this.selectedLogOption.setValue(this.QR);
   }
 
   _initializeFormModel(): void {
@@ -66,6 +70,7 @@ export class AttendancelogComponent extends AppPageBaseComponent implements OnIn
       this.formModel = this.fb.group({
         code: [''],
         name: [''],
+        selectedLogOption: [''],
       })
     }
   }
@@ -76,13 +81,38 @@ export class AttendancelogComponent extends AppPageBaseComponent implements OnIn
 
   onLogOptionChange(event: any) {
     this.isQrLog = event.value === this.QR;
+    this.code.reset();
+    this.name.reset();
+    this.nameQueryResults = [];
+  }
+
+  onSelectMemberOrGuest(event: any) {
+    if (!event.data.memberId && !event.data.guestId)
+      return;
+
+    this.attendanceLogService.log({ code: '', memberId: event.data.memberId, guestId: event.data.guestId }).subscribe({
+      next: (data: any) => {
+        // console.log('logged: ', data);
+        this.code.setValue('');
+        if (data && data.message?.trim().length > 0) {
+          this.messages.push({ key: 'tst', severity: 'success', detail: data.message, life: 5000 })
+        }
+
+        this.nameQueryResults = [];
+      },
+      error: (e) => {
+        this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+        this.code.setValue('');
+      }
+    })
   }
 
   onSubmit() {
     this.messages = [];
+
     if (this.isQrLog) {
       if (this.code && this.code.value.trim().length > 0) {
-        this.attendanceLogService.log({ code: this.code.value }).subscribe({
+        this.attendanceLogService.log({ code: this.code.value, memberId: null, guestId: null }).subscribe({
           next: (data: any) => {
             // console.log('logged: ', data);
             this.code.setValue('');
@@ -98,6 +128,20 @@ export class AttendancelogComponent extends AppPageBaseComponent implements OnIn
       }
     }
     else {
+      if (this.name && this.name.value.trim().length > 0) {
+        this.attendanceLogService.getQuery({ name: this.name.value }).subscribe({
+          next: (data: any) => {
+            // console.log('query results: ', data);
+            this.name.setValue('');
+
+            this.nameQueryResults = data.results;
+          },
+          error: (e) => {
+            this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+            this.code.setValue('');
+          }
+        })
+      }
     }
   }
 }

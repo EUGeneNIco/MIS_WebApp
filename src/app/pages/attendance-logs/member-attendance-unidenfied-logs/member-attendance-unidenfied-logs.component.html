@@ -1,19 +1,11 @@
 <div class="card">
-    <!-- <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-        </ng-template>
-        <ng-template pTemplate="right">
-        </ng-template>
-    </p-toolbar> -->
-
     <p-table #dt [columns]="cols" currentPageReportTemplate="{{totalRecordCountLabel}}" dataKey="id" [lazy]="true"
-        [loading]="loading" (onLazyLoad)="loadLazy($event)" (onRowSelect)="onRowSelect($event)" [paginator]="true"
-        [responsive]="true" responsiveLayout="scroll" [rowHover]="true" [rows]="10"
-        [rowsPerPageOptions]="[10,20,50,100]" [showCurrentPageReport]="true" selectionMode="single"
-        [totalRecords]="totalRecords" [value]="rows">
+        [loading]="loading" (onLazyLoad)="loadLazy($event)" [paginator]="true" [responsive]="true"
+        responsiveLayout="scroll" [rowHover]="true" [rows]="10" [rowsPerPageOptions]="[10,20,50,100]"
+        [showCurrentPageReport]="true" selectionMode="single" [totalRecords]="totalRecords" [value]="rows">
         <ng-template pTemplate="caption">
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                <h5 class="m-0">Attendance Logs</h5>
+                <h5 class="m-0">Member Attendance Unidentified Logs</h5>
             </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -27,7 +19,7 @@
             <tr>
                 <th *ngFor="let col of columns" [ngStyle]="col.cellStyle" [ngClass]="col.priority">
                     <input *ngIf="col.filter && col.type === 'text' && !col.isDate" pInputText
-                        placeholder="Enter guest name here"
+                        placeholder="Enter name here"
                         class="p-inputtext p-component p-element ng-star-inserted p-filled"
                         (keyup.enter)="columnFilter(col.field, $event.target.value)" type="text"
                         [style]="{'width': '100%'}" />
@@ -40,7 +32,7 @@
         </ng-template>
 
         <ng-template pTemplate="body" let-columns="columns" let-rowData>
-            <tr [pSelectableRow]="rowData">
+            <tr>
                 <td class="table-cell" *ngFor="let col of columns" [ngStyle]="col.cellStyle">
                     <span class="p-column-title">{{col.header}}</span>
 
@@ -53,9 +45,9 @@
                     </span>
 
                     <div *ngIf="col.type == 'actions' " class="flex">
-                        <button pButton pRipple icon="pi pi-pencil"
+                        <button pButton pRipple icon="pi pi-thumbs-up-fill"
                             class="p-button-rounded p-button-raised p-button-success mr-2"
-                            (click)="openEditModal(rowData)" pTooltip="Edit"></button>
+                            (click)="openProcessingModal(rowData)" pTooltip="Process"></button>
                         <button pButton pRipple icon="pi pi-trash"
                             class="p-button-rounded p-button-raised p-button-warning" (click)="deleteRecord(rowData)"
                             pTooltip="Delete"></button>
@@ -71,3 +63,25 @@
         </ng-template>
     </p-table>
 </div>
+
+<!-- Modal -->
+<p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '45vw'}" [(visible)]="displayModal"
+    (onHide)="onExit()" [header]="processMessage">
+
+    <form autocomplete="off" class="m-t" [formGroup]="formModel">
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12">
+                <label htmlfor="service">Service</label>
+                <p-dropdown appendTo="body" [filter]="false" formControlName="service" optionLabel="label"
+                    placeholder="Select" [options]="services"></p-dropdown>
+                <app-field-error-display [displayError]="validation.isFieldInvalid(this.service, 'required')"
+                    errorMsg="Service is required"></app-field-error-display>
+            </div>
+        </div>
+    </form>
+
+    <div class="field col-12 p-0 mb-0">
+        <button pButton pRipple icon="pi pi-check" class="p-button-raised p-button-success" label="Submit"
+            style="float:right;width:auto" type="button" (click)="onSubmit()"></button>
+    </div>
+</p-dialog>

@@ -131,7 +131,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   _setBreadcrumbs(): void {
     this.setBreadcrumbs([
       { label: 'Management' },
-      { label: 'Member', url: '' }
+      { label: 'Members', url: '' }
     ]);
   }
 

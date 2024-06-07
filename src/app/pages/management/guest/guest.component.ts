@@ -129,7 +129,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   _setBreadcrumbs(): void {
     this.setBreadcrumbs([
       { label: 'Management' },
-      { label: 'Guest', url: '' }
+      { label: 'Guests', url: '' }
     ]);
   }
 

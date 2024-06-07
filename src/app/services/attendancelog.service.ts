@@ -18,7 +18,15 @@ export class AttendancelogService extends BaseService {
     return this.http.post(this.API_URL + `/${this.resource}/getQuery`, data);
   }
 
-  getGrid(data: any) {
-    return this.http.post(this.API_URL + `/${this.resource}/getGrid`, data);
+  getMemberAttendanceLogs(data: any) {
+    return this.http.post(this.API_URL + `/${this.resource}/getMemberAttendanceLogs`, data);
+  }
+
+  getMemberUnidentifiedLogs(data: any) {
+    return this.http.post(this.API_URL + `/${this.resource}/getMemberAttendanceUnidentifiedLogs`, data);
+  }
+
+  processMemberUnidentifiedLog(data: any) {
+    return this.http.post(this.API_URL + `/${this.resource}/processMemberUnidentifiedLog`, data);
   }
 }

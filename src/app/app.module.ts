@@ -110,7 +110,8 @@ import { AuthInterceptor } from './_auth/auth.interceptor';
 import { DashboardComponent } from './pages/common/dashboard/dashboard.component';
 import { MemberComponent } from './pages/management/member/member.component';
 import { AttendancelogComponent } from './pages/transaction/attendancelog/attendancelog.component';
-import { MemberAttendanceLogComponent } from './pages/management/member-attendance-log/member-attendance-log.component';
+import { MemberAttendanceLogComponent } from './pages/attendance-logs/member-attendance-log/member-attendance-log.component';
+import { MemberAttendanceUnidenfiedLogsComponent } from './pages/attendance-logs/member-attendance-unidenfied-logs/member-attendance-unidenfied-logs.component';
 
 @NgModule({
     declarations: [
@@ -125,6 +126,7 @@ import { MemberAttendanceLogComponent } from './pages/management/member-attendan
         MemberComponent,
         AttendancelogComponent,
         MemberAttendanceLogComponent,
+        MemberAttendanceUnidenfiedLogsComponent
     ],
     imports: [
         BrowserModule,

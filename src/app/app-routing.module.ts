@@ -11,7 +11,8 @@ import { DashboardComponent } from './pages/common/dashboard/dashboard.component
 import { MemberComponent } from './pages/management/member/member.component';
 import { UserRoles } from './_enums/UserRoles';
 import { AttendancelogComponent } from './pages/transaction/attendancelog/attendancelog.component';
-import { MemberAttendanceLogComponent } from './pages/management/member-attendance-log/member-attendance-log.component';
+import { MemberAttendanceLogComponent } from './pages/attendance-logs/member-attendance-log/member-attendance-log.component';
+import { MemberAttendanceUnidenfiedLogsComponent } from './pages/attendance-logs/member-attendance-unidenfied-logs/member-attendance-unidenfied-logs.component';
 
 @NgModule({
     imports: [
@@ -30,7 +31,8 @@ import { MemberAttendanceLogComponent } from './pages/management/member-attendan
                     { path: 'management/import-member-data', component: ImportMemberDataComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
                     { path: 'management/guest', component: GuestComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
                     { path: 'management/member', component: MemberComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
-                    { path: 'management/member-attendance-log', component: MemberAttendanceLogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
+                    { path: 'attendance-logs/member-attendance-log', component: MemberAttendanceLogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
+                    { path: 'attendance-logs/member-attendance-unidentified-log', component: MemberAttendanceUnidenfiedLogsComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
 
                     { path: 'transaction/attendance-log', component: AttendancelogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Staff } },
                 ],

@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MIS.Application._Exceptions;
 using MIS.Application.AttendanceLogs.Commands.LogGuestAttendance;
+using MIS.Application.AttendanceLogs.Commands.ProcessUnidentifiedMemberLog;
 using MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceLogsGrid;
+using MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceUnidentifiedLogsGrid;
 using MIS.Application.AttendanceLogs.Queries.GetMemberGuest;
 
 namespace MIS.WebAPI.Controllers
@@ -54,14 +56,48 @@ namespace MIS.WebAPI.Controllers
             }
         }
 
-        [HttpPost("getGrid")]
-        public async Task<ActionResult> GetGrid([FromBody] GetMemberAttendanceLogsGridQuery query)
+        [HttpPost("getMemberAttendanceLogs")]
+        public async Task<ActionResult> GetMemberAttendanceLogs([FromBody] GetMemberAttendanceLogsGridQuery query)
         {
             try
             {
                 var data = await Mediator.Send(query);
 
                 return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("getMemberAttendanceUnidentifiedLogs")]
+        public async Task<ActionResult> GetMemberAttendanceUnidentifiedLogs([FromBody] GetMemberAttendanceUnidentifiedLogsGridQuery query)
+        {
+            try
+            {
+                var data = await Mediator.Send(query);
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("processMemberUnidentifiedLog")]
+        public async Task<ActionResult> ProcessMemberUnidentifiedLog([FromBody] ProcessUnidentifiedMemberLogCommand command)
+        {
+            try
+            {
+                var data = await Mediator.Send(command);
+
+                return Ok(data);
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

@@ -66,6 +66,12 @@ export class AppLayoutComponent implements OnDestroy {
                 this.block = val;
             });
         });
+
+        this.layoutService.config.update((config) => ({
+            ...config,
+            theme: 'tailwind-light',
+            colorScheme: 'light',
+        }));
     }
 
     hideMenu() {

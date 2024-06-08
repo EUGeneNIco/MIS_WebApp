@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
 using MIS.Application._Helpers;
+using MIS.Application._Interfaces.Guests;
 using MIS.Domain;
 using MIS.Domain.Entities;
 using System;
@@ -15,19 +16,17 @@ namespace MIS.Application.Guests.Queries.GetGuestGrid
 {
     public class GetGuestGridQueryHandler : IRequestHandler<GetGuestGridQuery, GuestGridViewModel>
     {
-        private readonly IAppDbContext dbContext;
+        private readonly IGuestRepository guestRepository;
         private readonly IMapper mapper;
 
-        public GetGuestGridQueryHandler(IAppDbContext dbContext, IMapper mapper)
+        public GetGuestGridQueryHandler(IGuestRepository guestRepository, IMapper mapper)
         {
-            this.dbContext = dbContext;
+            this.guestRepository = guestRepository;
             this.mapper = mapper;
         }
         public async Task<GuestGridViewModel> Handle(GetGuestGridQuery request, CancellationToken cancellationToken)
         {
-            var query = dbContext.Guests
-                .Where(x => !x.IsDeleted)
-                .AsQueryable();
+            var query = await guestRepository.GetGuests();
 
             var data = new GuestGridViewModel
             {

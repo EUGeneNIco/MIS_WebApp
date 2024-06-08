@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MIS.Application._Exceptions;
+using MIS.Application._Interfaces.Guests;
 using MIS.Domain;
 using MIS.Domain.Entities;
 
@@ -9,10 +10,12 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
     public class LogAttendanceCommandHandler : IRequestHandler<LogAttendanceCommand, string>
     {
         private readonly IAppDbContext dbContext;
+        private readonly IGuestRepository guestRepository;
 
-        public LogAttendanceCommandHandler(IAppDbContext dbContext)
+        public LogAttendanceCommandHandler(IAppDbContext dbContext, IGuestRepository guestRepository)
         {
             this.dbContext = dbContext;
+            this.guestRepository = guestRepository;
         }
 
         public async Task<string> Handle(LogAttendanceCommand request, CancellationToken cancellationToken)
@@ -43,7 +46,7 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
                 // Save unindentified log
                 dbContext.MemberAttendanceUnidentifiedLogs.Add(new MemberAttendanceUnidentifiedLog
                 {
-                    Member = member,
+                    MemberId = member.Id,
                     LogDateTime = logTime
                 });
 
@@ -53,7 +56,7 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
 
             var log = new MemberAttendanceLog
             {
-                Member = member,
+                MemberId = member.Id,
                 LogDateTime = logTime,
                 Service = service
             };
@@ -66,11 +69,10 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
 
         private async Task<string> LogGuest(LogAttendanceCommand request, CancellationToken cancellationToken)
         {
-            var guest = await dbContext.Guests
-                .FirstOrDefaultAsync(x => !string.IsNullOrWhiteSpace(request.Code)
+            var dbGuests = await guestRepository.GetGuests();
+            var guest = await dbGuests.FirstOrDefaultAsync(x => !string.IsNullOrWhiteSpace(request.Code)
                     ? x.Code == request.Code
-                    : (x.Id == request.GuestId) &&
-                    !x.IsDeleted);
+                    : (x.Id == request.GuestId) && !x.IsDeleted);
             if (guest is null)
                 throw new NotFoundException("Guest or Member not found.");
 
@@ -82,7 +84,7 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
                 // Save unindentified log
                 dbContext.GuestAttendanceUnidentifiedLogs.Add(new GuestAttendanceUnidentifiedLog
                 {
-                    Guest = guest,
+                    GuestId = guest.Id,
                     LogDateTime = logTime
                 });
 
@@ -92,7 +94,7 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
 
             var log = new GuestAttendanceLog
             {
-                Guest = guest,
+                GuestId = guest.Id,
                 LogDateTime = logTime,
                 Service = service
             };

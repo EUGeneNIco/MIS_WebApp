@@ -240,6 +240,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
             },
             error: (e) => {
               this.handleErrorMessage(e, NotificationMessages.DeleteError.Message);
+              this.closeModal();
               this.uiService.unBlock()
             }
           })
@@ -308,6 +309,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
               },
               error: (e) => {
                 this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+                this.closeModal();
                 this.uiService.unBlock()
               }
             })
@@ -336,6 +338,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
               },
               error: (e) => {
                 this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+                this.closeModal();
                 this.uiService.unBlock()
               }
             })

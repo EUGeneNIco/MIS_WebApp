@@ -5,7 +5,7 @@ using MIS.Domain.Entities;
 
 namespace MIS.Application.Guests.Commands.CreateGuest
 {
-    public class CreateGuestCommand : IRequest<long>, IHaveCustomMapping
+    public class CreateGuestCommand : IRequest<Unit>, IHaveCustomMapping
     {
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

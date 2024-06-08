@@ -1,11 +1,8 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MIS.Application._Enums;
-using MIS.Application._Exceptions;
+using MIS.Application._Interfaces.Guests;
 using MIS.Application.AttendanceLogs.Models;
-using MIS.Application.Members.Models;
-using MIS.Application.Members.Queries.GetMember;
 using MIS.Domain;
 
 namespace MIS.Application.AttendanceLogs.Queries.GetMemberGuest
@@ -13,11 +10,13 @@ namespace MIS.Application.AttendanceLogs.Queries.GetMemberGuest
     public class  GetMemberGuestQueryHandler : IRequestHandler< GetMemberGuestQuery, MemberGuestQueryDto>
     {
         private readonly IAppDbContext dbContext;
+        private readonly IGuestRepository guestRepository;
         private readonly IMapper mapper;
 
-        public  GetMemberGuestQueryHandler(IAppDbContext dbContext, IMapper mapper)
+        public  GetMemberGuestQueryHandler(IAppDbContext dbContext, IGuestRepository guestRepository, IMapper mapper)
         {
             this.dbContext = dbContext;
+            this.guestRepository = guestRepository;
             this.mapper = mapper;
         }
         public async Task<MemberGuestQueryDto> Handle(GetMemberGuestQuery request, CancellationToken cancellationToken)
@@ -36,8 +35,9 @@ namespace MIS.Application.AttendanceLogs.Queries.GetMemberGuest
                     MemberId = x.Id
                 }).ToList();
 
-            var guestQuery = dbContext.Guests
-                .Include(x => x.Network)
+            var dbGuests = await guestRepository.GetGuests();
+
+            var guestQuery = dbGuests
                 .Where(x => x.FirstName.Contains(request.Name) ||
                             x.MiddleName.Contains(request.Name) ||
                             x.LastName.Contains(request.Name) && !x.IsDeleted)

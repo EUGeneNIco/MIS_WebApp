@@ -216,6 +216,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
       },
       error: (e) => {
         this.handleErrorMessage(e, NotificationMessages.GenericError.Message);
+        this.closeModal();
       }
     })
   }
@@ -320,6 +321,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
             },
             error: (e) => {
               this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+              this.closeModal();
               this.uiService.unBlock()
             }
           })

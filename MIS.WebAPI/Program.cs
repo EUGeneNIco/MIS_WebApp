@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MIS.Application._Interfaces.Guests;
 using MIS.Application._Mappings.AutoMapper;
 using MIS.Domain;
 using MIS.Persistence;
+using MIS.Persistence.Implementations.Guests;
 using MIS.WebAPI;
 using MIS.WebAPI.Auth;
 using System.Text;
@@ -87,6 +89,10 @@ builder.Services.AddAuthentication(x =>
 
 // JwtAuthenticationManager
 builder.Services.AddScoped<IJwtAuthenticationManager>(manager => new JwtAuthenticationManager(JWT_KEY, manager.GetService<IMediator>()));
+builder.Services.AddScoped<IGuestRepository, GuestRepository>();
+builder.Services.AddScoped<IDeleteGuestActivity, DeleteGuestActivity>();
+builder.Services.AddScoped<IAddGuestActivity, AddGuestActivity>();
+builder.Services.AddScoped<IUpdateGuestActivity, UpdateGuestActivity>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));

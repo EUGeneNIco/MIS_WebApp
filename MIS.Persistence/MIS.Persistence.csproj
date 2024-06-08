@@ -21,4 +21,8 @@
     <ProjectReference Include="..\MIS.Domain\MIS.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Implementations\Members\" />
+  </ItemGroup>
+
 </Project>

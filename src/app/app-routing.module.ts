@@ -13,6 +13,8 @@ import { UserRoles } from './_enums/UserRoles';
 import { AttendancelogComponent } from './pages/transaction/attendancelog/attendancelog.component';
 import { MemberAttendanceLogComponent } from './pages/attendance-logs/member-attendance-log/member-attendance-log.component';
 import { MemberAttendanceUnidenfiedLogsComponent } from './pages/attendance-logs/member-attendance-unidenfied-logs/member-attendance-unidenfied-logs.component';
+import { GuestAttendanceLogComponent } from './pages/attendance-logs/guest-attendance-log/guest-attendance-log.component';
+import { GuestAttendanceUnidentifiedLogComponent } from './pages/attendance-logs/guest-attendance-unidentified-log/guest-attendance-unidentified-log.component';
 
 @NgModule({
     imports: [
@@ -31,8 +33,11 @@ import { MemberAttendanceUnidenfiedLogsComponent } from './pages/attendance-logs
                     { path: 'management/import-member-data', component: ImportMemberDataComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
                     { path: 'management/guest', component: GuestComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
                     { path: 'management/member', component: MemberComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
-                    { path: 'attendance-logs/member-attendance-log', component: MemberAttendanceLogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
+
+                    { path: 'attendance-logs/member-attendance-log', component: MemberAttendanceLogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Staff } },
                     { path: 'attendance-logs/member-attendance-unidentified-log', component: MemberAttendanceUnidenfiedLogsComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
+                    { path: 'attendance-logs/guest-attendance-log', component: GuestAttendanceLogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Staff } },
+                    { path: 'attendance-logs/guest-attendance-unidentified-log', component: GuestAttendanceUnidentifiedLogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Admin } },
 
                     { path: 'transaction/attendance-log', component: AttendancelogComponent, canActivate: [AuthGuard], data: { role: UserRoles.Staff } },
                 ],

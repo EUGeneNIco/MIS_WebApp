@@ -29,9 +29,12 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Transaction',
+                label: 'Attendance Logs',
                 items: [
-                    { label: 'Attendance Log', icon: 'pi pi-fw pi-qrcode', routerLink: ['/transaction/attendance-log'], requiredRoles: [UserRoles.Admin, UserRoles.Staff] },
+                    { label: 'Member', icon: 'pi pi-fw pi-check-circle', routerLink: ['/attendance-logs/member-attendance-log'], requiredRoles: [UserRoles.Staff, UserRoles.Admin] },
+                    { label: 'Member (Unidentified)', icon: 'pi pi-fw pi-times-circle', routerLink: ['/attendance-logs/member-attendance-unidentified-log'], requiredRoles: [UserRoles.Admin] },
+                    { label: 'Guest', icon: 'pi pi-fw pi-check-circle', routerLink: ['/attendance-logs/guest-attendance-log'], requiredRoles: [UserRoles.Staff, UserRoles.Admin] },
+                    { label: 'Guest (Unidentified)', icon: 'pi pi-fw pi-times-circle', routerLink: ['/attendance-logs/guest-attendance-unidentified-log'], requiredRoles: [UserRoles.Admin] },
                 ]
             },
             {
@@ -39,16 +42,12 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Guests', icon: 'pi pi-fw pi-user-plus', routerLink: ['/management/guest'], requiredRoles: [UserRoles.Admin] },
                     { label: 'Members', icon: 'pi pi-fw pi-list', routerLink: ['/management/member'], requiredRoles: [UserRoles.Admin] },
-                    // { label: 'Member Attendance Logs', icon: 'pi pi-fw pi-check-circle', routerLink: ['/management/member-attendance-log'], requiredRoles: [UserRoles.Admin] },
                 ]
             },
             {
-                label: 'Attendance Logs',
+                label: 'Transaction',
                 items: [
-                    { label: 'Member', icon: 'pi pi-fw pi-check-circle', routerLink: ['/attendance-logs/member-attendance-log'], requiredRoles: [UserRoles.Admin] },
-                    { label: 'Member (Unidentified)', icon: 'pi pi-fw pi-times-circle', routerLink: ['/attendance-logs/member-attendance-unidentified-log'], requiredRoles: [UserRoles.Admin] },
-                    { label: 'Guest', icon: 'pi pi-fw pi-check-circle', routerLink: ['/attendance-logs/guest-attendance-log'], requiredRoles: [UserRoles.Admin] },
-                    { label: 'Guest (Unidentified)', icon: 'pi pi-fw pi-times-circle', routerLink: ['/attendance-logs/guest-attendance-unidentified-log'], requiredRoles: [UserRoles.Admin] },
+                    { label: 'Attendance Log', icon: 'pi pi-fw pi-qrcode', routerLink: ['/transaction/attendance-log'], requiredRoles: [UserRoles.Admin, UserRoles.Staff] },
                 ]
             },
             // {
@@ -197,17 +196,16 @@ export class AppMenuComponent implements OnInit {
 
     private filterMenuBasedOnAuthorizedRoles(rawModels: any) {
         let filteredModels = [];
-        rawModels.forEach((rm: any, index: any) => {
-            let rawModel = { label: rm.label, items: [] };
-            rm.items.forEach((item: any) => {
-                if (item.requiredRoles.find(x => x === this.loggedInUserRole))
+        rawModels.forEach((model: any) => {
+            let rawModel = { label: model.label, items: [] };
+            model.items.forEach((item: any) => {
+                if (item.requiredRoles.find(requiredRole => requiredRole === this.loggedInUserRole))
                     rawModel.items.push(item);
             });
 
             if (rawModel.items.length > 0)
                 filteredModels.push(rawModel)
         });
-
 
         this.model = filteredModels;
     }

@@ -112,6 +112,8 @@ import { MemberComponent } from './pages/management/member/member.component';
 import { AttendancelogComponent } from './pages/transaction/attendancelog/attendancelog.component';
 import { MemberAttendanceLogComponent } from './pages/attendance-logs/member-attendance-log/member-attendance-log.component';
 import { MemberAttendanceUnidenfiedLogsComponent } from './pages/attendance-logs/member-attendance-unidenfied-logs/member-attendance-unidenfied-logs.component';
+import { GuestAttendanceLogComponent } from './pages/attendance-logs/guest-attendance-log/guest-attendance-log.component';
+import { GuestAttendanceUnidentifiedLogComponent } from './pages/attendance-logs/guest-attendance-unidentified-log/guest-attendance-unidentified-log.component';
 
 @NgModule({
     declarations: [
@@ -126,7 +128,9 @@ import { MemberAttendanceUnidenfiedLogsComponent } from './pages/attendance-logs
         MemberComponent,
         AttendancelogComponent,
         MemberAttendanceLogComponent,
-        MemberAttendanceUnidenfiedLogsComponent
+        MemberAttendanceUnidenfiedLogsComponent,
+        GuestAttendanceLogComponent,
+        GuestAttendanceUnidentifiedLogComponent
     ],
     imports: [
         BrowserModule,

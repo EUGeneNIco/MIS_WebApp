@@ -29,4 +29,16 @@ export class AttendancelogService extends BaseService {
   processMemberUnidentifiedLog(data: any) {
     return this.http.post(this.API_URL + `/${this.resource}/processMemberUnidentifiedLog`, data);
   }
+  
+  getGuestAttendanceLogs(data: any) {
+    return this.http.post(this.API_URL + `/${this.resource}/getGuestAttendanceLogs`, data);
+  }
+
+  getGuestUnidentifiedLogs(data: any) {
+    return this.http.post(this.API_URL + `/${this.resource}/getGuestAttendanceUnidentifiedLogs`, data);
+  }
+
+  processGuestUnidentifiedLog(data: any) {
+    return this.http.post(this.API_URL + `/${this.resource}/processGuestUnidentifiedLog`, data);
+  }
 }

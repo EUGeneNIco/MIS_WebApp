@@ -5,36 +5,36 @@ using MIS.Application._Enums;
 using MIS.Application._Helpers;
 using MIS.Domain;
 
-namespace MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceLogsGrid
+namespace MIS.Application.AttendanceLogs.Queries.GetGuestAttendanceUnidentifiedLogsGrid
 {
-    public class GetMemberAttendanceLogsGridQueryHandler : IRequestHandler<GetMemberAttendanceLogsGridQuery, MemberAttendanceLogsGridViewModel>
+    public class GetGuestAttendanceUnidentifiedLogsGridQueryHandler : IRequestHandler<GetGuestAttendanceUnidentifiedLogsGridQuery, GuestAttendanceUnidentifiedLogsGridViewModel>
     {
         private readonly IAppDbContext dbContext;
         private readonly IMapper mapper;
 
-        public GetMemberAttendanceLogsGridQueryHandler(IAppDbContext dbContext, IMapper mapper)
+        public GetGuestAttendanceUnidentifiedLogsGridQueryHandler(IAppDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
         }
-        public async Task<MemberAttendanceLogsGridViewModel> Handle(GetMemberAttendanceLogsGridQuery request, CancellationToken cancellationToken)
+        public async Task<GuestAttendanceUnidentifiedLogsGridViewModel> Handle(GetGuestAttendanceUnidentifiedLogsGridQuery request, CancellationToken cancellationToken)
         {
-            var query = dbContext.MemberAttendanceLogs
+            var query = dbContext.GuestAttendanceUnidentifiedLogs
                 .OrderByDescending(x => x.LogDateTime)
                 .AsQueryable();
 
-            var data = new MemberAttendanceLogsGridViewModel
+            var data = new GuestAttendanceUnidentifiedLogsGridViewModel
             {
                 TotalDataCount = query.Count()
             };
 
             //Filter
-            var name = QueryHelper.GetFilterValue(request.Filters, "member");
+            var name = QueryHelper.GetFilterValue(request.Filters, "name");
             var logDateTime = QueryHelper.GetFilterValue(request.Filters, "logDateTime");
             if (!string.IsNullOrEmpty(name))
             {
                 name = name.Trim();
-                query = query.Where(x => x.Member.FirstName.Contains(name) || x.Member.MiddleName.Contains(name) || x.Member.LastName.Contains(name));
+                query = query.Where(x => x.Guest.FirstName.Contains(name) || x.Guest.MiddleName.Contains(name) || x.Guest.LastName.Contains(name));
             }
             if (!string.IsNullOrEmpty(logDateTime))
             {
@@ -58,7 +58,7 @@ namespace MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceLogsGrid
                     .Take(request.Limit)
                 : query;
 
-            data.Data = mapper.Map<IEnumerable<MemberAttendanceLogsGridItem>>(await query.ToListAsync(cancellationToken));
+            data.Data = mapper.Map<IEnumerable<GuestAttendanceUnidentifiedLogsGridItem>>(await query.ToListAsync(cancellationToken));
 
             return data;
         }

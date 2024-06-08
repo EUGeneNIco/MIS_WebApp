@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MIS.Application._Exceptions;
 using MIS.Application.AttendanceLogs.Commands.LogGuestAttendance;
+using MIS.Application.AttendanceLogs.Commands.ProcessUnidentifiedGuestLog;
 using MIS.Application.AttendanceLogs.Commands.ProcessUnidentifiedMemberLog;
+using MIS.Application.AttendanceLogs.Queries.GetGuestAttendanceLogsGrid;
+using MIS.Application.AttendanceLogs.Queries.GetGuestAttendanceUnidentifiedLogsGrid;
 using MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceLogsGrid;
 using MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceUnidentifiedLogsGrid;
 using MIS.Application.AttendanceLogs.Queries.GetMemberGuest;
@@ -88,6 +91,55 @@ namespace MIS.WebAPI.Controllers
 
         [HttpPost("processMemberUnidentifiedLog")]
         public async Task<ActionResult> ProcessMemberUnidentifiedLog([FromBody] ProcessUnidentifiedMemberLogCommand command)
+        {
+            try
+            {
+                var data = await Mediator.Send(command);
+
+                return Ok(data);
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("getGuestAttendanceLogs")]
+        public async Task<ActionResult> GetGuestAttendanceLogs([FromBody] GetGuestAttendanceLogsGridQuery query)
+        {
+            try
+            {
+                var data = await Mediator.Send(query);
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("getGuestAttendanceUnidentifiedLogs")]
+        public async Task<ActionResult> GetGuestAttendanceUnidentifiedLogs([FromBody] GetGuestAttendanceUnidentifiedLogsGridQuery query)
+        {
+            try
+            {
+                var data = await Mediator.Send(query);
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
+
+        [HttpPost("processGuestUnidentifiedLog")]
+        public async Task<ActionResult> ProcessGuestUnidentifiedLog([FromBody] ProcessUnidentifiedGuestLogCommand command)
         {
             try
             {

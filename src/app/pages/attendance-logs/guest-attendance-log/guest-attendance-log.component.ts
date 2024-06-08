@@ -1,33 +1,27 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { MasterBaseComponent } from 'src/app/_components/base/master-base.component';
 import { Validation } from 'src/app/_helpers/validation';
-import { UiService } from 'src/app/layout/service/ui.service';
 import { AttendancelogService } from 'src/app/services/attendancelog.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
-  selector: 'app-member-attendance-log',
-  templateUrl: './member-attendance-log.component.html',
-  styleUrl: './member-attendance-log.component.scss'
+  selector: 'app-guest-attendance-log',
+  templateUrl: './guest-attendance-log.component.html',
+  styleUrl: './guest-attendance-log.component.scss'
 })
-export class MemberAttendanceLogComponent extends MasterBaseComponent implements AfterViewInit, OnInit {
+export class GuestAttendanceLogComponent extends MasterBaseComponent implements AfterViewInit, OnInit {
   formModel: FormGroup;
   recordId: any = 0;
   initialGridParams: any;
 
-  // Modal
   displayModal: boolean;
-
-  // get firstName() { return this.formModel.get('firstName'); }
 
   @ViewChild('dt') dt: Table;
   constructor(
     private logService: AttendancelogService,
-    private fb: FormBuilder,
-    private uiService: UiService,
     public confirmationService: ConfirmationService,
     public validation: Validation,
     notifService: NotificationService) {
@@ -39,7 +33,7 @@ export class MemberAttendanceLogComponent extends MasterBaseComponent implements
     this._setBreadcrumbs();
 
     this.cols = [
-      { field: 'member', filter: true, header: 'Name', sortable: false, type: 'text' },
+      { field: 'name', filter: true, header: 'Name', sortable: false, type: 'text' },
       { field: 'logDateTime', filter: true, header: 'Logged Date/Time', sortable: true, type: 'text', isDate: true },
       { field: 'service', filter: false, header: 'Service', sortable: false, type: 'text' },
       // { field: 'id', filter: false, header: 'Action', sortable: false, type: 'actions' }
@@ -55,11 +49,11 @@ export class MemberAttendanceLogComponent extends MasterBaseComponent implements
   }
 
   _callLoadService(): void {
-    this.logService.getMemberAttendanceLogs(this.dataParameter).subscribe({
+    this.logService.getGuestAttendanceLogs(this.dataParameter).subscribe({
       next: (data: any) => {
         this.reloadData(data);
       },
-      error: (e) => {
+      error: () => {
         this.notifService.showErrorToast('Oops!', 'Server error. Please try again later.');
       }
     })
@@ -71,7 +65,7 @@ export class MemberAttendanceLogComponent extends MasterBaseComponent implements
   _setBreadcrumbs(): void {
     this.setBreadcrumbs([
       { label: 'Attendance Logs' },
-      { label: 'Member Attendance Logs', url: '' }
+      { label: 'Guest Attendance Logs', url: '' }
     ]);
   }
 
@@ -80,4 +74,5 @@ export class MemberAttendanceLogComponent extends MasterBaseComponent implements
     this._callLoadService();
   }
 }
+
 

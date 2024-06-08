@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ConfirmationService, SelectItem } from 'primeng/api';
+import { SelectItem, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { MasterBaseComponent } from 'src/app/_components/base/master-base.component';
 import { NotificationMessages } from 'src/app/_enums/notification-messages';
@@ -11,11 +11,11 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { ServiceService } from 'src/app/services/service.service';
 
 @Component({
-  selector: 'app-member-attendance-unidenfied-logs',
-  templateUrl: './member-attendance-unidenfied-logs.component.html',
-  styleUrl: './member-attendance-unidenfied-logs.component.scss'
+  selector: 'app-guest-attendance-unidentified-log',
+  templateUrl: './guest-attendance-unidentified-log.component.html',
+  styleUrl: './guest-attendance-unidentified-log.component.scss'
 })
-export class MemberAttendanceUnidenfiedLogsComponent extends MasterBaseComponent implements AfterViewInit, OnInit {
+export class GuestAttendanceUnidentifiedLogComponent extends MasterBaseComponent implements AfterViewInit, OnInit {
   formModel: FormGroup;
   recordId: any = 0;
   processMessage: string;
@@ -44,7 +44,7 @@ export class MemberAttendanceUnidenfiedLogsComponent extends MasterBaseComponent
     this._setBreadcrumbs();
 
     this.cols = [
-      { field: 'member', filter: true, header: 'Name', sortable: false, type: 'text' },
+      { field: 'name', filter: true, header: 'Name', sortable: false, type: 'text' },
       { field: 'logDateTime', filter: true, header: 'Logged Date/Time', sortable: true, type: 'text', isDate: true },
       { field: 'id', filter: false, header: 'Action', sortable: false, type: 'actions' }
     ];
@@ -60,7 +60,7 @@ export class MemberAttendanceUnidenfiedLogsComponent extends MasterBaseComponent
   }
 
   _callLoadService(): void {
-    this.logService.getMemberUnidentifiedLogs(this.dataParameter).subscribe({
+    this.logService.getGuestUnidentifiedLogs(this.dataParameter).subscribe({
       next: (data: any) => {
         this.reloadData(data);
       },
@@ -81,7 +81,7 @@ export class MemberAttendanceUnidenfiedLogsComponent extends MasterBaseComponent
   _setBreadcrumbs(): void {
     this.setBreadcrumbs([
       { label: 'Attendance Logs' },
-      { label: 'Member Attendance Unidentified Logs', url: '' }
+      { label: 'Guest Attendance Unidentified Logs', url: '' }
     ]);
   }
 
@@ -91,7 +91,7 @@ export class MemberAttendanceUnidenfiedLogsComponent extends MasterBaseComponent
   }
 
   openProcessingModal(record: any) {
-    this.processMessage = `Processing log of ${record.member} last ${record.logDateTime}`
+    this.processMessage = `Processing log of ${record.name} last ${record.logDateTime}`
     this.recordId = record.id;
     this.displayModal = true;
   }
@@ -122,7 +122,7 @@ export class MemberAttendanceUnidenfiedLogsComponent extends MasterBaseComponent
     if (this.formModel.valid) {
       if (this.recordId > 0) {
         this.uiService.block();
-        this.logService.processMemberUnidentifiedLog({
+        this.logService.processGuestUnidentifiedLog({
           serviceId: this.service.value.value,
           unidentifiedLogId: this.recordId
         }).subscribe({

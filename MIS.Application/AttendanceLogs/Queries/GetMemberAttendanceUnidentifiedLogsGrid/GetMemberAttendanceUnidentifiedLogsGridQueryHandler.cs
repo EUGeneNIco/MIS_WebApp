@@ -19,7 +19,9 @@ namespace MIS.Application.AttendanceLogs.Queries.GetMemberAttendanceUnidentified
         }
         public async Task<MemberAttendanceUnidentifiedLogsGridViewModel> Handle(GetMemberAttendanceUnidentifiedLogsGridQuery request, CancellationToken cancellationToken)
         {
-            var query = dbContext.MemberAttendanceUnidentifiedLogs.AsQueryable();
+            var query = dbContext.MemberAttendanceUnidentifiedLogs
+                .OrderByDescending(x => x.LogDateTime)
+                .AsQueryable();
 
             var data = new MemberAttendanceUnidentifiedLogsGridViewModel
             {

@@ -5,12 +5,13 @@
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid pt-2" style="display: flex;justify-content: center;align-items: center">
             <div class="field col-12" style="display: flex;justify-content: center;align-items: center">
-                <p-selectButton (onChange)="onLogOptionChange($event)" [options]="logOptions"
-                    formControlName="selectedLogOption" optionLabel="label" optionValue="value" />
+                <p-toggleButton (onChange)="onLogOptionChange($event)" formControlName="selectedLogOption"
+                    [onLabel]="QR" [offLabel]="Name" />
             </div>
             <div class="field col-12">
                 <input *ngIf="isQrLog" pInputText formControlName="code" type="text">
-                <input *ngIf="!isQrLog" pInputText formControlName="name" type="text" placeholder="Enter name here">
+                <input *ngIf="!isQrLog" pInputText formControlName="name" type="text"
+                    placeholder="Enter first name, middle name or last name here">
             </div>
             <p-table *ngIf="!isQrLog && nameQueryResults.length > 0" [value]="nameQueryResults" [responsive]="true"
                 responsiveLayout="scroll" (onRowSelect)="onSelectMemberOrGuest($event)" selectionMode="single"

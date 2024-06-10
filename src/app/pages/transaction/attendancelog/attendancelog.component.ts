@@ -79,8 +79,8 @@ export class AttendancelogComponent extends AppPageBaseComponent implements OnIn
     this.router.navigateByUrl('');
   }
 
-  onLogOptionChange(event: any) {
-    this.isQrLog = event.value === this.QR;
+  onLogOptionChange(val) {
+    this.isQrLog = val.checked;
     this.code.reset();
     this.name.reset();
     this.nameQueryResults = [];

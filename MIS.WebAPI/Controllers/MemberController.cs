@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MIS.Application._Exceptions;
+using MIS.Application.Members.Commands.CreateMember;
 using MIS.Application.Members.Commands.ImportMemberData;
 using MIS.Application.Members.Commands.UpdateMember;
 using MIS.Application.Members.Queries.GetMember;
@@ -59,27 +60,27 @@ namespace MIS.WebAPI.Controllers
             }
         }
 
-        //[HttpPost]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public async Task<IActionResult> Create(CreateMemberCommand command)
-        //{
-        //    try
-        //    {
-        //        var result = await Mediator.Send(command);
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Create(CreateMemberCommand command)
+        {
+            try
+            {
+                var result = await Mediator.Send(command);
 
-        //        return Ok(result);
-        //    }
-        //    catch (DuplicateException ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, ex);
-        //    }
-        //}
+                return Ok(result);
+            }
+            catch (DuplicateException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+        }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]

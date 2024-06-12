@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIS.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240611114215_Changes_Member_AddCityBrgy")]
-    partial class Changes_Member_AddCityBrgy
+    [Migration("20240612030102_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,9 +75,6 @@ namespace MIS.Persistence.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -216,9 +213,6 @@ namespace MIS.Persistence.Migrations
                     b.Property<DateTime?>("ImportDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -323,9 +317,6 @@ namespace MIS.Persistence.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<long?>("ModifiedById")
                         .HasColumnType("bigint");
 
@@ -348,31 +339,26 @@ namespace MIS.Persistence.Migrations
                         new
                         {
                             Id = 1L,
-                            IsDeleted = false,
                             Name = "KKB/CYN"
                         },
                         new
                         {
                             Id = 2L,
-                            IsDeleted = false,
                             Name = "Women"
                         },
                         new
                         {
                             Id = 3L,
-                            IsDeleted = false,
                             Name = "Men"
                         },
                         new
                         {
                             Id = 4L,
-                            IsDeleted = false,
                             Name = "Children"
                         },
                         new
                         {
                             Id = 5L,
-                            IsDeleted = false,
                             Name = "Y-AM"
                         });
                 });
@@ -395,9 +381,6 @@ namespace MIS.Persistence.Migrations
                         .HasColumnType("time");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<long?>("ModifiedById")
@@ -425,29 +408,26 @@ namespace MIS.Persistence.Migrations
                         new
                         {
                             Id = 1L,
-                            EndTime = new TimeSpan(0, 9, 30, 0, 0),
+                            EndTime = new TimeSpan(0, 8, 30, 0, 0),
                             IsActive = true,
-                            IsDeleted = false,
                             Name = "1st",
                             StartTime = new TimeSpan(0, 7, 0, 0, 0)
                         },
                         new
                         {
                             Id = 2L,
-                            EndTime = new TimeSpan(0, 11, 30, 0, 0),
+                            EndTime = new TimeSpan(0, 10, 30, 0, 0),
                             IsActive = true,
-                            IsDeleted = false,
                             Name = "2nd",
-                            StartTime = new TimeSpan(0, 10, 0, 0, 0)
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
                         },
                         new
                         {
                             Id = 3L,
-                            EndTime = new TimeSpan(0, 13, 30, 0, 0),
+                            EndTime = new TimeSpan(0, 12, 30, 0, 0),
                             IsActive = true,
-                            IsDeleted = false,
                             Name = "3rd",
-                            StartTime = new TimeSpan(0, 12, 0, 0, 0)
+                            StartTime = new TimeSpan(0, 11, 0, 0, 0)
                         });
                 });
 

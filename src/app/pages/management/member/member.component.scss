@@ -9,3 +9,11 @@ th:nth-child(3),
 th:nth-child(4) {
     width: 15%;
 }
+
+.qr-code-display {
+    text-align: end;
+}
+.qr-code-display .qr-code-value {
+    font-weight: bold;
+    font-style: italic;
+}

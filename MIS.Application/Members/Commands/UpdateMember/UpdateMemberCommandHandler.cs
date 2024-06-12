@@ -34,6 +34,7 @@ namespace MIS.Application.Members.Commands.UpdateMember
             member.Address = request.Address;
             member.Gender = request.Gender;
             member.ContactNumber = request.ContactNumber;
+            member.Category = request.Category;
             member.CivilStatus = request.CivilStatus;
             member.Age = request.Age != null && request.Age > 0 ? request.Age : null;
             member.Extension = request.Extension;

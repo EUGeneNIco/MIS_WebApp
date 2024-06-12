@@ -12,19 +12,25 @@ namespace MIS.Application.AttendanceLogs.Queries.GetMemberGuest
     {
         private readonly IAppDbContext dbContext;
         private readonly IRepository<Guest> guestRepository;
+        private readonly IRepository<Member> memberRepository;
         private readonly IMapper mapper;
 
-        public  GetMemberGuestQueryHandler(IAppDbContext dbContext,IRepository<Guest> guestRepository, IMapper mapper)
+        public  GetMemberGuestQueryHandler(IAppDbContext dbContext,
+                                           IRepository<Guest> guestRepository,
+                                           IRepository<Member> memberRepository,
+                                           IMapper mapper)
         {
             this.dbContext = dbContext;
             this.guestRepository = guestRepository;
+            this.memberRepository = memberRepository;
             this.mapper = mapper;
         }
         public async Task<MemberGuestQueryDto> Handle(GetMemberGuestQuery request, CancellationToken cancellationToken)
         {
             var requestName = request.Name.Trim().ToUpper();
-            var query = dbContext.Members
-                .Include(x => x.Network)
+
+            var dbMembers = await memberRepository.GetAllAsync();
+            var query = dbMembers
                 .Where(x => x.FirstName.ToUpper().Contains(requestName) ||
                             x.MiddleName.ToUpper().Contains(requestName) ||
                             x.LastName.ToUpper().Contains(requestName))

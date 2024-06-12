@@ -44,8 +44,7 @@ namespace MIS.Persistence.Migrations
                     CreatedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedById = table.Column<long>(type: "bigint", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -75,8 +74,7 @@ namespace MIS.Persistence.Migrations
                     CreatedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedById = table.Column<long>(type: "bigint", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,8 +112,7 @@ namespace MIS.Persistence.Migrations
                     CreatedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedById = table.Column<long>(type: "bigint", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -148,19 +145,23 @@ namespace MIS.Persistence.Migrations
                     MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Barangay = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CivilStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Extension = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Birthdate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: true),
                     NetworkImported = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NetworkId = table.Column<long>(type: "bigint", nullable: true),
                     ImportDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedById = table.Column<long>(type: "bigint", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -169,6 +170,11 @@ namespace MIS.Persistence.Migrations
                         name: "FK_Members_Networks_NetworkId",
                         column: x => x.NetworkId,
                         principalTable: "Networks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Members_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Members_Users_ModifiedById",
@@ -275,24 +281,24 @@ namespace MIS.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Networks",
-                columns: new[] { "Id", "CreatedById", "CreatedOn", "IsDeleted", "ModifiedById", "ModifiedOn", "Name" },
+                columns: new[] { "Id", "CreatedById", "CreatedOn", "ModifiedById", "ModifiedOn", "Name" },
                 values: new object[,]
                 {
-                    { 1L, null, null, false, null, null, "KKB/CYN" },
-                    { 2L, null, null, false, null, null, "Women" },
-                    { 3L, null, null, false, null, null, "Men" },
-                    { 4L, null, null, false, null, null, "Children" },
-                    { 5L, null, null, false, null, null, "Y-AM" }
+                    { 1L, null, null, null, null, "KKB/CYN" },
+                    { 2L, null, null, null, null, "Women" },
+                    { 3L, null, null, null, null, "Men" },
+                    { 4L, null, null, null, null, "Children" },
+                    { 5L, null, null, null, null, "Y-AM" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Services",
-                columns: new[] { "Id", "CreatedById", "CreatedOn", "EndTime", "IsActive", "IsDeleted", "ModifiedById", "ModifiedOn", "Name", "StartTime" },
+                columns: new[] { "Id", "CreatedById", "CreatedOn", "EndTime", "IsActive", "ModifiedById", "ModifiedOn", "Name", "StartTime" },
                 values: new object[,]
                 {
-                    { 1L, null, null, new TimeSpan(0, 9, 30, 0, 0), true, false, null, null, "1st", new TimeSpan(0, 7, 0, 0, 0) },
-                    { 2L, null, null, new TimeSpan(0, 11, 30, 0, 0), true, false, null, null, "2nd", new TimeSpan(0, 10, 0, 0, 0) },
-                    { 3L, null, null, new TimeSpan(0, 13, 30, 0, 0), true, false, null, null, "3rd", new TimeSpan(0, 12, 0, 0, 0) }
+                    { 1L, null, null, new TimeSpan(0, 8, 30, 0, 0), true, null, null, "1st", new TimeSpan(0, 7, 0, 0, 0) },
+                    { 2L, null, null, new TimeSpan(0, 10, 30, 0, 0), true, null, null, "2nd", new TimeSpan(0, 9, 0, 0, 0) },
+                    { 3L, null, null, new TimeSpan(0, 12, 30, 0, 0), true, null, null, "3rd", new TimeSpan(0, 11, 0, 0, 0) }
                 });
 
             migrationBuilder.InsertData(
@@ -349,6 +355,11 @@ namespace MIS.Persistence.Migrations
                 name: "IX_MemberAttendanceUnidentifiedLogs_MemberId",
                 table: "MemberAttendanceUnidentifiedLogs",
                 column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Members_CreatedById",
+                table: "Members",
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Members_ModifiedById",

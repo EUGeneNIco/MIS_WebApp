@@ -55,9 +55,9 @@ namespace MIS.Persistence
             );
 
             modelBuilder.Entity<Service>().HasData(
-                new Service { Id = 1, Name = "1st", StartTime = new TimeSpan(7, 0, 0), EndTime = new TimeSpan(9, 30, 0), IsActive = true },
-                new Service { Id = 2, Name = "2nd", StartTime = new TimeSpan(10, 0, 0), EndTime = new TimeSpan(11, 30, 0), IsActive = true },
-                new Service { Id = 3, Name = "3rd", StartTime = new TimeSpan(12, 0, 0), EndTime = new TimeSpan(13, 30, 0), IsActive = true }
+                new Service { Id = 1, Name = "1st", StartTime = new TimeSpan(7, 0, 0), EndTime = new TimeSpan(8, 30, 0), IsActive = true },
+                new Service { Id = 2, Name = "2nd", StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(10, 30, 0), IsActive = true },
+                new Service { Id = 3, Name = "3rd", StartTime = new TimeSpan(11, 0, 0), EndTime = new TimeSpan(12, 30, 0), IsActive = true }
             );
         }
     }

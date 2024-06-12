@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, Message, SelectItem } from 'primeng/api';
 import { AppPageBaseComponent } from 'src/app/_components/base/app-page-base.component';
-import { MasterBaseComponent } from 'src/app/_components/base/master-base.component';
-import { ConfirmationMessages } from 'src/app/_enums/confirmation-messages';
-import { ApiCallStatusCodes } from 'src/app/_enums/enums';
 import { NotificationMessages } from 'src/app/_enums/notification-messages';
 import { Validation } from 'src/app/_helpers/validation';
-import { UiService } from 'src/app/layout/service/ui.service';
 import { AttendancelogService } from 'src/app/services/attendancelog.service';
 import { NotificationService } from 'src/app/services/notification.service';
 

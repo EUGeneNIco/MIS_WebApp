@@ -13,9 +13,9 @@ export class MemberService extends BaseService {
   get(id: number) {
     return this.http.get(this.API_URL + `/${this.resource}/` + id);
   }
-  // create(data: any) {
-  //   return this.http.post(this.API_URL + `/${this.resource}`, data);
-  // }
+  create(data: any) {
+    return this.http.post(this.API_URL + `/${this.resource}`, data);
+  }
   update(data: any) {
     return this.http.put(this.API_URL + `/${this.resource}`, data);
   }

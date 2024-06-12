@@ -405,7 +405,7 @@ namespace MIS.Persistence.Migrations
                         new
                         {
                             Id = 1L,
-                            EndTime = new TimeSpan(0, 9, 30, 0, 0),
+                            EndTime = new TimeSpan(0, 8, 30, 0, 0),
                             IsActive = true,
                             Name = "1st",
                             StartTime = new TimeSpan(0, 7, 0, 0, 0)
@@ -413,18 +413,18 @@ namespace MIS.Persistence.Migrations
                         new
                         {
                             Id = 2L,
-                            EndTime = new TimeSpan(0, 11, 30, 0, 0),
+                            EndTime = new TimeSpan(0, 10, 30, 0, 0),
                             IsActive = true,
                             Name = "2nd",
-                            StartTime = new TimeSpan(0, 10, 0, 0, 0)
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
                         },
                         new
                         {
                             Id = 3L,
-                            EndTime = new TimeSpan(0, 13, 30, 0, 0),
+                            EndTime = new TimeSpan(0, 12, 30, 0, 0),
                             IsActive = true,
                             Name = "3rd",
-                            StartTime = new TimeSpan(0, 12, 0, 0, 0)
+                            StartTime = new TimeSpan(0, 11, 0, 0, 0)
                         });
                 });
 

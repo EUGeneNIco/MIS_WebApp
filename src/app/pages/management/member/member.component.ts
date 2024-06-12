@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ConfirmationService, SelectItem } from 'primeng/api';
+import { ConfirmationService, Message, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { MasterBaseComponent } from 'src/app/_components/base/master-base.component';
 import { ConfirmationMessages } from 'src/app/_enums/confirmation-messages';
@@ -23,6 +23,8 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   recordId: any = 0;
   initialGridParams: any;
   cutOffLoading: number = 20;
+  messages: Message[] = [];
+
   civilStatuses: SelectItem[] = [
     { label: 'Single', value: 'Single' },
     { label: 'Married', value: 'Married' },
@@ -45,6 +47,8 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   displayImportModal: boolean;
   formMode: string;
   editMode: boolean;
+  readonly createFormTitle: string = 'Member Registration Form';
+  readonly updateFormTitle: string = 'Member Details';
 
   get firstName() { return this.formModel.get('firstName'); }
   get middleName() { return this.formModel.get('middleName'); }
@@ -64,7 +68,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   get barangay() { return this.formModel.get('barangay'); }
 
   get addMode() {
-    return this.formMode === 'Add';
+    return !this.recordId || this.recordId === 0;
   }
 
   @ViewChild('dt') dt: Table;
@@ -96,6 +100,12 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
 
     this.loading = true;
     this.initialGridParams = Object.assign({}, this.dataParameter);
+
+    this.messages.push({
+      key: 'tst',
+      severity: 'warn',
+      detail: 'Registering a new member is not a normal action. He or she should be a guest first before being a member. However, if this action is necessary, please check if a member with same name or credentials already exists on the Member table under the Management menu. We should avoid creating multiple records for the same person.'
+    })
   }
 
 
@@ -300,40 +310,71 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   }
 
   onSubmit() {
-    if (this.formModel.valid && this.recordId > 0) {
+    if (this.formModel.valid) {
       let record = this.formModel.getRawValue();
       let mappedData = this.mapData(record);
       // console.log('mapped: ', mappedData);
 
-      this.confirmationService.confirm({
-        message: ConfirmationMessages.ConfirmUpdate.Message,
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.uiService.block();
+      if (this.recordId > 0) {
+        this.confirmationService.confirm({
+          message: ConfirmationMessages.ConfirmUpdate.Message,
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.uiService.block();
 
-          this.memberService.update({ ...mappedData, id: this.recordId }).subscribe({
-            next: (data: any) => {
-              // console.log('updated: ', data);
+            this.memberService.update({ ...mappedData, id: this.recordId }).subscribe({
+              next: (data: any) => {
+                // console.log('updated: ', data);
 
-              this.notifService.showSuccessToast(
-                NotificationMessages.SaveSuccessful.Title,
-                NotificationMessages.SaveSuccessful.Message);
+                this.notifService.showSuccessToast(
+                  NotificationMessages.SaveSuccessful.Title,
+                  NotificationMessages.SaveSuccessful.Message);
 
-              this.reInitGrid();
-              this.recordId = 0;
-              setTimeout(() => this.closeModal(), 500);
-              this.uiService.unBlock();
-            },
-            error: (e) => {
-              this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
-              this.closeModal();
-              this.uiService.unBlock()
-            }
-          })
-        }
-      })
+                this.reInitGrid();
+                this.recordId = 0;
+                setTimeout(() => this.closeModal(), 500);
+                this.uiService.unBlock();
+              },
+              error: (e) => {
+                this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+                this.closeModal();
+                this.uiService.unBlock()
+              }
+            })
+          }
+        })
+      }
+      else {
+        this.confirmationService.confirm({
+          message: ConfirmationMessages.ConfirmSave.Message,
+          header: 'Confirmation',
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.uiService.block();
 
+            this.memberService.create(mappedData).subscribe({
+              next: (data: any) => {
+                // console.log('updated: ', data);
+
+                this.notifService.showSuccessToast(
+                  NotificationMessages.SaveSuccessful.Title,
+                  NotificationMessages.SaveSuccessful.Message);
+
+                this.reInitGrid();
+                this.recordId = 0;
+                setTimeout(() => this.closeModal(), 500);
+                this.uiService.unBlock();
+              },
+              error: (e) => {
+                this.handleErrorMessage(e, NotificationMessages.SaveError.Message);
+                this.closeModal();
+                this.uiService.unBlock()
+              }
+            })
+          }
+        })
+      }
     }
     else {
       this.validation.validateAllFormFields(this.formModel);

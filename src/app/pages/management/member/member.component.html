@@ -7,6 +7,8 @@
                 accept=".xls,.xlsx" pButton pRipple icon="pi pi-download"
                 class="p-button-raised p-button-info mr-2"><input style="display: none;" type="file" #fileInput
                     (change)="openImportModal($event)"></button>
+            <button pButton pRipple label="Register new member" icon="pi pi-plus"
+                class="p-button-raised p-button-info mr-2" (click)="openModal()"></button>
         </ng-template>
     </p-toolbar>
 
@@ -72,8 +74,10 @@
 
 <!-- Modal -->
 <p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '65vw'}" [(visible)]="displayModal"
-    (onHide)="onExit()" header="Member Details">
-    <p style="text-align: end;">QR Code: <span style="font-weight: bold; font-style: italic">{{memberCode.value}}</span></p>
+    (onHide)="onExit()" [header]="addMode ? createFormTitle : updateFormTitle">
+    <p *ngIf="!addMode" class="qr-code-display">QR Code: <span class="qr-code-value">{{memberCode.value}}</span>
+    </p>
+    <p-messages *ngIf="addMode" [(value)]="messages" [closable]="false" />
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid">
             <!-- <div class="field col-12 md:col-4">

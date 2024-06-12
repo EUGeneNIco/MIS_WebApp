@@ -1,27 +1,25 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
 using MIS.Application._Helpers;
-using MIS.Domain;
+using MIS.Application._Interfaces;
+using MIS.Domain.Entities;
 
 namespace MIS.Application.Members.Queries.GetMemberGrid
 {
     public class GetMemberGridQueryHandler : IRequestHandler<GetMemberGridQuery, MemberGridViewModel>
     {
-        private readonly IAppDbContext dbContext;
+        private readonly IRepository<Member> memberRepository;
         private readonly IMapper mapper;
 
-        public GetMemberGridQueryHandler(IAppDbContext dbContext, IMapper mapper)
+        public GetMemberGridQueryHandler(IRepository<Member> memberRepository, IMapper mapper)
         {
-            this.dbContext = dbContext;
+            this.memberRepository = memberRepository;
             this.mapper = mapper;
         }
         public async Task<MemberGridViewModel> Handle(GetMemberGridQuery request, CancellationToken cancellationToken)
         {
-            var query = dbContext.Members
-                .Where(x => !x.IsDeleted)
-                .AsQueryable();
+            var query = await memberRepository.GetAllAsync();
 
             var data = new MemberGridViewModel
             {
@@ -32,8 +30,8 @@ namespace MIS.Application.Members.Queries.GetMemberGrid
             var name = QueryHelper.GetFilterValue(request.Filters, "name");
             if (!string.IsNullOrEmpty(name))
             {
-                name = name.Trim();
-                query = query.Where(x => x.FirstName.Contains(name) || x.MiddleName.Contains(name) || x.LastName.Contains(name));
+                name = name.ToUpper().Trim();
+                query = query.Where(x => x.FirstName.ToUpper().Contains(name) || x.MiddleName.ToUpper().Contains(name) || x.LastName.ToUpper().Contains(name));
             }
 
             data.FilteredDataCount = query.Count();
@@ -58,7 +56,7 @@ namespace MIS.Application.Members.Queries.GetMemberGrid
                     .Take(request.Limit)
                 : query;
 
-            data.Data = mapper.Map<IEnumerable<MemberGridItem>>(await query.ToListAsync(cancellationToken));
+            data.Data = mapper.Map<IEnumerable<MemberGridItem>>(query);
 
             return data;
         }

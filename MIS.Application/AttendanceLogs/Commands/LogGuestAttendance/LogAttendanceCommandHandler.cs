@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MIS.Application._Exceptions;
-using MIS.Application._Interfaces.Guests;
+using MIS.Application._Interfaces;
 using MIS.Domain;
 using MIS.Domain.Entities;
 
@@ -10,9 +10,9 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
     public class LogAttendanceCommandHandler : IRequestHandler<LogAttendanceCommand, string>
     {
         private readonly IAppDbContext dbContext;
-        private readonly IGuestRepository guestRepository;
+        private readonly IRepository<Guest> guestRepository;
 
-        public LogAttendanceCommandHandler(IAppDbContext dbContext, IGuestRepository guestRepository)
+        public LogAttendanceCommandHandler(IAppDbContext dbContext, IRepository<Guest> guestRepository)
         {
             this.dbContext = dbContext;
             this.guestRepository = guestRepository;
@@ -33,8 +33,7 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
             var member = await dbContext.Members
                 .FirstOrDefaultAsync(x => !string.IsNullOrWhiteSpace(request.Code)
                     ? x.MemberCode == request.Code
-                    : (x.Id == request.MemberId) &&
-                    !x.IsDeleted);
+                    : (x.Id == request.MemberId));
 
             if (member is null) return null;
 
@@ -69,10 +68,10 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
 
         private async Task<string> LogGuest(LogAttendanceCommand request, CancellationToken cancellationToken)
         {
-            var dbGuests = await guestRepository.GetGuests();
-            var guest = await dbGuests.FirstOrDefaultAsync(x => !string.IsNullOrWhiteSpace(request.Code)
+            var dbGuests = await guestRepository.GetAllAsync();
+            var guest = dbGuests.FirstOrDefault(x => !string.IsNullOrWhiteSpace(request.Code)
                     ? x.Code == request.Code
-                    : (x.Id == request.GuestId) && !x.IsDeleted);
+                    : x.Id == request.GuestId);
             if (guest is null)
                 throw new NotFoundException("Guest or Member not found.");
 
@@ -110,7 +109,7 @@ namespace MIS.Application.AttendanceLogs.Commands.LogGuestAttendance
             //logTime = new DateTime(2024, 03, 03, 7, 12, 0);
             var logTimeSpan = logTime.TimeOfDay;
 
-            var service = dbContext.Services.FirstOrDefault(x => x.IsActive && !x.IsDeleted && TimeSpan.Compare(logTimeSpan, x.StartTime) >= 0 && TimeSpan.Compare(x.EndTime, logTimeSpan) >= 0);
+            var service = dbContext.Services.FirstOrDefault(x => x.IsActive && TimeSpan.Compare(logTimeSpan, x.StartTime) >= 0 && TimeSpan.Compare(x.EndTime, logTimeSpan) >= 0);
 
             return service;
         }

@@ -19,7 +19,7 @@ namespace MIS.Application.AttendanceLogs.Commands.ProcessUnidentifiedGuestLog
         public async Task<Unit> Handle(ProcessUnidentifiedGuestLogCommand request, CancellationToken cancellationToken)
         {
             var service = await dbContext.Services
-                .FirstOrDefaultAsync(x => !x.IsDeleted && x.IsActive && x.Id == request.ServiceId);
+                .FirstOrDefaultAsync(x => x.IsActive && x.Id == request.ServiceId);
             if (service is null)
                 throw new NotFoundException(ErrorMessages.EntityNotFound("Service"));
 

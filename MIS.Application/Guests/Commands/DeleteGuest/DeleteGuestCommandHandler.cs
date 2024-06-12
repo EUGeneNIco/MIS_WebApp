@@ -1,28 +1,28 @@
 using MediatR;
 using MIS.Application._Enums;
 using MIS.Application._Exceptions;
-using MIS.Application._Interfaces.Guests;
+using MIS.Application._Interfaces;
+using MIS.Domain.Entities;
 
 namespace MIS.Application.Guests.Commands.DeleteGuest
 {
     public class DeleteGuestCommandHandler : IRequestHandler<DeleteGuestCommand, Unit>
     {
-        private readonly IGuestRepository guestRepository;
-        private readonly IDeleteGuestActivity deleteGuestActivity;
+        private readonly IRepository<Guest> guestRepository;
 
-        public DeleteGuestCommandHandler(IGuestRepository guestRepository, IDeleteGuestActivity deleteGuestActivity)
+        public DeleteGuestCommandHandler(IRepository<Guest> guestRepository)
         {
             this.guestRepository = guestRepository;
-            this.deleteGuestActivity = deleteGuestActivity;
         }
 
         public async Task<Unit> Handle(DeleteGuestCommand request, CancellationToken cancellationToken)
         {
-            var guest = await guestRepository.GetGuest(request.Id);
+            var guest = await guestRepository.GetByIdAsync(request.Id);
             if (guest is null)
                 throw new NotFoundException(ErrorMessages.EntityNotFound("Guest"));
 
-            await deleteGuestActivity.Execute(guest, cancellationToken);
+            guestRepository.Delete(guest);
+            await guestRepository.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

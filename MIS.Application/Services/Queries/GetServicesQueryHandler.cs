@@ -19,7 +19,7 @@ namespace MIS.Application.Services.Queries
 
         public async Task<List<ServiceDto>> Handle(GetServicesQuery request, CancellationToken cancellationToken)
         {
-            var query = dbContext.Services.Where(x => !x.IsDeleted && x.IsActive);
+            var query = dbContext.Services.Where(x => x.IsActive);
 
             return this.mapper.Map<List<ServiceDto>>(await query.ToListAsync(cancellationToken));
         }

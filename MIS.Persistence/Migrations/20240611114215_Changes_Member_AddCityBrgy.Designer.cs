@@ -4,6 +4,7 @@ using MIS.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIS.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611114215_Changes_Member_AddCityBrgy")]
+    partial class Changes_Member_AddCityBrgy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,6 +75,9 @@ namespace MIS.Persistence.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -210,6 +216,9 @@ namespace MIS.Persistence.Migrations
                     b.Property<DateTime?>("ImportDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -314,6 +323,9 @@ namespace MIS.Persistence.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<long?>("ModifiedById")
                         .HasColumnType("bigint");
 
@@ -336,26 +348,31 @@ namespace MIS.Persistence.Migrations
                         new
                         {
                             Id = 1L,
+                            IsDeleted = false,
                             Name = "KKB/CYN"
                         },
                         new
                         {
                             Id = 2L,
+                            IsDeleted = false,
                             Name = "Women"
                         },
                         new
                         {
                             Id = 3L,
+                            IsDeleted = false,
                             Name = "Men"
                         },
                         new
                         {
                             Id = 4L,
+                            IsDeleted = false,
                             Name = "Children"
                         },
                         new
                         {
                             Id = 5L,
+                            IsDeleted = false,
                             Name = "Y-AM"
                         });
                 });
@@ -378,6 +395,9 @@ namespace MIS.Persistence.Migrations
                         .HasColumnType("time");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<long?>("ModifiedById")
@@ -407,6 +427,7 @@ namespace MIS.Persistence.Migrations
                             Id = 1L,
                             EndTime = new TimeSpan(0, 9, 30, 0, 0),
                             IsActive = true,
+                            IsDeleted = false,
                             Name = "1st",
                             StartTime = new TimeSpan(0, 7, 0, 0, 0)
                         },
@@ -415,6 +436,7 @@ namespace MIS.Persistence.Migrations
                             Id = 2L,
                             EndTime = new TimeSpan(0, 11, 30, 0, 0),
                             IsActive = true,
+                            IsDeleted = false,
                             Name = "2nd",
                             StartTime = new TimeSpan(0, 10, 0, 0, 0)
                         },
@@ -423,6 +445,7 @@ namespace MIS.Persistence.Migrations
                             Id = 3L,
                             EndTime = new TimeSpan(0, 13, 30, 0, 0),
                             IsActive = true,
+                            IsDeleted = false,
                             Name = "3rd",
                             StartTime = new TimeSpan(0, 12, 0, 0, 0)
                         });

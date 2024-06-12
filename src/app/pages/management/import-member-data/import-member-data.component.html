@@ -29,7 +29,7 @@
             <tr>
                 <td class="table-cell" *ngFor="let col of columns" [ngStyle]="col.cellStyle">
                     <span class="p-column-title">{{col.header}}</span>
-                    <span style="font-size: smaller;" *ngIf="col.type=='text'">
+                    <span class="font-table" *ngIf="col.type=='text'">
                         {{rowData[col.field]}}
                     </span>
 

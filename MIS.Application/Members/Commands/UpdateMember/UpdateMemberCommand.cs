@@ -19,6 +19,9 @@ namespace MIS.Application.Members.Commands.UpdateMember
         public int? Age { get; set; }
         public int? NetworkId { get; set; }
         public string Extension { get; set; }
+        public string Status { get; set; }
+        public string Barangay { get; set; }
+        public string City { get; set; }
 
         public void CreateMappings(Profile configuration)
         {

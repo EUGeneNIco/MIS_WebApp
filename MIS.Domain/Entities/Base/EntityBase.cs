@@ -1,5 +1,3 @@
-using System;
-
 namespace MIS.Domain.Entities.Base
 {
     public abstract class EntityBase : IEntity, IAuditEntity
@@ -15,8 +13,6 @@ namespace MIS.Domain.Entities.Base
         public virtual User ModifiedBy { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
-
-        public bool IsDeleted { get; set; }
 
         public T ShallowCopy<T>() where T : EntityBase
         {

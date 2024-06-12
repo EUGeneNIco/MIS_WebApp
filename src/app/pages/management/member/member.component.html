@@ -73,13 +73,13 @@
 <!-- Modal -->
 <p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '65vw'}" [(visible)]="displayModal"
     (onHide)="onExit()" header="Member Details">
-
+    <p style="text-align: end;">QR Code: <span style="font-weight: bold; font-style: italic">{{memberCode.value}}</span></p>
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid">
-            <div class="field col-12 md:col-4">
+            <!-- <div class="field col-12 md:col-4">
                 <label htmlfor="memberCode">Code</label>
                 <input pInputText formControlName="memberCode" type="text" readonly>
-            </div>
+            </div> -->
             <div class="field col-12 md:col-4">
                 <label htmlfor="firstName">First Name</label>
                 <input pInputText formControlName="firstName" type="text">
@@ -132,9 +132,21 @@
                 <label htmlfor="extension">Extension</label>
                 <input pInputText formControlName="extension" type="text">
             </div>
-            <div class="field col-12 md:col-12">
+            <div class="field col-12 md:col-4">
+                <label htmlfor="status">Status</label>
+                <input pInputText formControlName="status" type="text">
+            </div>
+            <div class="field col-12 md:col-4">
                 <label htmlfor="address">Address</label>
                 <input pInputText formControlName="address" type="text">
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlfor="barangay">Brgy.</label>
+                <input pInputText formControlName="barangay" type="text">
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlfor="city">City</label>
+                <input pInputText formControlName="city" type="text">
             </div>
         </div>
     </form>

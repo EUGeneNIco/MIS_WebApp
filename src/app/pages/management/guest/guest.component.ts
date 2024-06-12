@@ -9,6 +9,7 @@ import { DateUtils } from 'src/app/_helpers/dateUtils';
 import { Validation } from 'src/app/_helpers/validation';
 import { UiService } from 'src/app/layout/service/ui.service';
 import { GuestService } from 'src/app/services/guest.service';
+import { NetworkService } from 'src/app/services/network.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
@@ -30,13 +31,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     { label: 'HK Village', value: 'HK Village' },
     { label: 'SJV7', value: 'SJV7' },
   ];
-  networks: SelectItem[] = [
-    { label: 'KKB/CYN', value: 1 },
-    { label: 'Men', value: 2 },
-    { label: 'Women', value: 3 },
-    { label: 'Children', value: 4 },
-    { label: 'Y-AM', value: 5 },
-  ];
+  networks: SelectItem[];
   genders: SelectItem[] = [
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
@@ -68,6 +63,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   @ViewChild('dt') dt: Table;
   constructor(
     private guestService: GuestService,
+    private networkService: NetworkService,
     private fb: FormBuilder,
     private uiService: UiService,
     public confirmationService: ConfirmationService,
@@ -79,11 +75,12 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
   ngOnInit(): void {
     this._initializeFormModel();
     this._setBreadcrumbs();
+    this.getNetworks();
 
     this.cols = [
       { field: 'name', filter: true, header: 'Name', sortable: true, type: 'text' },
       { field: 'address', filter: false, header: 'Address', sortable: false, type: 'text' },
-      { field: 'network', filter: false, header: 'Network', sortable: true, type: 'text' },
+      { field: 'network', filter: false, header: 'Network', sortable: false, type: 'text' },
       { field: 'contactNumber', filter: false, header: 'Contact No.', sortable: false, type: 'text' },
       { field: 'id', filter: false, header: 'Action', sortable: false, type: 'actions' }
     ];
@@ -138,23 +135,17 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     this._callLoadService();
   }
 
-  getCivilStatuses() {
-    // this.causeOfDeathDisabilityService.getGetDescriptionsOfClaim().subscribe({
-    //   next: (data: any) => {
-    //     this.descriptionOfClaimOptions = data.map((des) => {
-    //       return { label: des.descriptionOfClaim, value: des.id };
-    //     });
-
-    //     if (this.descriptionOfClaimRetrieved !== "") {
-    //       this.descriptionOfClaim.setValue(this.descriptionOfClaimOptions.find(des => {
-    //         return des.label === this.descriptionOfClaimRetrieved;
-    //       }));
-    //     }
-    //   },
-    //   error: (e) => {
-    //     this.handleErrorMessage(e, NotificationMessages.GenericError.Message);
-    //   }
-    // })
+  getNetworks() {
+    this.networkService.getNetworks().subscribe({
+      next: (data: any) => {
+        this.networks = data.map((d) => {
+          return { label: d.name, value: d.id };
+        });
+      },
+      error: (e) => {
+        this.handleErrorMessage(e, NotificationMessages.GenericError.Message);
+      }
+    })
   }
 
   // ******************************************Modal(Add, Edit and View)************************************************
@@ -193,7 +184,7 @@ export class GuestComponent extends MasterBaseComponent implements AfterViewInit
     this.recordId = id;
     this.guestService.get(id).subscribe({
       next: (data: any) => {
-        // console.log("get data: ", data);
+        console.log("get data: ", data);
 
         this.formModel.patchValue(data);
 

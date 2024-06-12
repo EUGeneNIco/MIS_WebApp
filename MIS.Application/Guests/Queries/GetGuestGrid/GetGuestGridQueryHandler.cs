@@ -1,32 +1,25 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
 using MIS.Application._Helpers;
-using MIS.Application._Interfaces.Guests;
-using MIS.Domain;
+using MIS.Application._Interfaces;
 using MIS.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MIS.Application.Guests.Queries.GetGuestGrid
 {
     public class GetGuestGridQueryHandler : IRequestHandler<GetGuestGridQuery, GuestGridViewModel>
     {
-        private readonly IGuestRepository guestRepository;
         private readonly IMapper mapper;
+        private readonly IRepository<Guest> repository;
 
-        public GetGuestGridQueryHandler(IGuestRepository guestRepository, IMapper mapper)
+        public GetGuestGridQueryHandler(IMapper mapper, IRepository<Guest> repository)
         {
-            this.guestRepository = guestRepository;
             this.mapper = mapper;
+            this.repository = repository;
         }
         public async Task<GuestGridViewModel> Handle(GetGuestGridQuery request, CancellationToken cancellationToken)
         {
-            var query = await guestRepository.GetGuests();
+            var query = await repository.GetAllAsync();
 
             var data = new GuestGridViewModel
             {
@@ -37,8 +30,8 @@ namespace MIS.Application.Guests.Queries.GetGuestGrid
             var name = QueryHelper.GetFilterValue(request.Filters, "name");
             if (!string.IsNullOrEmpty(name))
             {
-                name = name.Trim();
-                query = query.Where(x => x.FirstName.Contains(name) || x.MiddleName.Contains(name) || x.LastName.Contains(name));
+                name = name.ToUpper().Trim();
+                query = query.Where(x => x.FirstName.ToUpper().Contains(name) || x.MiddleName.ToUpper().Contains(name) || x.LastName.ToUpper().Contains(name));
             }
 
             data.FilteredDataCount = query.Count();
@@ -62,7 +55,7 @@ namespace MIS.Application.Guests.Queries.GetGuestGrid
                     .Take(request.Limit)
                 : query;
 
-            data.Data = mapper.Map<IEnumerable<GuestGridItem>>(await query.ToListAsync(cancellationToken));
+            data.Data = mapper.Map<IEnumerable<GuestGridItem>>(query);
 
             return data;
         }

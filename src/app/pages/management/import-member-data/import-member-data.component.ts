@@ -9,6 +9,7 @@ import { MemberService } from 'src/app/services/member.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import * as XLSX from 'xlsx';
 import { EventEmitter, Output } from '@angular/core';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-import-member-data',
@@ -56,18 +57,21 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
       limit: 0
     };
 
+    // Please make sure to match the columns below to the column names in the actual excel file (remove spaces and please check spelling)
     this.cols = [
       { field: 'NAME', filter: false, header: 'Name', sortable: false, type: 'text' },
       { field: 'ADDRESS', filter: false, header: 'Address', sortable: false, type: 'text' },
-      { field: 'BIRTHDAY', filter: false, header: 'Birthday', sortable: false, type: 'text' },
+      { field: 'BARANGAY', filter: false, header: 'Brgy.', sortable: false, type: 'text' },
+      { field: 'CITY', filter: false, header: 'City', sortable: false, type: 'text' },
+      { field: 'BIRTHDAY', filter: false, header: 'Bday', sortable: false, type: 'text' },
       { field: 'AGE', filter: false, header: 'Age', sortable: false, type: 'text' },
       { field: 'GENDER', filter: false, header: 'Gender', sortable: false, type: 'text' },
-      { field: 'CONTACTNUMBER', filter: false, header: 'Contact No.', sortable: false, type: 'text' },
-      { field: 'CIVILSTATUS', filter: false, header: 'Civil Status', sortable: false, type: 'text' },
-      { field: 'CATEGORY', filter: false, header: 'Category', sortable: false, type: 'text' },
+      { field: 'CONTACTNUMBER', filter: false, header: 'Cont. No.', sortable: false, type: 'text' },
+      { field: 'CIVILSTATUS', filter: false, header: 'CS', sortable: false, type: 'text' },
+      { field: 'CATEGORY', filter: false, header: 'Cat.', sortable: false, type: 'text' },
       { field: 'CODE', filter: false, header: 'Code', sortable: false, type: 'text' },
-      { field: 'NETWORK', filter: false, header: 'Network', sortable: false, type: 'text' },
-      { field: 'EXTENSION', filter: false, header: 'Extension', sortable: false, type: 'text' },
+      { field: 'NETWORK', filter: false, header: 'Net.', sortable: false, type: 'text' },
+      { field: 'EXTENSION', filter: false, header: 'Ext.', sortable: false, type: 'text' },
       // { field: 'FIRSTNAME', filter: false, header: 'First Name', sortable: false, type: 'text' },
       // { field: 'MIDDLENAME', filter: false, header: 'Middle Name', sortable: false, type: 'text' },
       // { field: 'LASTNAME', filter: false, header: 'Last Name', sortable: false, type: 'text' },
@@ -75,14 +79,6 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
     ];
 
     // this.loading = true;
-  }
-
-  onUpload(event: any) {
-    for (const file of event.files) {
-      this.uploadedData.push(file);
-    }
-
-    this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
   }
 
   _setBreadcrumbs(): void {
@@ -203,6 +199,9 @@ export class ImportMemberDataComponent extends AppPageBaseComponent implements O
         birthDate: birthDate ?? null,
         age: d.AGE && d.AGE != undefined ? String(d.AGE) : null,
         networkImported: d.NETWORK ?? '',
+        status: d.STATUS ?? '',
+        city: d.CITY ?? '',
+        barangay: d.BARANGAY ?? '',
       }
     })
   }

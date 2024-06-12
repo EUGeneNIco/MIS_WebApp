@@ -1,10 +1,10 @@
 tr,
 th:nth-child(1) {
-    width: 15%;
+    width: 14%;
 }
 tr,
 th:nth-child(2) {
-    width: 28%;
+    width: 25%;
 }
 tr,
 th:nth-child(6),
@@ -14,10 +14,18 @@ th:nth-child(11) {
     width: 8%;
 }
 tr,
-th:nth-child(3),
-th:nth-child(4),
 th:nth-child(5),
 th:nth-child(7),
 th:nth-child(10) {
     width: 5%;
+}
+
+tr,
+th:nth-child(3),
+th:nth-child(4) {
+    width: 7%;
+}
+
+.font-table {
+    font-size: smaller;
 }

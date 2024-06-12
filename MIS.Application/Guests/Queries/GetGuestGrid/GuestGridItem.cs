@@ -21,7 +21,7 @@ namespace MIS.Application.Guests.Queries.GetGuestGrid
         {
             configuration.CreateMap<Guest, GuestGridItem>()
                 .ForMember(dm => dm.Name, mo => mo.MapFrom(s => $"{s.LastName}, {s.FirstName} {s.MiddleName}"))
-                .ForMember(dm => dm.Network, mo => mo.MapFrom(s => s.Network.Name));
+                .ForMember(dm => dm.Network, mo => mo.MapFrom(s => s.Network != null ? s.Network.Name : string.Empty));
         }
     }
 

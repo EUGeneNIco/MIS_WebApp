@@ -11,6 +11,7 @@ import { UiService } from 'src/app/layout/service/ui.service';
 import { MemberService } from 'src/app/services/member.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ImportMemberDataComponent } from '../import-member-data/import-member-data.component';
+import { NetworkService } from 'src/app/services/network.service';
 
 @Component({
   selector: 'app-member',
@@ -58,6 +59,9 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   get memberCode() { return this.formModel.get('memberCode'); }
   get category() { return this.formModel.get('category'); }
   get extension() { return this.formModel.get('extension'); }
+  get status() { return this.formModel.get('status'); }
+  get city() { return this.formModel.get('city'); }
+  get barangay() { return this.formModel.get('barangay'); }
 
   get addMode() {
     return this.formMode === 'Add';
@@ -68,6 +72,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
 
   constructor(
     private memberService: MemberService,
+    private networkService: NetworkService,
     private fb: FormBuilder,
     private uiService: UiService,
     public confirmationService: ConfirmationService,
@@ -79,11 +84,12 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   ngOnInit(): void {
     this._initializeFormModel();
     this._setBreadcrumbs();
+    this.getNetworks();
 
     this.cols = [
       { field: 'name', filter: true, header: 'Name', sortable: true, type: 'text' },
       { field: 'address', filter: false, header: 'Address', sortable: false, type: 'text' },
-      { field: 'network', filter: false, header: 'Network', sortable: true, type: 'text' },
+      { field: 'network', filter: false, header: 'Network', sortable: false, type: 'text' },
       { field: 'contactNumber', filter: false, header: 'Contact No.', sortable: false, type: 'text' },
       { field: 'id', filter: false, header: 'Action', sortable: false, type: 'actions' }
     ];
@@ -124,6 +130,9 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
         memberCode: [''],
         category: [''],
         extension: [''],
+        status: [''],
+        city: [''],
+        barangay: [''],
       })
     }
   }
@@ -140,23 +149,17 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
     this._callLoadService();
   }
 
-  getCivilStatuses() {
-    // this.causeOfDeathDisabilityService.getGetDescriptionsOfClaim().subscribe({
-    //   next: (data: any) => {
-    //     this.descriptionOfClaimOptions = data.map((des) => {
-    //       return { label: des.descriptionOfClaim, value: des.id };
-    //     });
-
-    //     if (this.descriptionOfClaimRetrieved !== "") {
-    //       this.descriptionOfClaim.setValue(this.descriptionOfClaimOptions.find(des => {
-    //         return des.label === this.descriptionOfClaimRetrieved;
-    //       }));
-    //     }
-    //   },
-    //   error: (e) => {
-    //     this.handleErrorMessage(e, NotificationMessages.GenericError.Message);
-    //   }
-    // })
+  getNetworks() {
+    this.networkService.getNetworks().subscribe({
+      next: (data: any) => {
+        this.networks = data.map((d) => {
+          return { label: d.name, value: d.id };
+        });
+      },
+      error: (e) => {
+        this.handleErrorMessage(e, NotificationMessages.GenericError.Message);
+      }
+    })
   }
 
   // ******************************************Modal(Add, Edit and View)************************************************
@@ -290,6 +293,9 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
       contactNumber: record.contactNumber,
       extension: record.extension,
       category: record.category,
+      status: record.status,
+      barangay: record.barangay,
+      city: record.city,
     }
   }
 

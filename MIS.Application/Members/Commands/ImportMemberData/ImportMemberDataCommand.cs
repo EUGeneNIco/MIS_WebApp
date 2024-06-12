@@ -22,5 +22,8 @@ namespace MIS.Application.Members.Commands.ImportMemberData
         public string Gender { get; set; }
         public string ContactNumber { get; set; }
         public string CivilStatus { get; set; }
+        public string Status { get; set; }
+        public string City { get; set; }
+        public string Barangay { get; set; }
     }
 }

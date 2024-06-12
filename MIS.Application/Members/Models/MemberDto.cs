@@ -22,6 +22,9 @@ namespace MIS.Application.Members.Models
         public string NetworkImported { get; set; }
         public long? NetworkId { get; set; }
         public DateTime? ImportDate { get; set; }
+        public string Status { get; set; }
+        public string Barangay { get; set; }
+        public string City { get; set; }
 
         public void CreateMappings(Profile configuration)
         {

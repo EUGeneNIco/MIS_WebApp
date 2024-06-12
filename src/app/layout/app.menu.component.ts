@@ -31,10 +31,10 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Attendance Logs',
                 items: [
-                    { label: 'Member', icon: 'pi pi-fw pi-check-circle', routerLink: ['/attendance-logs/member-attendance-log'], requiredRoles: [UserRoles.Staff, UserRoles.Admin] },
-                    { label: 'Member (Unidentified)', icon: 'pi pi-fw pi-times-circle', routerLink: ['/attendance-logs/member-attendance-unidentified-log'], requiredRoles: [UserRoles.Admin] },
                     { label: 'Guest', icon: 'pi pi-fw pi-check-circle', routerLink: ['/attendance-logs/guest-attendance-log'], requiredRoles: [UserRoles.Staff, UserRoles.Admin] },
                     { label: 'Guest (Unidentified)', icon: 'pi pi-fw pi-times-circle', routerLink: ['/attendance-logs/guest-attendance-unidentified-log'], requiredRoles: [UserRoles.Admin] },
+                    { label: 'Member', icon: 'pi pi-fw pi-check-circle', routerLink: ['/attendance-logs/member-attendance-log'], requiredRoles: [UserRoles.Staff, UserRoles.Admin] },
+                    { label: 'Member (Unidentified)', icon: 'pi pi-fw pi-times-circle', routerLink: ['/attendance-logs/member-attendance-unidentified-log'], requiredRoles: [UserRoles.Admin] },
                 ]
             },
             {

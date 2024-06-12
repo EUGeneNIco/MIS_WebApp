@@ -1,19 +1,20 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MIS.Application._Interfaces.Guests;
+using MIS.Application._Interfaces;
 using MIS.Application.AttendanceLogs.Models;
 using MIS.Domain;
+using MIS.Domain.Entities;
 
 namespace MIS.Application.AttendanceLogs.Queries.GetMemberGuest
 {
     public class  GetMemberGuestQueryHandler : IRequestHandler< GetMemberGuestQuery, MemberGuestQueryDto>
     {
         private readonly IAppDbContext dbContext;
-        private readonly IGuestRepository guestRepository;
+        private readonly IRepository<Guest> guestRepository;
         private readonly IMapper mapper;
 
-        public  GetMemberGuestQueryHandler(IAppDbContext dbContext, IGuestRepository guestRepository, IMapper mapper)
+        public  GetMemberGuestQueryHandler(IAppDbContext dbContext,IRepository<Guest> guestRepository, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.guestRepository = guestRepository;
@@ -21,11 +22,12 @@ namespace MIS.Application.AttendanceLogs.Queries.GetMemberGuest
         }
         public async Task<MemberGuestQueryDto> Handle(GetMemberGuestQuery request, CancellationToken cancellationToken)
         {
+            var requestName = request.Name.Trim().ToUpper();
             var query = dbContext.Members
                 .Include(x => x.Network)
-                .Where(x => x.FirstName.Contains(request.Name) ||
-                            x.MiddleName.Contains(request.Name) ||
-                            x.LastName.Contains(request.Name) && !x.IsDeleted)
+                .Where(x => x.FirstName.ToUpper().Contains(requestName) ||
+                            x.MiddleName.ToUpper().Contains(requestName) ||
+                            x.LastName.ToUpper().Contains(requestName))
                 .Select(x => new MemberGuestQueryItem
                 {
                     FullName = $"{x.FirstName} {x.MiddleName} {x.LastName}",
@@ -35,12 +37,12 @@ namespace MIS.Application.AttendanceLogs.Queries.GetMemberGuest
                     MemberId = x.Id
                 }).ToList();
 
-            var dbGuests = await guestRepository.GetGuests();
+            var dbGuests = await guestRepository.GetAllAsync();
 
             var guestQuery = dbGuests
-                .Where(x => x.FirstName.Contains(request.Name) ||
-                            x.MiddleName.Contains(request.Name) ||
-                            x.LastName.Contains(request.Name) && !x.IsDeleted)
+                .Where(x => x.FirstName.ToUpper().Contains(requestName) ||
+                            x.MiddleName.ToUpper().Contains(requestName) ||
+                            x.LastName.ToUpper().Contains(requestName))
                 .Select(x => new MemberGuestQueryItem
                 {
                     FullName = $"{x.FirstName} {x.MiddleName} {x.LastName}",

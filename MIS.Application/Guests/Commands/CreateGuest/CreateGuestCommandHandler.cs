@@ -3,22 +3,19 @@ using MediatR;
 using MIS.Application._Enums;
 using MIS.Application._Exceptions;
 using MIS.Application._Helpers;
-using MIS.Application._Interfaces.Guests;
-using MIS.Domain;
+using MIS.Application._Interfaces;
 using MIS.Domain.Entities;
 
 namespace MIS.Application.Guests.Commands.CreateGuest
 {
     public class CreateGuestCommandHandler : IRequestHandler<CreateGuestCommand, Unit>
     {
-        private readonly IAddGuestActivity guestActivity;
-        private readonly IGuestRepository guestRepository;
+        private readonly IRepository<Guest> guestRepository;
         private readonly IMapper mapper;
 
-        public CreateGuestCommandHandler(IAddGuestActivity guestActivity, IGuestRepository guestRepository,
+        public CreateGuestCommandHandler(IRepository<Guest> guestRepository,
                                          IMapper mapper)
         {
-            this.guestActivity = guestActivity;
             this.guestRepository = guestRepository;
             this.mapper = mapper;
         }
@@ -28,12 +25,17 @@ namespace MIS.Application.Guests.Commands.CreateGuest
             if (guest is null)
                 throw new GenericException(ErrorMessages.GenericError);
 
-            var dbGuests = await guestRepository.GetGuests();
+            var dbGuests = await guestRepository.GetAllAsync();
 
-            if (!string.IsNullOrWhiteSpace(request.ContactNumber) && dbGuests.Any(x => x.ContactNumber == request.ContactNumber && !x.IsDeleted))
+            if (!string.IsNullOrWhiteSpace(request.ContactNumber) && dbGuests.Any(x => x.ContactNumber == request.ContactNumber))
                 throw new DuplicateException(ErrorMessages.DuplicateRecordError("contact number"));
 
-            await guestActivity.Execute(guest, cancellationToken);
+            var dateNow = DateTime.Now;
+            guest.CreatedOn = dateNow;
+            guest.Code = CodeHelper.GenerateGuestCode();
+
+            await guestRepository.AddAsync(guest);
+            await guestRepository.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

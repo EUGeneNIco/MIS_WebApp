@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using MIS.Application._Enums;
 using MIS.Application._Helpers;
 using MIS.Application._Interfaces;
 using MIS.Domain;
@@ -52,7 +53,7 @@ namespace MIS.Application.Members.Commands.ImportMemberData
                     ContactNumber = data.ContactNumber,
                     City = data.City,
                     Barangay = data.Barangay,
-                    Status = !string.IsNullOrEmpty(data.Status) ? data.Status : "Active",
+                    Status = !string.IsNullOrEmpty(data.Status) ? data.Status : MemberConstants.Status.Active,
                     ImportDate = DateTime.Now.Date
                 });
 

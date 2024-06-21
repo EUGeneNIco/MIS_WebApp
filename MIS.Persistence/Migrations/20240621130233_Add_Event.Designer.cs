@@ -4,6 +4,7 @@ using MIS.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIS.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240621130233_Add_Event")]
+    partial class Add_Event
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace MIS.Persistence.Migrations
 
                     b.HasIndex("ModifiedById");
 
-                    b.ToTable("Events");
+                    b.ToTable("Event");
 
                     b.HasData(
                         new
@@ -199,48 +202,6 @@ namespace MIS.Persistence.Migrations
                     b.HasIndex("GuestId");
 
                     b.ToTable("GuestAttendanceUnidentifiedLogs");
-                });
-
-            modelBuilder.Entity("MIS.Domain.Entities.GuestEventRecord", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long?>("CreatedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("EventDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("EventId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("GuestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ModifiedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("GuestId");
-
-                    b.HasIndex("ModifiedById");
-
-                    b.ToTable("GuestEventRecords");
                 });
 
             modelBuilder.Entity("MIS.Domain.Entities.Member", b =>
@@ -390,48 +351,6 @@ namespace MIS.Persistence.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("MemberAttendanceUnidentifiedLogs");
-                });
-
-            modelBuilder.Entity("MIS.Domain.Entities.MemberEventRecord", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long?>("CreatedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("EventDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("EventId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("MemberId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ModifiedById")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("ModifiedById");
-
-                    b.ToTable("MemberEventRecords");
                 });
 
             modelBuilder.Entity("MIS.Domain.Entities.Network", b =>
@@ -710,37 +629,6 @@ namespace MIS.Persistence.Migrations
                     b.Navigation("Guest");
                 });
 
-            modelBuilder.Entity("MIS.Domain.Entities.GuestEventRecord", b =>
-                {
-                    b.HasOne("MIS.Domain.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("MIS.Domain.Entities.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MIS.Domain.Entities.Guest", "Guest")
-                        .WithMany()
-                        .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MIS.Domain.Entities.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Guest");
-
-                    b.Navigation("ModifiedBy");
-                });
-
             modelBuilder.Entity("MIS.Domain.Entities.Member", b =>
                 {
                     b.HasOne("MIS.Domain.Entities.User", "CreatedBy")
@@ -790,37 +678,6 @@ namespace MIS.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Member");
-                });
-
-            modelBuilder.Entity("MIS.Domain.Entities.MemberEventRecord", b =>
-                {
-                    b.HasOne("MIS.Domain.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("MIS.Domain.Entities.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MIS.Domain.Entities.Member", "Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MIS.Domain.Entities.User", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Member");
-
-                    b.Navigation("ModifiedBy");
                 });
 
             modelBuilder.Entity("MIS.Domain.Entities.Network", b =>

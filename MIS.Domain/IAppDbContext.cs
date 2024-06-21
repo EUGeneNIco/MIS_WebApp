@@ -6,6 +6,9 @@ namespace MIS.Domain
 {
     public interface IAppDbContext
     {
+        DbSet<Event> Events { get; set; }
+        DbSet<GuestEventRecord> GuestEventRecords { get; set; }
+        DbSet<MemberEventRecord> MemberEventRecords { get; set; }
         DbSet<Guest> Guests { get; set; }
         DbSet<GuestAttendanceLog> GuestAttendanceLogs { get; set; }
         DbSet<GuestAttendanceUnidentifiedLog> GuestAttendanceUnidentifiedLogs { get; set; }

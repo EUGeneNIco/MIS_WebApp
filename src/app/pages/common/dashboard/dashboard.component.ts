@@ -1,52 +1,60 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { Subscription, debounceTime } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { AppPageBaseComponent } from 'src/app/_components/base/app-page-base.component';
-import { Product } from 'src/app/demo/api/product';
+import { NotificationMessages } from 'src/app/_enums/notification-messages';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { DashboardService } from 'src/app/services/dashboard.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
     templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent extends AppPageBaseComponent implements OnInit, OnDestroy {
-
-    items!: MenuItem[];
-
-    products!: Product[];
-
-    chartData: any;
-
-    chartOptions: any;
-
-    subscription!: Subscription;
+export class DashboardComponent extends AppPageBaseComponent implements OnInit {
+    barData: any;
+    barOptions: any;
+    barDataLabels: string[] = [];
+    barDataMembersDataSets: any[] = [];
+    barDataGuestsDataSets: any[] = [];
 
     constructor(
+        private dashboardService: DashboardService,
         private productService: ProductService,
         public layoutService: LayoutService,
         public override notifService: NotificationService) {
         super(notifService);
-        this.subscription = this.layoutService.configUpdate$
-            .pipe(debounceTime(25))
-            .subscribe((config) => {
-                this.initChart();
-            });
     }
 
     ngOnInit() {
-        this.initChart();
-        this.productService.getProductsSmall().then(data => this.products = data);
-
-        this.items = [
-            { label: 'Add New', icon: 'pi pi-fw pi-plus' },
-            { label: 'Remove', icon: 'pi pi-fw pi-minus' }
-        ];
-
+        this.getAttendanceData();
         this.setBreadcrumbs([
             { label: 'Home' },
             { label: 'Dashboard', url: '' }
         ]);
+    }
+
+    private getAttendanceData() {
+        this.dashboardService.getAttendanceData().subscribe({
+            next: (data: any) => {
+                // console.log('data', data);
+
+                if (data && data?.datasets && data?.datasets.length > 0) {
+                    data?.datasets.forEach(data => {
+                        const label = data['dateTimeLabel'];
+                        const guestsCount = data['guestsCount'];
+                        const membersCount = data['membersCount'];
+
+                        this.barDataLabels.push(label);
+                        this.barDataMembersDataSets.push(membersCount);
+                        this.barDataGuestsDataSets.push(guestsCount);
+                    });
+                }
+
+                this.initChart();
+            },
+            error: (e) => {
+                this.handleErrorMessage(e, NotificationMessages.GenericError.Message);
+            }
+        });
     }
 
     initChart() {
@@ -55,43 +63,42 @@ export class DashboardComponent extends AppPageBaseComponent implements OnInit, 
         const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
         const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-        this.chartData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        this.barData = {
+            labels: this.barDataLabels,
             datasets: [
                 {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    borderColor: documentStyle.getPropertyValue('--bluegray-700'),
-                    tension: .4
+                    label: 'Members',
+                    backgroundColor: documentStyle.getPropertyValue('--primary-500'),
+                    borderColor: documentStyle.getPropertyValue('--primary-500'),
+                    data: this.barDataMembersDataSets
                 },
                 {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--green-600'),
-                    borderColor: documentStyle.getPropertyValue('--green-600'),
-                    tension: .4
+                    label: 'Guests',
+                    backgroundColor: documentStyle.getPropertyValue('--primary-200'),
+                    borderColor: documentStyle.getPropertyValue('--primary-200'),
+                    data: this.barDataGuestsDataSets
                 }
             ]
         };
 
-        this.chartOptions = {
+        this.barOptions = {
             plugins: {
                 legend: {
                     labels: {
-                        color: textColor
+                        fontColor: textColor
                     }
                 }
             },
             scales: {
                 x: {
                     ticks: {
-                        color: textColorSecondary
+                        color: textColorSecondary,
+                        font: {
+                            weight: 500
+                        }
                     },
                     grid: {
-                        color: surfaceBorder,
+                        display: false,
                         drawBorder: false
                     }
                 },
@@ -103,14 +110,8 @@ export class DashboardComponent extends AppPageBaseComponent implements OnInit, 
                         color: surfaceBorder,
                         drawBorder: false
                     }
-                }
+                },
             }
         };
-    }
-
-    ngOnDestroy() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
     }
 }

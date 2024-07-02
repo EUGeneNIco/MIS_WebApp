@@ -68,7 +68,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   get barangay() { return this.formModel.get('barangay'); }
 
   get addMode() {
-    return !this.recordId || this.recordId === 0;
+    return this.formMode === 'Add';
   }
 
   @ViewChild('dt') dt: Table;
@@ -332,8 +332,12 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
                   NotificationMessages.SaveSuccessful.Message);
 
                 this.reInitGrid();
-                this.recordId = 0;
-                setTimeout(() => this.closeModal(), 500);
+
+                setTimeout(() => {
+                  this.closeModal();
+                  this.recordId = 0;
+                }, 500);
+
                 this.uiService.unBlock();
               },
               error: (e) => {
@@ -362,8 +366,12 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
                   NotificationMessages.SaveSuccessful.Message);
 
                 this.reInitGrid();
-                this.recordId = 0;
-                setTimeout(() => this.closeModal(), 500);
+
+                setTimeout(() => {
+                  this.closeModal();
+                  this.recordId = 0;
+                }, 500);
+
                 this.uiService.unBlock();
               },
               error: (e) => {

@@ -77,7 +77,7 @@
     (onHide)="onExit()" [header]="addMode ? createFormTitle : updateFormTitle">
     <p *ngIf="!addMode" class="qr-code-display">QR Code: <span class="qr-code-value">{{memberCode.value}}</span>
     </p>
-    <p-messages *ngIf="addMode" [(value)]="messages" [closable]="false" />
+    <p-messages *ngIf="addMode && messages.length > 0" [(value)]="messages" [closable]="false" />
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid">
             <!-- <div class="field col-12 md:col-4">

@@ -48,5 +48,10 @@ namespace MIS.Persistence.Implementations
         {
             await this.dbContext.SaveChangesAsync(cancellationToken);
         }
+
+        public IQueryable<T> GetAllQuery()
+        {
+            return (this.dbSet).AsQueryable();
+        }
     }
 }

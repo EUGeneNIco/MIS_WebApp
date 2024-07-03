@@ -14,6 +14,7 @@ namespace MIS.Application._Interfaces
         void Update(T entity);
         void Delete(T entity);
         Task SaveChangesAsync(CancellationToken cancellationToken);
+        IQueryable<T> GetAllQuery();
     }
 
 }

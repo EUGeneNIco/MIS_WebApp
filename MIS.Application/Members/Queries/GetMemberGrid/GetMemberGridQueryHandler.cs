@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
 using MIS.Application._Helpers;
 using MIS.Application._Interfaces;
@@ -19,7 +20,7 @@ namespace MIS.Application.Members.Queries.GetMemberGrid
         }
         public async Task<MemberGridViewModel> Handle(GetMemberGridQuery request, CancellationToken cancellationToken)
         {
-            var query = await memberRepository.GetAllAsync();
+            var query = memberRepository.GetAllQuery();
 
             var data = new MemberGridViewModel
             {
@@ -56,7 +57,7 @@ namespace MIS.Application.Members.Queries.GetMemberGrid
                     .Take(request.Limit)
                 : query;
 
-            data.Data = mapper.Map<IEnumerable<MemberGridItem>>(query);
+            data.Data = mapper.Map<IEnumerable<MemberGridItem>>(await query.ToListAsync(cancellationToken));
 
             return data;
         }

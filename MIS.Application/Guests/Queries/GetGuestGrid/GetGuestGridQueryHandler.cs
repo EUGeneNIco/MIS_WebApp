@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MIS.Application._Enums;
 using MIS.Application._Helpers;
 using MIS.Application._Interfaces;
@@ -19,7 +20,7 @@ namespace MIS.Application.Guests.Queries.GetGuestGrid
         }
         public async Task<GuestGridViewModel> Handle(GetGuestGridQuery request, CancellationToken cancellationToken)
         {
-            var query = await repository.GetAllAsync();
+            var query = repository.GetAllQuery();
 
             var data = new GuestGridViewModel
             {
@@ -55,7 +56,7 @@ namespace MIS.Application.Guests.Queries.GetGuestGrid
                     .Take(request.Limit)
                 : query;
 
-            data.Data = mapper.Map<IEnumerable<GuestGridItem>>(query);
+            data.Data = mapper.Map<IEnumerable<GuestGridItem>>(await query.ToListAsync(cancellationToken));
 
             return data;
         }

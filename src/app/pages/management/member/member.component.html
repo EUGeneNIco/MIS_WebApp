@@ -80,23 +80,21 @@
     </p>
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
         <div class="p-fluid p-formgrid grid">
-            <!-- <div class="field col-12 md:col-4">
-                <label htmlfor="memberCode">Code</label>
-                <input pInputText formControlName="memberCode" type="text" readonly>
-            </div> -->
             <div class="field col-12 md:col-4">
                 <label htmlfor="firstName">First Name</label>
-                <input pInputText formControlName="firstName" type="text">
+                <input maxlength="50" pInputText formControlName="firstName" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.firstName, 'required')"
                     errorMsg="First Name is required"></app-field-error-display>
+                <app-field-error-display [displayError]="validation.isFieldInvalid(this.firstName, 'maxLength')"
+                    errorMsg="Only 50 or less than characters are allowed."></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="middleName">Middle Name</label>
-                <input pInputText formControlName="middleName" type="text">
+                <input maxlength="50" pInputText formControlName="middleName" type="text">
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="lastName">Last Name</label>
-                <input pInputText formControlName="lastName" type="text">
+                <input maxlength="50" pInputText formControlName="lastName" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.lastName, 'required')"
                     errorMsg="Last Name is required"></app-field-error-display>
             </div>
@@ -111,7 +109,7 @@
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="contactNumber">Contact No.</label>
-                <input pInputText formControlName="contactNumber" type="text">
+                <input maxlength="50" pInputText formControlName="contactNumber" type="text">
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="civilStatus">Civil Status</label>
@@ -130,15 +128,15 @@
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="category">Category</label>
-                <input pInputText formControlName="category" type="text">
+                <input maxlength="50" pInputText formControlName="category" type="text">
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="extension">Extension</label>
-                <input pInputText formControlName="extension" type="text">
+                <input maxlength="50" pInputText formControlName="extension" type="text">
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="status">Status</label>
-                <input pInputText formControlName="status" type="text">
+                <input maxlength="50" pInputText formControlName="status" type="text">
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="address">Address</label>
@@ -146,11 +144,11 @@
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="barangay">Brgy.</label>
-                <input pInputText formControlName="barangay" type="text">
+                <input maxlength="50" pInputText formControlName="barangay" type="text">
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="city">City</label>
-                <input pInputText formControlName="city" type="text">
+                <input maxlength="50" pInputText formControlName="city" type="text">
             </div>
         </div>
     </form>

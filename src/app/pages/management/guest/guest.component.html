@@ -79,19 +79,19 @@
         <div class="p-fluid p-formgrid grid">
             <div class="field col-12 md:col-4">
                 <label htmlfor="firstName">First Name</label>
-                <input pInputText formControlName="firstName" type="text">
+                <input maxlength="50" pInputText formControlName="firstName" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.firstName, 'required')"
                     errorMsg="First Name is required"></app-field-error-display>
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="middleName">Middle Name</label>
-                <input pInputText formControlName="middleName" type="text">
+                <input maxlength="50" pInputText formControlName="middleName" type="text">
                 <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.middleName, 'required')"
                     errorMsg="Amount is required"></app-field-error-display> -->
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="lastName">Last Name</label>
-                <input pInputText formControlName="lastName" type="text">
+                <input maxlength="50" pInputText formControlName="lastName" type="text">
                 <app-field-error-display [displayError]="validation.isFieldInvalid(this.lastName, 'required')"
                     errorMsg="Last Name is required"></app-field-error-display>
             </div>
@@ -110,7 +110,7 @@
             </div>
             <div class="field col-12 md:col-4">
                 <label htmlfor="contactNumber">Contact No.</label>
-                <input pInputText formControlName="contactNumber" type="text">
+                <input maxlength="50" pInputText formControlName="contactNumber" type="text">
                 <!-- <app-field-error-display [displayError]="validation.isFieldInvalid(this.contactNumber, 'required')"
                     errorMsg="Contact No. is required"></app-field-error-display> -->
             </div>

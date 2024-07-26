@@ -19,14 +19,14 @@ namespace MIS.Persistence.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastSuccessfulLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastFailedLoginAttempt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     FailedLogInAttempt = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -35,12 +35,39 @@ namespace MIS.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedById = table.Column<long>(type: "bigint", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Events_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Events_Users_ModifiedById",
+                        column: x => x.ModifiedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Networks",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CreatedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedById = table.Column<long>(type: "bigint", nullable: true),
@@ -67,7 +94,7 @@ namespace MIS.Persistence.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -97,17 +124,17 @@ namespace MIS.Persistence.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CivilStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ContactNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CivilStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: true),
-                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Extension = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NetworkId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -140,24 +167,25 @@ namespace MIS.Persistence.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MemberCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Barangay = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CivilStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MemberCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Barangay = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ContactNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CivilStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Extension = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: true),
-                    NetworkImported = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NetworkImported = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NetworkId = table.Column<long>(type: "bigint", nullable: true),
                     ImportDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    IsWorker = table.Column<bool>(type: "bit", nullable: false),
                     CreatedById = table.Column<long>(type: "bigint", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedById = table.Column<long>(type: "bigint", nullable: true),
@@ -232,6 +260,47 @@ namespace MIS.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GuestEventRecords",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GuestId = table.Column<long>(type: "bigint", nullable: false),
+                    EventId = table.Column<long>(type: "bigint", nullable: false),
+                    EventDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedById = table.Column<long>(type: "bigint", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GuestEventRecords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GuestEventRecords_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GuestEventRecords_Guests_GuestId",
+                        column: x => x.GuestId,
+                        principalTable: "Guests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GuestEventRecords_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_GuestEventRecords_Users_ModifiedById",
+                        column: x => x.ModifiedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MemberAttendanceLogs",
                 columns: table => new
                 {
@@ -279,6 +348,57 @@ namespace MIS.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MemberEventRecords",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MemberId = table.Column<long>(type: "bigint", nullable: false),
+                    EventId = table.Column<long>(type: "bigint", nullable: false),
+                    EventDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedById = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedById = table.Column<long>(type: "bigint", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberEventRecords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MemberEventRecords_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MemberEventRecords_Members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Members",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MemberEventRecords_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MemberEventRecords_Users_ModifiedById",
+                        column: x => x.ModifiedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Events",
+                columns: new[] { "Id", "CreatedById", "CreatedOn", "ModifiedById", "ModifiedOn", "Name" },
+                values: new object[,]
+                {
+                    { 1L, null, null, null, null, "School of Discipleship" },
+                    { 2L, null, null, null, null, "Encounter God Retreat" },
+                    { 3L, null, null, null, null, "Water Baptism" }
+                });
+
             migrationBuilder.InsertData(
                 table: "Networks",
                 columns: new[] { "Id", "CreatedById", "CreatedOn", "ModifiedById", "ModifiedOn", "Name" },
@@ -312,6 +432,16 @@ namespace MIS.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Events_CreatedById",
+                table: "Events",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_ModifiedById",
+                table: "Events",
+                column: "ModifiedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GuestAttendanceLogs_GuestId",
                 table: "GuestAttendanceLogs",
                 column: "GuestId");
@@ -325,6 +455,26 @@ namespace MIS.Persistence.Migrations
                 name: "IX_GuestAttendanceUnidentifiedLogs_GuestId",
                 table: "GuestAttendanceUnidentifiedLogs",
                 column: "GuestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GuestEventRecords_CreatedById",
+                table: "GuestEventRecords",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GuestEventRecords_EventId",
+                table: "GuestEventRecords",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GuestEventRecords_GuestId",
+                table: "GuestEventRecords",
+                column: "GuestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GuestEventRecords_ModifiedById",
+                table: "GuestEventRecords",
+                column: "ModifiedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Guests_CreatedById",
@@ -355,6 +505,26 @@ namespace MIS.Persistence.Migrations
                 name: "IX_MemberAttendanceUnidentifiedLogs_MemberId",
                 table: "MemberAttendanceUnidentifiedLogs",
                 column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberEventRecords_CreatedById",
+                table: "MemberEventRecords",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberEventRecords_EventId",
+                table: "MemberEventRecords",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberEventRecords_MemberId",
+                table: "MemberEventRecords",
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberEventRecords_ModifiedById",
+                table: "MemberEventRecords",
+                column: "ModifiedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Members_CreatedById",
@@ -402,16 +572,25 @@ namespace MIS.Persistence.Migrations
                 name: "GuestAttendanceUnidentifiedLogs");
 
             migrationBuilder.DropTable(
+                name: "GuestEventRecords");
+
+            migrationBuilder.DropTable(
                 name: "MemberAttendanceLogs");
 
             migrationBuilder.DropTable(
                 name: "MemberAttendanceUnidentifiedLogs");
 
             migrationBuilder.DropTable(
+                name: "MemberEventRecords");
+
+            migrationBuilder.DropTable(
                 name: "Guests");
 
             migrationBuilder.DropTable(
                 name: "Services");
+
+            migrationBuilder.DropTable(
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "Members");

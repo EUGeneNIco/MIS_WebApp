@@ -23,5 +23,6 @@ namespace MIS.Domain.Entities
         public virtual Network Network { get; set; }
         public DateTime? ImportDate { get; set; }
         public string Status { get; set; }
+        public bool IsWorker { get; set; }
     }
 }

@@ -9,7 +9,17 @@ namespace MIS.Persistence.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.Property(u => u.UserName)
-                .HasMaxLength(256);
+                .HasMaxLength(50);
+            builder.Property(u => u.FirstName)
+                .HasMaxLength(50);
+            builder.Property(u => u.MiddleName)
+                .HasMaxLength(50);
+            builder.Property(u => u.LastName)
+                .HasMaxLength(50);
+            builder.Property(u => u.Role)
+                .HasMaxLength(50);
+            builder.Property(u => u.PasswordHash)
+                .HasMaxLength(100);
         }
     }
 }

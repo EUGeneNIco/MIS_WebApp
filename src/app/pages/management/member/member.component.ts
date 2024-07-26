@@ -105,7 +105,7 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
       key: 'tst',
       severity: 'warn',
       detail: 'Registering a new member is not a normal action. He or she should be a guest first before being a member. However, if this action is necessary, please check if a member with same name or credentials already exists on the Member table under the Management menu. We should avoid creating multiple records for the same person.'
-    })
+    });
   }
 
 

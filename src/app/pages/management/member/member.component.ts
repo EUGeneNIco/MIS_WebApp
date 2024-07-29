@@ -23,7 +23,6 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
   recordId: any = 0;
   initialGridParams: any;
   cutOffLoading: number = 20;
-  messages: Message[] = [];
 
   civilStatuses: SelectItem[] = [
     { label: 'Single', value: 'Single' },
@@ -100,12 +99,6 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
 
     this.loading = true;
     this.initialGridParams = Object.assign({}, this.dataParameter);
-
-    this.messages.push({
-      key: 'tst',
-      severity: 'warn',
-      detail: 'Registering a new member is not a normal action. He or she should be a guest first before being a member. However, if this action is necessary, please check if a member with same name or credentials already exists on the Member table under the Management menu. We should avoid creating multiple records for the same person.'
-    });
   }
 
 
@@ -307,6 +300,21 @@ export class MemberComponent extends MasterBaseComponent implements AfterViewIni
       barangay: record.barangay,
       city: record.city,
     }
+  }
+
+  confirmAction() {
+    this.confirmationService.confirm({
+      message: 'Registering a new member is not a normal action. Are you sure you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.displayModal = false;
+        this.openModal();
+      },
+      reject: () => {
+        this.displayModal = false;
+      }
+    })
   }
 
   onSubmit() {

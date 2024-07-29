@@ -8,7 +8,7 @@
                 class="p-button-raised p-button-info mr-2"><input style="display: none;" type="file" #fileInput
                     (change)="openImportModal($event)"></button>
             <button pButton pRipple label="Register new member" icon="pi pi-plus"
-                class="p-button-raised p-button-info mr-2" (click)="openModal()"></button>
+                class="p-button-raised p-button-info mr-2" (click)="confirmAction()"></button>
         </ng-template>
     </p-toolbar>
 
@@ -71,11 +71,9 @@
     </p-table>
 </div>
 
-
 <!-- Modal -->
 <p-dialog [draggable]="false" [modal]="true" [resizable]="false" [style]="{width: '65vw'}" [(visible)]="displayModal"
     (onHide)="onExit()" [header]="addMode ? createFormTitle : updateFormTitle">
-    <p-messages *ngIf="addMode && messages.length > 0" [(value)]="messages" [closable]="false" />
     <p *ngIf="!addMode" class="qr-code-display">QR Code: <span class="qr-code-value">{{memberCode.value}}</span>
     </p>
     <form autocomplete="off" class="m-t" [formGroup]="formModel" (ngSubmit)="onSubmit()">
